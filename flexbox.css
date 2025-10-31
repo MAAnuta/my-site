@@ -1,0 +1,212 @@
+/* Основной flex-контейнер (200x200px) */
+.flexbox-role {
+    width: 12.5em;
+    height: 12.5em;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Шкаф как фон */
+.wardrobe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    position: absolute;
+}
+
+/* Контейнер для игрушек */
+.toys-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+}
+
+/* Полки */
+.shelf {
+    display: flex;
+    flex: 1;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.top-shelf {
+    align-items: center;
+}
+
+.bottom-shelf {
+    align-items: flex-start;
+}
+
+/* Общие стили для игрушек */
+.toy {
+    width: 30%;
+    /*transition: all 0.3s ease;*/
+    pointer-events: auto;
+}
+
+/* Машина на верхней полке */
+.car {
+    transform: translate(-75%, -20%);
+}
+
+.flexbox-role:hover .car {
+    animation: carDrive 1s infinite ease-in-out;
+}
+
+@keyframes carDrive {
+    0% {
+        transform: translate(-75%, -20%) translateX(0);
+    }
+    25% {
+        transform: translate(-75%, -20%) translateX(-0.5em);
+    }
+    50% {
+        transform: translate(-75%, -20%) translateX(0);
+    }
+    75% {
+        transform: translate(-75%, -20%) translateX(0.5em);
+    }
+    100% {
+        transform: translate(-75%, -20%) translateX(0);
+    }
+}
+
+.flexbox-role:active .car {
+    animation: none !important;
+}
+
+/* Лодка на нижней полке */
+.boat:hover {
+    animation: boatRock 1.5s infinite ease-in-out;
+}
+
+@keyframes boatRock {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(10deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-10deg);
+    }
+}
+
+.boat:active {
+    animation: none !important;
+}
+
+/* Мальчик */
+.boy {
+    opacity: 0;
+    position: absolute;
+    align-self: flex-end;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.flexbox-role:active .boy {
+    opacity: 1;
+    animation: flexJump 2s ease-in-out forwards;
+}
+
+@keyframes flexJump {
+    0% {
+        transform: translateX(-10%) translateY(0%);
+    }
+    20% {
+        transform: translateX(60%) translateY(-50%);
+    }
+    40% {
+        transform: translateX(110%) translateY(0%);
+    }
+    60% {
+        transform: translateX(160%) translateY(-50%);
+    }
+    80% {
+        transform: translateX(210%) translateY(0%);
+    }
+    100% {
+        transform: translateX(240%) translateY(0%);
+    }
+}
+
+/* Контейнер для надписей */
+.labels-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none
+}
+
+/* Общие стили для надписей */
+.label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 2% 5%;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Надпись "Магазин игрушек" */
+.shop-label {
+    transform: translateY(-50%);
+}
+
+.flexbox-role:hover .shop-label {
+    opacity: 1;
+}
+
+.flexbox-role:active .shop-label {
+    opacity: 0;
+}
+
+/* Надпись "Покупаю!" */
+.buy-label {
+    align-self: flex-start;
+    transform: rotate(-15deg);
+}
+
+.flexbox-role:active .buy-label {
+    opacity: 1;
+}
+
+/* Эффект сепии */
+.sepia-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(112, 66, 20, 0.3);
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+}
+
+.flexbox-role:active .sepia-overlay {
+    animation: fadeInSepia 0.5s 2s forwards;
+}
+
+@keyframes fadeInSepia {
+    to {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Театр Эмоций — Главная</title>
+  <link rel="preload" href="image/theater.png" as="image">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <!-- КЛИКАБЕЛЬНЫЙ ЛОГОТИП -->
+  <a href="index.html" class="logo-link">
+    <div class="logo">
+      <!-- Левая маска (трагедия) -->
+      <div class="mask sad">
+        <div class="eye"></div>
+        <div class="eye"></div>
+        <div class="mouth"></div>
+      </div>
+      <!-- Правая маска (комедия) -->
+      <div class="mask happy">
+        <div class="eye"></div>
+        <div class="eye"></div>
+        <div class="mouth"></div>
+      </div>
+    </div>
+  </a>
+
+  <nav>
+    <ul>
+      <li><a href="#home">Главная</a></li>
+      <li><a href="#about">О театре</a></li>
+      <li><a href="#shows">Спектакли</a></li>
+
+      <!-- ВЫПАДАЮЩЕЕ МЕНЮ "ЗАДАНИЯ" -->
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle">Задания</a>
+        <ul class="dropdown-menu">
+          <li><a href="task1.html">Задание 1</a></li>
+          <li><a href="task2.html">Задание 2</a></li>
+          <li><a href="kursovaya.html">Курсовая</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="hero reveal">
+    <!-- КОЛОННЫ -->
+    <div class="column column-left"><div class="base"></div></div>
+    <div class="column column-right"><div class="base"></div></div>
+    <!-- Занавес -->
+    <div class="curtain curtain-left"></div>
+    <div class="curtain curtain-right"></div>
+
+    <div class="hero-content">
+      <h1>Театр Эмоций</h1>
+      <p>Погружение в мир драмы и вдохновения</p>
+    </div>
+  </section>
+
+  <section id="about" class="reveal">
+    <h2>История театра</h2>
+    <p>История театра насчитывает тысячи лет и отражает эволюцию человеческой культуры, общества и искусства. Театр зародился в Древней Греции около VI века до н.э., где он был тесно связан с религиозными ритуалами в честь бога Диониса. Фестивали Дионисий в Афинах стали первыми организованными театральными представлениями, где актёры в масках разыгрывали мифы. Великие драматурги, такие как Эсхил, Софокл и Еврипид, заложили основы трагедии, а Аристофан — комедии. Греческий театр включал хор, который комментировал действие, и амфитеатры под открытым небом, такие как театр Диониса, вмещавшие тысячи зрителей.</p>
+    <p>В Древнем Риме театр эволюционировал под влиянием греков, но стал более развлекательным: добавились фарсы, пантомимы и гладиаторские зрелища. Римляне построили первые крытые театры, такие как Театр Помпея. После падения Римской империи театр в Европе угас из-за христианских запретов, но сохранился в форме уличных представлений и мистерий в Средние века. Церковь использовала театр для иллюстрации библейских историй, что привело к развитию morality plays и miracle plays.</p>
+    <p>Возрождение театра произошло в эпоху Ренессанса в Италии с commedia dell'arte — импровизированными комедиями с фиксированными персонажами в масках. В Англии Елизаветинская эпоха принесла расцвет: Уильям Шекспир, Кристофер Марло и Бен Джонсон создали шедевры, такие как "Гамлет" и "Ромео и Джульетта". Театры вроде "Глобуса" были круглыми, с открытой сценой. В XVII-XVIII веках во Франции доминировал классицизм с Мольером, Расином и Корнелем, подчёркивающий единства места, времени и действия.</p>
+    <p>В XIX веке романтизм принёс эмоциональность и реализм: Ибсен, Чехов и Стриндберг ввели психологическую глубину. Театр стал отражать социальные проблемы. XX век ознаменовался модернизмом: Брехт с "эпическим театром", абсурдисты вроде Беккета и Ионеско, эксперименты с авангардом. В США развивался Бродвей с мюзиклами, а в России — Станиславский с системой актёрской игры, повлиявшей на весь мир.</p>
+    <p>Сегодня театр разнообразен: от традиционных постановок до иммерсивных шоу, где зрители участвуют в действии, и цифровых перформансов. Он остаётся мощным инструментом для исследования человеческих эмоций, общества и идентичности, адаптируясь к новым технологиям, таким как VR и онлайн-трансляции. Театр не только развлекает, но и провоцирует размышления, объединяя людей в коллективном переживании.</p>
+  </section>
+  <section id="shows" class="reveal parallax">
+    <h2>Наши спектакли</h2>
+    <p>От классики до современных постановок — для истинных ценителей.</p>
+
+    <div class="shows-grid">
+      <!-- 6 КАРТОЧЕК — 2 строки по 3 -->
+      <div class="show-item" data-slug="optimistic-tragedy">
+        <div class="show-front"><h3>Оптимистическая трагедия</h3><p>Прощальный бал</p></div>
+        <div class="show-back">
+          <img src="image/OptymisticTragedy/tragedy_1.webp" alt="optimistic-tragedy">
+          <div class="show-info">
+            <h3>Оптимистическая трагедия</h3>
+            <p class="description">Драма о любви и революции. Последний бал на корабле.</p>
+            <button class="buy-ticket">Купить билет</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-item" data-slug="honest-woman">
+        <div class="show-front"><h3>Честная женщина</h3></div>
+        <div class="show-back">
+          <img src="image/HonestWoman/woman_1.webp" alt="honest-woman">
+          <div class="show-info">
+            <h3>Честная женщина</h3>
+            <p class="description">Комедия о морали и лжи в высшем обществе.</p>
+            <button class="buy-ticket">Купить билет</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-item" data-slug="at-the-bottom">
+        <div class="show-front"><h3>На дне</h3></div>
+        <div class="show-back">
+          <img src="image/AtTheBottom/bottom_1.webp" alt="at-the-bottom">
+          <div class="show-info">
+            <h3>На дне</h3>
+            <p class="description">Горькая правда о жизни на обочине общества.</p>
+            <button class="buy-ticket">Купить билет</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-item" data-slug="othello">
+        <div class="show-front"><h3>Отелло</h3></div>
+        <div class="show-back">
+          <img src="image/Othello/othello_1.webp" alt="othello">
+          <div class="show-info">
+            <h3>Отелло</h3>
+            <p class="description">Трагедия о мести, безумии и смысле бытия.</p>
+            <button class="buy-ticket">Купить билет</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-item" data-slug="resurrection">
+        <div class="show-front"><h3>Воскресение</h3></div>
+        <div class="show-back">
+          <img src="image/Resurrection/1.webp" alt="resurrection">
+          <div class="show-info">
+            <h3>Воскресение</h3>
+            <p class="description">Драма о мечтах, времени и упущенных возможностях.</p>
+            <button class="buy-ticket">Купить билет</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-item" data-slug="notes-of-a-young-doctor">
+        <div class="show-front"><h3>Записки юного врача</h3></div>
+        <div class="show-back">
+          <img src="image/NotesOfAYoungDoctor/doctor_1.webp" alt="notes-of-a-young-doctor">
+          <div class="show-info">
+            <h3>Записки юного врача</h3>
+            <p class="description">Лирическая комедия о конце эпохи.</p>
+            <button class="buy-ticket">Купить билет</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Информация</h4>
+        <p>© 2025 Мой сайт. Все права защищены.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Контакты</h4>
+        <p>Email: info@example.com</p>
+        <p>Телефон: +7 (777) 777-77-77</p>
+      </div>
+      <div class="footer-section">
+        <h4>Социальные сети</h4>
+        <div class="social-links">
+          <a href="#">VK</a>
+          <a href="#">Telegram</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

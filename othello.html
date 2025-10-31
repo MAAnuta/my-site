@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отелло — Театр Эмоций</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <!-- ЛОГОТИП — ССЫЛКА НА ГЛАВНУЮ -->
+  <a href="index.html" class="logo-link">
+    <div class="logo">
+      <div class="mask sad"><div class="eye"></div><div class="eye"></div><div class="mouth"></div></div>
+      <div class="mask happy"><div class="eye"></div><div class="eye"></div><div class="mouth"></div></div>
+    </div>
+  </a>
+
+  <!-- НАВИГАЦИЯ — ОТДЕЛЬНО -->
+  <nav>
+    <ul>
+      <li><a href="index.html#home">Главная</a></li>
+      <li><a href="index.html#about">О театре</a></li>
+      <li><a href="index.html#shows">Спектакли</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="play-page reveal">
+  <div class="play-hero">
+    <div class="carousel">
+      <img src="image/Othello/othello_1.webp" alt="Спектакль 1">
+      <img src="image/Othello/othello_2.webp" alt="Спектакль 2">
+      <img src="image/Othello/othello_3.webp" alt="Спектакль 3">
+      <img src="image/Othello/othello_4.webp" alt="Спектакль 4">
+    </div>
+
+    <div class="carousel-dots">
+      <span class="dot" data-slide="0"></span>
+      <span class="dot" data-slide="1"></span>
+      <span class="dot" data-slide="2"></span>
+      <span class="dot" data-slide="3"></span>
+    </div>
+
+    <div class="hero-overlay"></div>
+    <div class="hero-text">
+      <h1>Отелло</h1>
+      <p class="tagline">Трагедия ревности, предательства и безумия</p>
+    </div>
+  </div>
+
+  <div class="play-content">
+    <div class="info-block">
+      <p><strong>Автор:</strong> Уильям Шекспир</p>
+      <p><strong>Режиссёр:</strong> Андрей Смирнов</p>
+      <p><strong>Премьера:</strong> 1 октября 2025</p>
+      <p><strong>Продолжительность:</strong> 3 часа (с антрактом)</p>
+      <p><strong>Жанр:</strong> Трагедия</p>
+    </div>
+
+    <div class="description">
+      <h2>О спектакле</h2>
+      <p>Классическая трагедия Шекспира в минималистичном стиле. Один платок — и мир рушится. Любовь, зависть, манипуляция. Спектакль о том, как легко разрушить доверие.</p>
+    </div>
+
+    <div class="cast">
+      <h2>В ролях</h2>
+      <ul>
+        <li><strong>Отелло</strong> — Михаил Трофимов</li>
+        <li><strong>Дездемона</strong> — Анастасия Белова</li>
+        <li><strong>Яго</strong> — Павел Волков</li>
+      </ul>
+    </div>
+
+    <div class="buy-section">
+      <a href="https://kassir.ru" target="_blank" class="btn-gold">Купить билет</a>
+      <p class="note">Ближайшие даты: 5, 12 декабря 2025</p>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section"><h4>Информация</h4><p>© 2025 Театр Эмоций. Все права защищены.</p></div>
+      <div class="footer-section"><h4>Контакты</h4><p>Email: info@teatr-emociy.ru</p><p>Телефон: +7 (495) 777-77-77</p></div>
+      <div class="footer-section"><h4>Социальные сети</h4><div class="social-links"><a href="#">VK</a><a href="#">Telegram</a><a href="#">Instagram</a></div></div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

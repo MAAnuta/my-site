@@ -1,0 +1,262 @@
+/* Стили для картинки */
+
+.box {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(#c8d8f5, #718cc1);
+    border: 16px solid;
+    border-image: linear-gradient(45deg, #718cc1, #c8d8f5) 1;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Контейнер для маскировки внутреннего содержимого */
+.box-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Общие стили круга */
+.circle {
+    width: 8px;
+    height: 8px;
+    background: #f3eab8;
+    border-radius: 50%;
+    position: absolute;
+}
+
+/* Верхние круги */
+.circle-top-1 { top: -12px; left: 10%; }
+.circle-top-2 { top: -12px; left: 30%; }
+.circle-top-3 { top: -12px; left: 50%; }
+.circle-top-4 { top: -12px; left: 70%; }
+.circle-top-5 { top: -12px; left: 90%; }
+
+/* Правые круги */
+.circle-right-1 { top: 10%; right: -12px; }
+.circle-right-2 { top: 30%; right: -12px; }
+.circle-right-3 { top: 50%; right: -12px; }
+.circle-right-4 { top: 70%; right: -12px; }
+.circle-right-5 { top: 90%; right: -12px; }
+
+/* Нижние круги */
+.circle-bottom-1 { bottom: -12px; left: 10%; }
+.circle-bottom-2 { bottom: -12px; left: 30%; }
+.circle-bottom-3 { bottom: -12px; left: 50%; }
+.circle-bottom-4 { bottom: -12px; left: 70%; }
+.circle-bottom-5 { bottom: -12px; left: 90%; }
+
+/* Левые круги */
+.circle-left-1 { top: 10%; left: -12px; }
+.circle-left-2 { top: 30%; left: -12px; }
+.circle-left-3 { top: 50%; left: -12px; }
+.circle-left-4 { top: 70%; left: -12px; }
+.circle-left-5 { top: 90%; left: -12px; }
+
+/*контейнер для гриба*/
+.mushroom {
+    position: absolute;
+    top: 68px;
+    left: -10px;
+    width: 80px;
+    height: 100px;
+}
+
+/*шляпка гриба*/
+.mushroom::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 40%;
+    background: radial-gradient(circle at top right, #f8f0eb, #684839);
+    border-radius: 100px 100px 0 0;
+}
+
+/*ножка гриба*/
+.mushroom::after {
+    content: '';
+    position: absolute;
+    top: 40%;
+    left: 25%;
+    width: 44%;
+    height: 60%;
+    background-color: #ffffff;
+    border-inline: 2px solid #a3836a;
+    border-bottom: 2px solid #a3836a;
+    border-radius: 0 100% 50% 50% / 0 0 100% 100% ;
+}
+
+/*контейнер для маленького гриба*/
+.small-mushroom {
+    position: absolute;
+    top: 90px;
+    left: 40px;
+    width: 60px;
+    height: 80px;
+    transform: rotate(35deg);
+}
+
+/*шляпка гриба*/
+.small-mushroom::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 38%;
+    background: radial-gradient(circle at top, #f8eee7, #8c604c);
+    border-radius:  100px 100px 0 0;
+}
+
+/*ножка гриба*/
+.small-mushroom::after {
+    content: '';
+    position: absolute;
+    top: 37%;
+    left: 30%;
+    width: 34%;
+    height: 50%;
+    background-color: #ffffff;
+    border-inline: 2px solid #a3836a;
+    border-bottom: 2px solid #a3836a;
+    border-radius: 0 100% 50% 50% / 0 0 100% 100%;
+}
+
+.grass{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+}
+
+.triangle{
+    width: 60px;
+    height: 40px;
+    background: repeating-linear-gradient(
+            135deg,
+            #b7d8b7 0px,
+            #b7d8b7 4px,
+            #648364 4px,
+            #648364 8px
+    );
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    margin-left: -15px;
+}
+
+.cloud {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    width: 80px;
+    height: 60px;
+}
+
+.cloud::before {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at right, #e7edff, #87a4d8);
+    top: -2px;
+    left: 0;
+    width: 70px;
+    height: 35px;
+}
+
+.cloud::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at left, #e7edff, #87a4d8);
+    top: 10px;
+    left: 50px;
+    width: 70px;
+    height: 35px;
+}
+
+.butterfly{
+    position: absolute;
+    top: 55px;
+    left: 95px;
+    width: 80px;
+    height: 60px;
+}
+
+.butterfly-body{
+    position: absolute;
+    width: 45px;
+    height: 15px;
+    top: 2px;
+    background-color: #f3eab8;
+    border-radius: 100px / 50px;
+    border: 2px solid #aca05e;
+    transform: rotate(-35deg);
+    z-index: 3;
+}
+
+.butterfly-head{
+    position: absolute;
+    top: 15px;
+    left: -5px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #aca05e;
+    border-radius: 50%;
+    background-color: #f3eab8;
+    z-index: 4;
+}
+
+.butterfly-eye{
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: #000000;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+.butterfly-eye-left {
+    left: -2px;
+    top: 20px;
+}
+
+.butterfly-eye-right {
+    left: 4px;
+    top: 24px;
+}
+
+.butterfly-wing{
+    position: absolute;
+    width: 35px;
+    height: 15px;
+    background-color: #b8f0fa;
+    border-radius: 100px / 50px;
+    border: 2px solid #7a9ea5;
+    z-index: 2;
+}
+
+/* Передние крылья */
+.butterfly-wing-front-left {
+    transform: rotate(30deg);
+    top: -15px;
+    left: -15px;
+}
+
+.butterfly-wing-front-right {
+    transform: rotate(30deg);
+    top: 15px;
+    left: 30px;
+}
+
+/* Задние крылья */
+.butterfly-wing-back-left {
+    transform: rotate(80deg);
+    top: 25px;
+    left: 15px;
+}
+
+.butterfly-wing-back-right {
+    transform: rotate(80deg);
+    top: -25px;
+    left: 0;
+}
