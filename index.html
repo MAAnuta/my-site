@@ -10,6 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- КОЛОННЫ — ФИКСИРОВАННЫЕ ПО КРАЯМ
+<div class="hero-bg"></div>
+<div class="column column-left"><div class="base"></div></div>
+<div class="column column-right"><div class="base"></div></div>
+<div class="curtain curtain-left"></div>
+<div class="curtain curtain-right"></div>-->
 <header>
   <!-- КЛИКАБЕЛЬНЫЙ ЛОГОТИП -->
   <a href="index.html" class="logo-link">
@@ -28,13 +34,11 @@
       </div>
     </div>
   </a>
-
   <nav>
     <ul>
       <li><a href="#home">Главная</a></li>
       <li><a href="#about">О театре</a></li>
       <li><a href="#shows">Спектакли</a></li>
-
       <!-- ВЫПАДАЮЩЕЕ МЕНЮ "ЗАДАНИЯ" -->
       <li class="dropdown">
         <a href="#" class="dropdown-toggle">Задания</a>
@@ -49,19 +53,19 @@
 </header>
 
 <main>
-  <section id="home" class="hero reveal">
-    <!-- КОЛОННЫ -->
+  <!-- HERO С КОЛОННАМИ -->
+  <div class="hero-wrapper">
     <div class="column column-left"><div class="base"></div></div>
     <div class="column column-right"><div class="base"></div></div>
-    <!-- Занавес -->
     <div class="curtain curtain-left"></div>
     <div class="curtain curtain-right"></div>
-
-    <div class="hero-content">
-      <h1>Театр Эмоций</h1>
-      <p>Погружение в мир драмы и вдохновения</p>
-    </div>
-  </section>
+    <div class="hero-bg"></div>
+    <section class="hero">
+      <!--<div class="hero-content"><h1>Театр Эмоций</h1>
+        <p>Погружение в мир драмы и вдохновения</p>
+      </div>-->
+    </section>
+  </div>
 
   <section id="about" class="reveal">
     <h2>История театра</h2>
