@@ -159,18 +159,21 @@ nav a:hover {
 
 /* ----------------- HERO ----------------- */
 .hero {
+    position: relative;
+    width: 100%;
     height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    flex: 1 0 auto;
-    margin-top: 80px;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
     background: url('image/theater.png') center/cover no-repeat;
-    background-attachment: fixed;
+    z-index: 0;
 }
 
 .hero-content {
@@ -193,7 +196,6 @@ nav a:hover {
     text-shadow: 0 3px 12px rgba(0,0,0,0.8);
     font-weight: 700;
     letter-spacing: 1.2px;
-    text-shadow: 0 3px 12px rgba(0,0,0,0.8);
     line-height: 1.1;
 }
 
@@ -210,38 +212,62 @@ nav a:hover {
 }
 
 /* ----------------- КОЛОННЫ ----------------- */
+/* Обёртка — задаёт границы для колонн */
+.hero-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 80px; /* Отступ под фиксированный header */
+}
+
+/* Колонны — absolute от .hero-wrapper */
 .column {
     position: absolute;
     top: 0;
     width: 60px;
-    height: 100%;
+    height: 100%;               /* Растягивается по высоте .hero-wrapper */
     background: #e0caa4;
     z-index: 2;
     pointer-events: none;
     overflow: hidden;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.5);
 }
+
 .column-left  { left: 0; }
 .column-right { right: 0; }
 
-/* Капитель и база */
-.column::after,
-.base {
+/* Капитель */
+.column::after {
+    content: '';
     position: absolute;
-    left: 0; width: 100%;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    height: 65px;
     background: linear-gradient(to bottom, #777a81, #4a4c4f);
     border-bottom: 6px solid #3f4043;
     box-shadow: 0 6px 15px rgba(0,0,0,0.7);
 }
-.column::after { content: ''; top: 10px; height: 65px; }
-.base { bottom: 0; height: 60px; background: #3f3f42; border-top: 6px solid #4a4b4e; }
+
+/* База */
+.base {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #3f3f42;
+    border-top: 6px solid #4a4b4e;
+}
 
 /* Каннелюры */
 .column::before {
     content: '';
     position: absolute;
-    top: 70px; bottom: 60px;
-    left: 0; width: 100%;
+    top: 70px;
+    bottom: 60px;
+    left: 0;
+    width: 100%;
     background: repeating-linear-gradient(
             90deg,
             transparent 0px,
@@ -250,7 +276,6 @@ nav a:hover {
             rgba(255,255,255,0.1) 8px
     );
 }
-
 /* ----------------- Занавес ----------------- */
 .curtain {
     position: absolute;
@@ -265,14 +290,14 @@ nav a:hover {
 
 /* Левая и правая штора */
 .curtain-left {
-    left: 0;
-    width: 50%;
+    left: -60px;
+    width: calc(50% + 60px);
     transform: translateX(-80%);
 }
 
 .curtain-right {
-    right: 0;
-    width: 50%;
+    right: -60px;
+    width: calc(50% + 60px);
     transform: translateX(80%);
 }
 
