@@ -1,13 +1,15 @@
 /* ----------------- ОБЩЕЕ ----------------- */
 body {
     margin: 0;
-    font-family: 'Cormorant Garamond', 'Playfair Display', serif;    background: #302f2d;
+    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+    background: #302f2d;
     color: #fbeccb;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     line-height: 1.6;
     font-weight: 400;
+    overflow-x: hidden;
 }
 
 /* ----------------- ЗАГОЛОВКИ ----------------- */
@@ -216,11 +218,16 @@ nav a:hover {
 .hero-wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden;
     margin-top: 80px; /* Отступ под фиксированный header */
 }
 
-/* Колонны — absolute от .hero-wrapper */
+.hero-content-wrapper {
+    position: relative;
+    width: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
 .column {
     position: absolute;
     top: 0;
@@ -281,25 +288,27 @@ nav a:hover {
     position: absolute;
     top: 0;
     height: 100%;
+    width: 50%;
     background: radial-gradient(ellipse at center, #6b1c1c, #3d0f0f);
     z-index: 1;
     box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
     overflow: hidden;
-    will-change: transform;
 }
 
-/* Левая и правая штора */
 .curtain-left {
-    left: -60px;
-    width: calc(50% + 60px);
-    transform: translateX(-80%);
+    left: 0;
+    width: 50%;
+    transform: translateX(-100%);
 }
 
 .curtain-right {
-    right: -60px;
-    width: calc(50% + 60px);
-    transform: translateX(80%);
+    right: 0;
+    width: 50%;
+    transform: translateX(100%);
 }
+
+.curtain-left.open  { transform: translateX(0); }
+.curtain-right.open { transform: translateX(0); }
 
 /* Текстура и тени */
 .curtain::before,
@@ -902,7 +911,6 @@ section {
     .carousel-next { right: 10px; }
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .play-hero h1 { font-size: 2.5rem; }
     .play-hero .tagline { font-size: 1.1rem; }
@@ -995,7 +1003,7 @@ nav .dropdown-menu a:hover {
 }
 
 /* Мобильные: клик вместо ховера */
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
     nav .dropdown-menu {
         left: 0;
         transform: translateX(0);
@@ -1005,5 +1013,5 @@ nav .dropdown-menu a:hover {
     nav .dropdown-menu::before {
         display: none;
     }
-}
+}*/
 
