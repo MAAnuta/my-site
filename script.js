@@ -107,10 +107,18 @@ document.addEventListener('DOMContentLoaded', () => {
     reveals.forEach(el => observer.observe(el));
 });
 
-/* ---------- КНОПКИ БИЛЕТОВ ---------- */
+/* ---------- КЛИК ПО КАРТОЧКЕ СПЕКТАКЛЯ ---------- */
+document.querySelectorAll('.show-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const slug = item.dataset.slug;
+        window.location.href = `${slug}.html`;
+    });
+});
+
+/* Кнопка "Купить билет" — остаётся, но без stopPropagation */
 document.querySelectorAll('.buy-ticket').forEach(btn => {
     btn.addEventListener('click', e => {
-        e.stopPropagation();
+        e.stopPropagation(); // ← Важно! Чтобы не сработал клик по карточке
         const slug = btn.closest('.show-item').dataset.slug;
         window.location.href = `${slug}.html`;
     });
