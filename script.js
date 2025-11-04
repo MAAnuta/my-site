@@ -148,60 +148,66 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ---------- КАРУСЕЛЬ С ТОЧКАМИ (JS) ---------- */
+/* ---------- КАРУСЕЛЬ С ЭФФЕКТОМ FADE ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.carousel');
-    const dots = document.querySelectorAll('.carousel-dots .dot');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+    const hero = document.querySelector('.play-hero');
 
-    if (!carousel || dots.length === 0) return;
+    if (!carousel || !prevBtn || !nextBtn) return;
 
-    const slideCount = dots.length;
-    const slideDuration = 4000; // 4 секунды на слайд
+    const slides = carousel.querySelectorAll('img');
+    const slideCount = slides.length;
+    const slideDuration = 4000; // 4 секунды
     let currentSlide = 0;
+    let timeout = null;
 
-    // Установка активной точки
-    const setActiveDot = (index) => {
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-    };
-
-    // Переход к слайду
+    // === Переход к слайду ===
     const goToSlide = (index) => {
+        slides.forEach(slide => slide.classList.remove('active'));
         currentSlide = (index + slideCount) % slideCount;
-        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
-        setActiveDot(currentSlide);
+        slides[currentSlide].classList.add('active');
     };
 
-    // Клик по точке
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            goToSlide(index);
-            resetTimer(); // перезапускаем таймер
-        });
-    });
+    const nextSlide = () => goToSlide(currentSlide + 1);
+    const prevSlide = () => goToSlide(currentSlide - 1);
 
-    // Автопрокрутка
-    let timer;
-    const startTimer = () => {
-        timer = setInterval(() => {
-            goToSlide(currentSlide + 1);
+    // === Автопрокрутка через setTimeout (рекурсивная) ===
+    const startAutoPlay = () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            nextSlide();
+            startAutoPlay(); // запускаем следующий цикл
         }, slideDuration);
     };
 
+    // === Сброс таймера (после кнопки или наведения) ===
     const resetTimer = () => {
-        clearInterval(timer);
-        startTimer();
+        clearTimeout(timeout);
+        startAutoPlay();
     };
 
-    // Инициализация
-    setActiveDot(0);
-    startTimer();
+    // === Кнопки ===
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        resetTimer();
+    });
 
-    // Пауза при наведении (опционально)
-    const hero = document.querySelector('.play-hero');
-    hero.addEventListener('mouseenter', () => clearInterval(timer));
-    hero.addEventListener('mouseleave', startTimer);
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        resetTimer();
+    });
+
+    // === Пауза при наведении ===
+    if (hero) {
+        hero.addEventListener('mouseenter', () => clearTimeout(timeout));
+        hero.addEventListener('mouseleave', resetTimer);
+    }
+
+    // === Инициализация ===
+    goToSlide(0);
+    startAutoPlay();
 });
 
 /* ---------- ВЫПАДАЮЩЕЕ МЕНЮ "ЗАДАНИЯ" (МОБИЛЬНЫЕ) ---------- */
