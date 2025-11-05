@@ -58,48 +58,50 @@
       </p>
 
       <div class="task-demo">
-        <div class="box">
-          <div class="circles-container">
-            <div class="circle circle-top-1"></div>
-            <div class="circle circle-top-2"></div>
-            <div class="circle circle-top-3"></div>
-            <div class="circle circle-top-4"></div>
-            <div class="circle circle-top-5"></div>
-            <div class="circle circle-right-1"></div>
-            <div class="circle circle-right-2"></div>
-            <div class="circle circle-right-3"></div>
-            <div class="circle circle-right-4"></div>
-            <div class="circle circle-right-5"></div>
-            <div class="circle circle-bottom-1"></div>
-            <div class="circle circle-bottom-2"></div>
-            <div class="circle circle-bottom-3"></div>
-            <div class="circle circle-bottom-4"></div>
-            <div class="circle circle-bottom-5"></div>
-            <div class="circle circle-left-1"></div>
-            <div class="circle circle-left-2"></div>
-            <div class="circle circle-left-3"></div>
-            <div class="circle circle-left-4"></div>
-            <div class="circle circle-left-5"></div>
-          </div>
-          <div class="box-inner">
-            <div class="mushroom"></div>
-            <div class="small-mushroom"></div>
-            <div class="grass">
-              <div class="triangle"></div>
-              <div class="triangle"></div>
-              <div class="triangle"></div>
-              <div class="triangle"></div>
+        <div class="demo-wrapper">
+          <div class="box">
+            <div class="circles-container">
+              <div class="circle circle-top-1"></div>
+              <div class="circle circle-top-2"></div>
+              <div class="circle circle-top-3"></div>
+              <div class="circle circle-top-4"></div>
+              <div class="circle circle-top-5"></div>
+              <div class="circle circle-right-1"></div>
+              <div class="circle circle-right-2"></div>
+              <div class="circle circle-right-3"></div>
+              <div class="circle circle-right-4"></div>
+              <div class="circle circle-right-5"></div>
+              <div class="circle circle-bottom-1"></div>
+              <div class="circle circle-bottom-2"></div>
+              <div class="circle circle-bottom-3"></div>
+              <div class="circle circle-bottom-4"></div>
+              <div class="circle circle-bottom-5"></div>
+              <div class="circle circle-left-1"></div>
+              <div class="circle circle-left-2"></div>
+              <div class="circle circle-left-3"></div>
+              <div class="circle circle-left-4"></div>
+              <div class="circle circle-left-5"></div>
             </div>
-            <div class="cloud"></div>
-            <div class="butterfly">
-              <div class="butterfly-head"></div>
-              <div class="butterfly-body"></div>
-              <div class="butterfly-eye butterfly-eye-left"></div>
-              <div class="butterfly-eye butterfly-eye-right"></div>
-              <div class="butterfly-wing butterfly-wing-front-left"></div>
-              <div class="butterfly-wing butterfly-wing-front-right"></div>
-              <div class="butterfly-wing butterfly-wing-back-left"></div>
-              <div class="butterfly-wing butterfly-wing-back-right"></div>
+            <div class="box-inner">
+              <div class="mushroom"></div>
+              <div class="small-mushroom"></div>
+              <div class="grass">
+                <div class="triangle"></div>
+                <div class="triangle"></div>
+                <div class="triangle"></div>
+                <div class="triangle"></div>
+              </div>
+              <div class="cloud"></div>
+              <div class="butterfly">
+                <div class="butterfly-head"></div>
+                <div class="butterfly-body"></div>
+                <div class="butterfly-eye butterfly-eye-left"></div>
+                <div class="butterfly-eye butterfly-eye-right"></div>
+                <div class="butterfly-wing butterfly-wing-front-left"></div>
+                <div class="butterfly-wing butterfly-wing-front-right"></div>
+                <div class="butterfly-wing butterfly-wing-back-left"></div>
+                <div class="butterfly-wing butterfly-wing-back-right"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -131,7 +133,14 @@
     </div>
   </div>
 </footer>
-
+<script>
+  // Активируем анимацию появления
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('active');
+    });
+  });
+</script>
 <script src="script.js"></script>
 </body>
 </html>

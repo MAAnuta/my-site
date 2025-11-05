@@ -1,12 +1,14 @@
 /* Основной flex-контейнер (200x200px) */
+/*
 .flexbox-role {
-    width: 12.5em;
-    height: 12.5em;
+    width: 200px;
+    height: 200px;
     display: flex;
     overflow: hidden;
     position: relative;
     cursor: pointer;
 }
+*/
 
 /* Шкаф как фон */
 .wardrobe {
@@ -209,4 +211,20 @@
     to {
         opacity: 1;
     }
+}
+
+@media (max-width: 768px) {
+    .flexbox-role {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+.flexbox-role {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
 }

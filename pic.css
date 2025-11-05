@@ -1,6 +1,6 @@
 /* Стили для картинки */
 
-.box {
+/*.box {
     width: 200px;
     height: 200px;
     background: radial-gradient(#c8d8f5, #718cc1);
@@ -8,7 +8,7 @@
     border-image: linear-gradient(45deg, #718cc1, #c8d8f5) 1;
     box-sizing: border-box;
     position: relative;
-}
+}*/
 
 /* Контейнер для маскировки внутреннего содержимого */
 .box-inner {
@@ -261,4 +261,22 @@
     transform: rotate(80deg);
     top: -25px;
     left: 0;
+}
+
+@media (max-width: 768px) {
+    .box {
+        width: 100% !important;
+        height: 100% !important;
+        border-width: 8px !important;
+    }
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(#c8d8f5, #718cc1);
+    border: 16px solid;
+    border-image: linear-gradient(45deg, #718cc1, #c8d8f5) 1;
+    box-sizing: border-box;
+    position: relative;
 }

@@ -241,3 +241,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Имитация hover по тапу
+document.querySelectorAll('.flexbox-role').forEach(role => {
+    role.addEventListener('touchstart', function() {
+        this.classList.add('tapped');
+    });
+
+    role.addEventListener('touchend', function() {
+        setTimeout(() => this.classList.remove('tapped'), 3000);
+    });
+
+    // Для мыши — оставляем :hover
+    role.addEventListener('mouseenter', () => role.classList.add('tapped'));
+    role.addEventListener('mouseleave', () => role.classList.remove('tapped'));
+});

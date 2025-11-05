@@ -53,29 +53,31 @@
   <div class="curtain curtain-left"></div>
   <div class="curtain curtain-right"></div>
   <section class="task-section">
-    <div class="container">
-      <h1 class="task-title">Задание 2: Flexbox-ролик</h1>
-      <p class="task-desc">Создать анимированный ролик магазина игрушек с базовым размером 200х200 px с использованием Flexbox. Изображения прилагаются в архиве.
-        По наведению мыши и нажатию его состояние и содержимое меняется.
-      </p>
+      <div class="container">
+        <h1 class="task-title">Задание 2: Flexbox-ролик</h1>
+        <p class="task-desc">Создать анимированный ролик магазина игрушек с базовым размером 200х200 px с использованием Flexbox. Изображения прилагаются в архиве.
+          По наведению мыши и нажатию его состояние и содержимое меняется.
+        </p>
 
-      <div class="task-demo">
-        <div class="flexbox-role">
-          <img class="wardrobe" src="var3/toy1.png" alt="Шкаф с игрушками">
-          <img class="toy boy" src="var3/toy4.png" alt="Мальчик в магазине">
-          <div class="toys-container">
-            <div class="shelf top-shelf">
-              <img class="toy car" src="var3/toy3.png" alt="Игрушечная машина">
+        <div class="task-demo">
+          <div class="demo-wrapper">
+          <div class="flexbox-role">
+            <img class="wardrobe" src="var3/toy1.png" alt="Шкаф с игрушками">
+            <img class="toy boy" src="var3/toy4.png" alt="Мальчик в магазине">
+            <div class="toys-container">
+              <div class="shelf top-shelf">
+                <img class="toy car" src="var3/toy3.png" alt="Игрушечная машина">
+              </div>
+              <div class="shelf bottom-shelf">
+                <img class="toy boat" src="var3/toy2.png" alt="Игрушечная лодка">
+              </div>
             </div>
-            <div class="shelf bottom-shelf">
-              <img class="toy boat" src="var3/toy2.png" alt="Игрушечная лодка">
+            <div class="labels-container">
+              <div class="label buy-label">Покупаю!</div>
+              <div class="label shop-label">Магазин игрушек</div>
             </div>
+            <div class="sepia-overlay"></div>
           </div>
-          <div class="labels-container">
-            <div class="label buy-label">Покупаю!</div>
-            <div class="label shop-label">Магазин игрушек</div>
-          </div>
-          <div class="sepia-overlay"></div>
         </div>
       </div>
     </div>
@@ -105,7 +107,14 @@
     </div>
   </div>
 </footer>
-
+<script>
+  // Активируем анимацию появления
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('active');
+    });
+  });
+</script>
 <script src="script.js"></script>
 </body>
 </html>
