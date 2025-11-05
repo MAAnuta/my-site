@@ -33,6 +33,7 @@ h2 {
 h3 {
     font-size: 1.8rem;
     font-weight: 500;
+    margin: 0;
 }
 
 h4 {
@@ -391,7 +392,6 @@ nav a:hover {
     align-items: center;
     color: #d0a459;
     text-align: center;
-    padding: 20px;
     transform: rotateY(0deg);
     z-index: 2;
 }
@@ -440,12 +440,14 @@ nav a:hover {
     font-family: 'Playfair Display', serif;
     font-size: 1.3rem;
     font-weight: 600;
+    margin: 0;
 }
 
 .description {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1rem;
     line-height: 1.5;
+    margin-top: 10px;
 }
 
 .show-front h3 {
@@ -459,6 +461,7 @@ nav a:hover {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.1rem;
     font-style: italic;
+    margin: 0;
 }
 
 .buy-ticket {
@@ -741,10 +744,6 @@ section {
     margin: 8px 0;
     font-size: 1.1rem;
     font-weight: 400;
-}
-
-.description, .cast {
-    margin: 40px 0;
 }
 
 .description h2, .cast h2 {
