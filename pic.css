@@ -12,7 +12,7 @@
 
 /* Контейнер для маскировки внутреннего содержимого */
 .box-inner {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
@@ -72,6 +72,7 @@
     position: absolute;
     width: 100%;
     height: 40%;
+    left: 0;
     background: radial-gradient(circle at top right, #f8f0eb, #684839);
     border-radius: 100px 100px 0 0;
 }
@@ -106,6 +107,7 @@
     position: absolute;
     width: 100%;
     height: 38%;
+    left: 0;
     background: radial-gradient(circle at top, #f8eee7, #8c604c);
     border-radius:  100px 100px 0 0;
 }
