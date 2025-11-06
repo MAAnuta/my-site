@@ -240,3 +240,30 @@ document.querySelectorAll('.flexbox-role').forEach(role => {
     role.addEventListener('mouseenter', () => role.classList.add('tapped'));
     role.addEventListener('mouseleave', () => role.classList.remove('tapped'));
 });
+
+/* ---------- АККОРДЕОН ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const accordionItem = header.parentElement;
+            const accordionContent = header.nextElementSibling;
+            const isActive = accordionItem.classList.contains('active');
+
+            // Закрываем все открытые секции
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.accordion-content').classList.remove('active');
+                item.querySelector('.accordion-header').classList.remove('active');
+            });
+
+            // Открываем или закрываем текущую секцию
+            if (!isActive) {
+                accordionItem.classList.add('active');
+                accordionContent.classList.add('active');
+                header.classList.add('active');
+            }
+        });
+    });
+});
