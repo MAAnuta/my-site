@@ -770,7 +770,6 @@ section p {
 }
 
 /* ================= АДАПТИВНОСТЬ ДЛЯ ЗАДАНИЙ ================= */
-
 @media (max-width: 768px) {
     /* 1. УБИРАЕМ ЗАНОВЕСЫ */
     .task-page .hero-wrapper,
@@ -781,7 +780,7 @@ section p {
 
     /* 2. ОСНОВНОЙ КОНТЕЙНЕР */
     .task-page {
-        padding-top: 4.5em;
+        padding-top: 14em;
         min-height: 100vh;
         height: auto;
         overflow: visible;
@@ -789,7 +788,7 @@ section p {
 
     /* 3. СЕКЦИЯ */
     .task-section {
-        padding: 1.5em 1em;
+        padding-bottom: 1.5em;
         text-align: center;
         justify-content: flex-start;
     }
@@ -842,13 +841,4 @@ section p {
     .task-page .column-right {
         display: none !important;
     }
-
-    /* Опционально: убираем лишние отступы, если фон не нужен */
-    .task-page .task-section {
-        padding-top: 2em;
-    }
 }
-
-.carousel { position: absolute; inset: 0; } /* z-index не указан → 0 */
-.hero-overlay { position: absolute; inset: 0; z-index: 1; } /* градиент поверх фона */
-.hero-text { position: relative; z-index: 2; } /* текст поверх */

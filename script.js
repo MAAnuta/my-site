@@ -1,111 +1,124 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === ПРОВЕРКА: ЭТО СТРАНИЦА ЗАДАНИЙ? ===
-    const taskPage = document.querySelector('.task-page');
+    const isTaskPage = document.body.classList.contains('task-page') ||
+        document.querySelector('.task-page');
     const isMobile = window.innerWidth <= 768;
 
-    // === ЕСЛИ task-page + мобильное → скрываем ТОЛЬКО ЗДЕСЬ ===
-    if (taskPage && isMobile) {
-        // Скрываем ТОЛЬКО внутри .task-page
-        taskPage.querySelectorAll('.curtain, .column, .hero-wrapper').forEach(el => {
-            if (el) el.style.display = 'none';
-        });
-        // Анимация занавесов НЕ запускается
-        return;
-    }
+    // Если это страница задания И мобильное устройство — отключаем занавесы
+    if (isTaskPage && isMobile) {
+        const curtains = document.querySelectorAll('.curtain');
+        const columns = document.querySelectorAll('.column');
+        const heroWrapper = document.querySelector('.hero-wrapper');
 
-    // === ДАЛЬШЕ: ГЛАВНАЯ, СПЕКТАКЛИ, ДРУГИЕ СТРАНИЦЫ ===
-    // Проверяем, есть ли элементы для анимации занавесов
+        curtains.forEach(c => c.style.display = 'none');
+        columns.forEach(c => c.style.display = 'none');
+        if (heroWrapper) heroWrapper.style.display = 'none';
+
+        // Отключаем scroll-событие для занавесов
+        window.removeEventListener('scroll', handleScroll);
+        return; // Прерываем инициализацию анимации
+    }
+    /* ---------- ELEMENTS ---------- */
     const curtainLeft  = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
     const heroSection  = document.querySelector('.hero');
+    const reveals      = document.querySelectorAll('.reveal');
 
-    // Если занавесов нет — пропускаем их анимацию (но не ломаем страницу!)
-    if (curtainLeft && curtainRight && heroSection) {
-        /* ---------- ПЕРЕМЕННЫЕ АНИМАЦИИ ---------- */
-        let currentX = -80;
-        let targetX  = -80;
-        let inertiaX = -80;
-        let animating = false;
+    /* ---------- ПЛАВНЫЙ Занавес с ИНЕРЦИЕЙ ---------- */
+    /* ---------- ПЕРЕМЕННЫЕ ---------- */
+    let currentX = -80;
+    let targetX  = -80;
+    let inertiaX = -80;
+    let animating = false;
+    let lastScrollY = 0;
 
-        /* ---------- АНИМАЦИЯ С ИНЕРЦИЕЙ ---------- */
-        const animateCurtains = () => {
-            if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
-                currentX = targetX;
-                inertiaX = targetX;
-                animating = false;
-                return;
+    /* ---------- АНИМАЦИЯ С ИНЕРЦИЕЙ ---------- */
+    const animateCurtains = () => {
+        if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
+            currentX = targetX;
+            inertiaX = targetX;
+            animating = false;
+            return;
+        }
+
+        inertiaX += (targetX - inertiaX) * 0.08;
+        currentX += (inertiaX - currentX) * 0.15;
+
+        curtainLeft.style.transform  = `translateX(${currentX}%)`;
+        curtainRight.style.transform = `translateX(${-currentX}%)`;
+
+        requestAnimationFrame(animateCurtains);
+    };
+
+    const setTargetX = value => {
+        if (Math.abs(targetX - value) > 0.1) {
+            targetX = value;
+            if (!animating) {
+                animating = true;
+                requestAnimationFrame(animateCurtains);
             }
+        }
+    };
 
-            inertiaX += (targetX - inertiaX) * 0.08;
-            currentX += (inertiaX - currentX) * 0.15;
+    /* ---------- ИНИЦИАЛИЗАЦИЯ ---------- */
+    const initCurtains = () => {
+        currentX = -80;
+        targetX = -80;
+        inertiaX = -80;
+        curtainLeft.style.transform  = 'translateX(-80%)';
+        curtainRight.style.transform = 'translateX(80%)';
+    };
+    setTimeout(initCurtains, 100);
 
-            curtainLeft.style.transform  = `translateX(${currentX}%)`;
-            curtainRight.style.transform = `translateX(${-currentX}%)`;
+    /* ---------- SCROLL LOGIC — ПОЛНОЕ ЗАКРЫТИЕ + ТОЧНОЕ ВОЗВРАЩЕНИЕ ---------- */
+    let ticking = false;
 
-            requestAnimationFrame(animateCurtains);
-        };
+    const updateCurtains = () => {
+        const rect = heroSection.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const winW = window.innerWidth;
 
-        const setTargetX = value => {
-            if (Math.abs(targetX - value) > 0.1) {
-                targetX = value;
-                if (!animating) {
-                    animating = true;
-                    requestAnimationFrame(animateCurtains);
-                }
-            }
-        };
+        const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
 
-        /* ---------- ИНИЦИАЛИЗАЦИЯ ---------- */
-        const initCurtains = () => {
-            currentX = targetX = inertiaX = -80;
-            curtainLeft.style.transform  = 'translateX(-80%)';
-            curtainRight.style.transform = 'translateX(80%)';
-        };
-        setTimeout(initCurtains, 100);
-
-        /* ---------- SCROLL LOGIC ---------- */
-        let ticking = false;
-
-        const updateCurtains = () => {
-            const rect = heroSection.getBoundingClientRect();
-            const winH = window.innerHeight;
-            const winW = window.innerWidth;
-            const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
-
-            if (rect.top > -150 && rect.top < winH * 0.4) {
-                setTargetX(-80);
-                ticking = false;
-                return;
-            }
-
-            if (rect.bottom > 0 && rect.top < buffer) {
-                const progress = Math.max(0, Math.min(1, (winH - rect.top) / (winH + rect.height)));
-                setTargetX(-80 + 80 * progress);
-            } else if (rect.bottom <= 0) {
-                setTargetX(0);
-            }
-
+        // === 1. ВОЗВРАТ В НАЧАЛЬНОЕ СОСТОЯНИЕ (ТОЧНО -80%) ===
+        if (rect.top > -150 && rect.top < winH * 0.4) {
+            setTargetX(-80); // ← ТОЧНОЕ ПОЛОЖЕНИЕ, КАК ПРИ ЗАГРУЗКЕ
             ticking = false;
-        };
+            return;
+        }
 
-        const handleScroll = () => {
-            if (!ticking) {
-                requestAnimationFrame(updateCurtains);
-                ticking = true;
-            }
-        };
+        // === 2. В ЗОНЕ ВИДИМОСТИ — ПЛАВНО ЗАКРЫВАТЬ ДО ПОЛНОГО ЗАКРЫТИЯ ===
+        if (rect.bottom > 0 && rect.top < buffer) {
+            const progress = Math.max(0, Math.min(1,
+                (winH - rect.top) / (winH + rect.height)
+            ));
+            const newTarget = -80 + 80 * progress; // от -80% до 0%
+            setTargetX(newTarget);
+        }
+        // === 3. СЕКЦИЯ УШЛА ВВЕРХ — ПОЛНОСТЬЮ ЗАКРЫТЬ ===
+        else if (rect.bottom <= 0) {
+            setTargetX(0); // ← ПОЛНОСТЬЮ ЗАКРЫТ
+        }
 
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        window.addEventListener('resize', () => requestAnimationFrame(updateCurtains));
-    }
+        ticking = false;
+    };
 
-    // === REVEAL АНИМАЦИИ (работают везде) ===
-    const reveals = document.querySelectorAll('.reveal');
+    const handleScroll = () => {
+        if (!ticking) {
+            requestAnimationFrame(updateCurtains);
+            ticking = true;
+        }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        lastScrollY = window.scrollY;
+        requestAnimationFrame(updateCurtains);
+    });
+
+    /* ---------- REVEAL АНИМАЦИИ ---------- */
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
+            if (entry.isIntersecting) entry.target.classList.add('active');
         });
     }, { threshold: 0.1 });
 
@@ -178,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextSlide = () => goToSlide(currentSlide + 1);
     const prevSlide = () => goToSlide(currentSlide - 1);
 
-    // === Автопрокрутка через setTimeout (рекурсивная) ===
     const startAutoPlay = () => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
@@ -225,7 +237,6 @@ document.querySelectorAll('.flexbox-role').forEach(role => {
         setTimeout(() => this.classList.remove('tapped'), 3000);
     });
 
-    // Для мыши — оставляем :hover
     role.addEventListener('mouseenter', () => role.classList.add('tapped'));
     role.addEventListener('mouseleave', () => role.classList.remove('tapped'));
 });
