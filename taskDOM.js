@@ -283,20 +283,13 @@ function enableReview() {
         quizArea.appendChild(revBlock);
     });
 
-    // Заголовки для навигации по вопросам с маркерами
+// Заголовки для навигации по вопросам без маркеров
     const reviewHeaders = document.createElement('div');
     reviewHeaders.id = 'review-headers';
     shuffledQuestions.forEach((q, i) => {
-        const userChoice = userAnswers[i];
-        const isCorrect = userChoice && userChoice.correct;
-        const marker = isCorrect ? '✅' : '❌';
-
         const head = document.createElement('div');
         head.className = 'review-header';
-        head.innerHTML = `
-            <span class="review-marker">${marker}</span>
-            <span>Вопрос ${i + 1}</span>
-        `;
+        head.textContent = `Вопрос ${i + 1}`;
         head.addEventListener('click', () => toggleReview(i));
         reviewHeaders.appendChild(head);
     });

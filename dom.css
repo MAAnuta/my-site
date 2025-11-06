@@ -7,10 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f8fafc;
-    color: #2d3748;
     line-height: 1.6;
-    padding: 24px;
     min-height: 100vh;
 }
 header {
@@ -20,7 +17,8 @@ header {
 
 h1 {
     font-size:2.4rem;
-    color:#1a365d;
+    color:#d0a459;
+    padding: 0.5em;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
@@ -36,7 +34,7 @@ h1 {
 .finished {
     text-align:center;
     font-size:1.5rem;
-    color: #67a869;
+    color: #d0a459;
     margin: 32px 0;
     font-weight: 600;
 }
@@ -60,7 +58,7 @@ h1 {
 .question-block .q-num {
     font-weight:700;
     font-size:1.15rem;
-    color: #638bb1;
+    color: #000000;
     margin-bottom:10px;
     letter-spacing: 0.3px;
 }
@@ -96,9 +94,9 @@ h1 {
     text-align: center;
 }
 .answer-block:hover {
-    border-color:#638bb1;
+    border-color:#fbeccb;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(66,153,225,.15);
+    box-shadow: 0 4px 12px #d0a459;
 }
 .answer-block:active,
 .answer-block.selected {
@@ -122,7 +120,7 @@ h1 {
 .wrong {
     background:#fff5f5;
     border-color: #d15a5a;
-    box-shadow: 0 4px 12px rgba(245,101,101,.15);
+    box-shadow: 0 4px 12px rgb(43, 45, 48);
 }
 
 .explanation {
@@ -174,11 +172,11 @@ h1 {
     text-align:center;
     font-size:1.35rem;
     color:#1a202c;
-    background: #f7fafc;
+    background: #fbeccb;
     padding: 20px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,.06);
-    border: 1px solid #e2e8f0;
+    border: 1px solid #fbeccb;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity .4s ease, transform .4s ease;
@@ -189,27 +187,26 @@ h1 {
 }
 #stats p {
     font-weight: 600;
-    color: #2c5282;
+    color: #000000;
     margin: 0;
 }
 
-/* РЕЖИМ ПРОСМОТРА */
+/* РЕЖИМ ПРОСМОТРА до раскрытия */
 .review-header {
-    background: #edf2f7;
+    background: #fdfdfd;
     padding: 14px 16px;
     border-radius: 10px;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #2d3748;
+    color: #000000;
     cursor: pointer;
     transition: all .2s ease;
-    border: 1px solid #e2e8f0;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 .review-header:hover {
-    background: #e2e8f0;
+    background: #fbeccb;
     transform: translateY(-1px);
 }
 
@@ -217,16 +214,15 @@ h1 {
     font-size: 1.2rem;
 }
 
-/* Гарантируем, что правильный ответ с пояснением улетит целиком */
 .correct.slide-right {
     overflow: visible;
     animation: slideRight .6s ease-out forwards;
 }
 
-/* Стили для блоков в режиме просмотра */
+/* Стили для блоков в режиме просмотра при их открытии */
 .review-block {
     padding: 20px;
-    background: #fff;
+    background: #fdfdfd;
     border-radius: 12px;
     margin-bottom: 20px;
     box-shadow: 0 4px 12px rgba(0,0,0,.08);
@@ -262,7 +258,7 @@ h1 {
 .explanation-text {
     margin-top: 10px;
     font-style: italic;
-    color: #2c3e50;
+    color: #000000;
     font-size: 0.9rem;
 }
 
@@ -271,7 +267,7 @@ h1 {
     display: block;
     margin: 20px auto;
     padding: 12px 24px;
-    background: #638bb1;
+    background: #591c1c;
     color: white;
     border: none;
     border-radius: 8px;
@@ -281,7 +277,8 @@ h1 {
 }
 
 .restart-btn:hover {
-    background: #67a869;
+    background: #d0a459;
+    color: #000000;
 }
 
 .answer-block.disabled {
@@ -293,7 +290,6 @@ h1 {
     display: none;
 }
 
-/* СТИЛИ ДЛЯ ОТОБРАЖЕНИЯ В СТИЛЕ КАРТИНОК */
 .answer-option {
     background: #f7fafc;
     border: 2px solid #e2e8f0;
@@ -301,7 +297,7 @@ h1 {
     padding: 16px 20px;
     margin: 8px 0;
     font-weight: 500;
-    color: #2d3748;
+    color: #000000;
     position: relative;
     flex: 1;
     min-width: 120px;
@@ -339,10 +335,6 @@ h1 {
     color: #67a869;
 }
 
-.wrong-status {
-    color: #d15a5a;
-}
-
 .review-question {
     font-size: 1.25rem;
     font-weight: 600;
@@ -359,7 +351,7 @@ h1 {
     font-size: 1.3rem;
 }
 
-/* ==== АДАПТИВНОСТЬ ==== */
+/* АДАПТИВНОСТЬ */
 @media (max-width:600px) {
     body { padding: 16px; }
     h1 { font-size:1.9rem; }
@@ -373,3 +365,4 @@ h1 {
     .review-header { padding: 12px; font-size: 0.9rem; }
     .review-question { font-size: 1.1rem; }
 }
+
