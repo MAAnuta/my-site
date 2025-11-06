@@ -1,109 +1,111 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === ПРОВЕРКА: ЭТО СТРАНИЦА ЗАДАНИЙ И МОБИЛЬНОЕ УСТРОЙСТВО? ===
-    const isTaskPage = document.body.classList.contains('task-page') ||
-        document.querySelector('.task-page');
+    // === ПРОВЕРКА: ЭТО СТРАНИЦА ЗАДАНИЙ? ===
+    const taskPage = document.querySelector('.task-page');
     const isMobile = window.innerWidth <= 768;
 
-    if (isTaskPage && isMobile) {
-        // Скрываем элементы
-        document.querySelectorAll('.task-page .curtain, .task-page .column, .task-page .hero-wrapper')
-            .forEach(el => el && (el.style.display = 'none'));
-
-        // handleScroll ещё не добавлен → удалять НЕ НУЖНО
-        return; // Полностью выходим — анимация не запускается
+    // === ЕСЛИ task-page + мобильное → скрываем ТОЛЬКО ЗДЕСЬ ===
+    if (taskPage && isMobile) {
+        // Скрываем ТОЛЬКО внутри .task-page
+        taskPage.querySelectorAll('.curtain, .column, .hero-wrapper').forEach(el => {
+            if (el) el.style.display = 'none';
+        });
+        // Анимация занавесов НЕ запускается
+        return;
     }
 
-    // === ЕСЛИ НЕ task-page или НЕ мобильное — ВКЛЮЧАЕМ АНИМАЦИЮ ===
+    // === ДАЛЬШЕ: ГЛАВНАЯ, СПЕКТАКЛИ, ДРУГИЕ СТРАНИЦЫ ===
+    // Проверяем, есть ли элементы для анимации занавесов
     const curtainLeft  = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
     const heroSection  = document.querySelector('.hero');
-    const reveals      = document.querySelectorAll('.reveal');
 
-    if (!curtainLeft || !curtainRight || !heroSection) return;
+    // Если занавесов нет — пропускаем их анимацию (но не ломаем страницу!)
+    if (curtainLeft && curtainRight && heroSection) {
+        /* ---------- ПЕРЕМЕННЫЕ АНИМАЦИИ ---------- */
+        let currentX = -80;
+        let targetX  = -80;
+        let inertiaX = -80;
+        let animating = false;
 
-    /* ---------- ПЕРЕМЕННЫЕ АНИМАЦИИ ---------- */
-    let currentX = -80;
-    let targetX  = -80;
-    let inertiaX = -80;
-    let animating = false;
-
-    /* ---------- АНИМАЦИЯ С ИНЕРЦИЕЙ ---------- */
-    const animateCurtains = () => {
-        if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
-            currentX = targetX;
-            inertiaX = targetX;
-            animating = false;
-            return;
-        }
-
-        inertiaX += (targetX - inertiaX) * 0.08;
-        currentX += (inertiaX - currentX) * 0.15;
-
-        curtainLeft.style.transform  = `translateX(${currentX}%)`;
-        curtainRight.style.transform = `translateX(${-currentX}%)`;
-
-        requestAnimationFrame(animateCurtains);
-    };
-
-    const setTargetX = value => {
-        if (Math.abs(targetX - value) > 0.1) {
-            targetX = value;
-            if (!animating) {
-                animating = true;
-                requestAnimationFrame(animateCurtains);
+        /* ---------- АНИМАЦИЯ С ИНЕРЦИЕЙ ---------- */
+        const animateCurtains = () => {
+            if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
+                currentX = targetX;
+                inertiaX = targetX;
+                animating = false;
+                return;
             }
-        }
-    };
 
-    /* ---------- ИНИЦИАЛИЗАЦИЯ ---------- */
-    const initCurtains = () => {
-        currentX = targetX = inertiaX = -80;
-        curtainLeft.style.transform  = 'translateX(-80%)';
-        curtainRight.style.transform = 'translateX(80%)';
-    };
-    setTimeout(initCurtains, 100);
+            inertiaX += (targetX - inertiaX) * 0.08;
+            currentX += (inertiaX - currentX) * 0.15;
 
-    /* ---------- SCROLL LOGIC ---------- */
-    let ticking = false;
+            curtainLeft.style.transform  = `translateX(${currentX}%)`;
+            curtainRight.style.transform = `translateX(${-currentX}%)`;
 
-    const updateCurtains = () => {
-        const rect = heroSection.getBoundingClientRect();
-        const winH = window.innerHeight;
-        const winW = window.innerWidth;
-        const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
+            requestAnimationFrame(animateCurtains);
+        };
 
-        if (rect.top > -150 && rect.top < winH * 0.4) {
-            setTargetX(-80);
+        const setTargetX = value => {
+            if (Math.abs(targetX - value) > 0.1) {
+                targetX = value;
+                if (!animating) {
+                    animating = true;
+                    requestAnimationFrame(animateCurtains);
+                }
+            }
+        };
+
+        /* ---------- ИНИЦИАЛИЗАЦИЯ ---------- */
+        const initCurtains = () => {
+            currentX = targetX = inertiaX = -80;
+            curtainLeft.style.transform  = 'translateX(-80%)';
+            curtainRight.style.transform = 'translateX(80%)';
+        };
+        setTimeout(initCurtains, 100);
+
+        /* ---------- SCROLL LOGIC ---------- */
+        let ticking = false;
+
+        const updateCurtains = () => {
+            const rect = heroSection.getBoundingClientRect();
+            const winH = window.innerHeight;
+            const winW = window.innerWidth;
+            const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
+
+            if (rect.top > -150 && rect.top < winH * 0.4) {
+                setTargetX(-80);
+                ticking = false;
+                return;
+            }
+
+            if (rect.bottom > 0 && rect.top < buffer) {
+                const progress = Math.max(0, Math.min(1, (winH - rect.top) / (winH + rect.height)));
+                setTargetX(-80 + 80 * progress);
+            } else if (rect.bottom <= 0) {
+                setTargetX(0);
+            }
+
             ticking = false;
-            return;
-        }
+        };
 
-        if (rect.bottom > 0 && rect.top < buffer) {
-            const progress = Math.max(0, Math.min(1, (winH - rect.top) / (winH + rect.height)));
-            setTargetX(-80 + 80 * progress);
-        } else if (rect.bottom <= 0) {
-            setTargetX(0);
-        }
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(updateCurtains);
+                ticking = true;
+            }
+        };
 
-        ticking = false;
-    };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', () => requestAnimationFrame(updateCurtains));
+    }
 
-    // Объявляем handleScroll ДО использования
-    const handleScroll = () => {
-        if (!ticking) {
-            requestAnimationFrame(updateCurtains);
-            ticking = true;
-        }
-    };
-
-    // Добавляем обработчики
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', () => requestAnimationFrame(updateCurtains));
-
-    /* ---------- REVEAL АНИМАЦИИ ---------- */
+    // === REVEAL АНИМАЦИИ (работают везде) ===
+    const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
         });
     }, { threshold: 0.1 });
 

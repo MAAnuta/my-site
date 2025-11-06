@@ -848,3 +848,7 @@ section p {
         padding-top: 2em;
     }
 }
+
+.carousel { position: absolute; inset: 0; } /* z-index не указан → 0 */
+.hero-overlay { position: absolute; inset: 0; z-index: 1; } /* градиент поверх фона */
+.hero-text { position: relative; z-index: 2; } /* текст поверх */
