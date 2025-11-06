@@ -655,11 +655,7 @@ section p {
     perspective: 93.75em;
     margin: 0 auto;
 }
-.task-demo .box:hover,
-.task-demo .flexbox-role:hover {
-    transform: translateY(-0.5em) scale(1.02);
-    box-shadow: 0 1.25em 3.125em rgba(208,164,89,0.3);
-}
+
 .task-page .column,
 .task-page .curtain { height: 100%; position: absolute; overflow: hidden; }
 .task-page .hero-wrapper { height: 100%; overflow: hidden; }
@@ -810,8 +806,8 @@ section p {
         width: 200px;
         height: 200px;
         margin: 2em auto;
-        overflow: hidden;
-        border-radius: 16px;
+        /*overflow: hidden;*/
+        /*border-radius: 16px;*/
         box-shadow: 0 12px 30px rgba(0,0,0,0.6);
         background: #fff;
     }
