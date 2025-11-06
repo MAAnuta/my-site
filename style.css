@@ -842,3 +842,37 @@ section p {
         display: none !important;
     }
 }
+
+/* ================= КАРТА (БЕЗ API) ================= */
+.map-section {
+    margin: 2em 0;
+    text-align: center;
+}
+
+.map-section h2 {
+    margin-bottom: 1em;
+    color: #d0a459;
+}
+
+#map, iframe {
+    max-width: 75em;
+    margin: 0 auto;
+    display: block;
+}
+
+.map-note {
+    font-style: italic;
+    color: #cea358;
+    margin-top: 0.5em;
+    font-size: 1rem;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    iframe {
+        height: 300px;
+    }
+    .map-note {
+        font-size: 0.95rem;
+    }
+}
