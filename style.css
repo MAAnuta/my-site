@@ -606,7 +606,7 @@ section p {
 /* ================= СТРАНИЦА ЗАДАНИЙ ================= */
 .task-page {
     padding-top: 5em;
-    height: calc(100vh - 5em);
+    min-height: calc(100vh - 5em);
     display: flex;
     flex-direction: column;
     background: #302f2d;
@@ -819,5 +819,82 @@ section p {
         height: 200px;
         min-width: 200px;
         min-height: 200px;
+    }
+}
+/* === МОБИЛЬНАЯ ВЕРСИЯ: ДРОПДАУН === */
+@media (max-width: 768px) {
+
+    /* Скрываем все пункты кроме "Задания" */
+    nav ul li:not(.dropdown) {
+        display: none !important;
+    }
+
+    /* Центрируем меню */
+    nav ul {
+        justify-content: center;
+        padding: 0;
+        width: 100%;
+    }
+
+    nav .dropdown {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    nav .dropdown-toggle {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #d0a459;
+        padding: 0.5em 1em;
+        display: block;
+        width: 100%;
+        text-decoration: none;
+    }
+
+    nav .dropdown-toggle::after {
+        display: none;
+    }
+
+    /* === ВЫПАДАЮЩЕЕ МЕНЮ === */
+    nav .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: rgba(20, 20, 20, 0.98);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 0.75em 0.75em;
+        box-shadow: 0 0.5em 1em rgba(0,0,0,0.5);
+        z-index: 9999;
+        padding: 0.5em 0;
+
+        /* КЛЮЧЕВОЕ: СКРЫВАЕМ ПО УМОЛЧАНИЮ */
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    /* ОТКРЫТИЕ ПО КЛИКУ */
+    nav .dropdown.active .dropdown-menu {
+        display: block !important;   /* ← ОБЯЗАТЕЛЬНО */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    nav .dropdown-menu a {
+        display: block;
+        padding: 1em 1.5em;
+        font-size: 1.1rem;
+        color: #fbeccb;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    nav .dropdown-menu a:hover {
+        background: #381111;
+        color: #cea358;
     }
 }

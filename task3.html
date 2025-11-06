@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 3 — Театр Эмоций</title>
+    <link rel="preload" href="image/theater.png" as="image">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dom.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <a href="index.html" class="logo-link">
+        <div class="logo">
+            <div class="mask sad">
+                <div class="eye"></div>
+                <div class="eye"></div>
+                <div class="mouth"></div>
+            </div>
+            <div class="mask happy">
+                <div class="eye"></div>
+                <div class="eye"></div>
+                <div class="mouth"></div>
+            </div>
+        </div>
+    </a>
+    <nav>
+        <ul>
+            <li><a href="index.html#top">Главная</a></li>
+            <li><a href="index.html#about">О театре</a></li>
+            <li><a href="index.html#shows">Спектакли</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Задания</a>
+                <ul class="dropdown-menu">
+                    <li><a href="task1.html">Задание 1</a></li>
+                    <li><a href="task2.html">Задание 2</a></li>
+                    <li><a href="task3.html">Задание 3</a></li>
+                    <li><a href="kursovaya.html">Курсовая</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="task-page reveal">
+    <div class="hero-wrapper">
+        <div class="column column-left"><div class="base"></div></div>
+        <div class="column column-right"><div class="base"></div></div>
+        <div class="curtain curtain-left"></div>
+        <div class="curtain curtain-right"></div>
+    </div>
+
+    <section class="task-section">
+        <div class="container">
+            <h1 class="task-title">Задание 3: DOM-тест</h1>
+            <p class="task-desc">
+                Интерактивный тест по современному сленгу с использованием DOM-манипуляций, анимациями и системой подсчета результатов.
+            </p>
+
+            <div class="quiz-container">
+                <header class="quiz-header">
+                    <h1>Тест по сленгу</h1>
+                </header>
+
+                <main id="quiz-area"></main>
+
+                <footer id="stats" class="hidden">
+                    <p id="result"></p>
+                </footer>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Информация</h4>
+                <p>© 2025 Театр Эмоций. Все права защищены.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <p>Email: info@teatr-emociy.ru</p>
+                <p>Телефон: +7 (495) 777-77-77</p>
+            </div>
+            <div class="footer-section">
+                <h4>Социальные сети</h4>
+                <div class="social-links">
+                    <a href="#">VK</a>
+                    <a href="#">Telegram</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Активируем анимацию появления
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll('.reveal').forEach(el => {
+            el.classList.add('active');
+        });
+    });
+</script>
+<script src="taskDOM.js"></script>
+</body>
+</html>
