@@ -1591,6 +1591,9 @@ body.menu-open {
         transition: transform 0.3s ease-in-out;
     }
 
+    nav .dropdown:hover .dropdown-menu, nav .dropdown.active .dropdown-menu {
+        transform: translateX(0);
+    }
     .nav-menu.active {
         transform: translateX(0);
     }

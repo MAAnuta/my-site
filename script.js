@@ -243,60 +243,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuClose = document.querySelector('.menu-close');
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-    // Функция для открытия/закрытия меню
-    function toggleMenu() {
-        navMenu.classList.toggle('active');
-        menuToggle.classList.toggle('active');
-        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-    }
+    if (menuToggle && navMenu && menuClose) {
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
 
-    // Открытие/закрытие меню
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMenu();
+        menuClose.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                menuToggle.classList.toggle('active');
+            }
         });
     }
 
-    // Закрытие меню
-    if (menuClose) {
-        menuClose.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMenu();
-        });
-    }
-
-    // Закрытие меню при клике вне его
-    document.addEventListener('click', (e) => {
-        if (navMenu && navMenu.classList.contains('active') &&
-            !navMenu.contains(e.target) &&
-            !menuToggle.contains(e.target)) {
-            toggleMenu();
-        }
-    });
-
-    // Обработка выпадающих меню в мобильной версии
     dropdownToggles.forEach(toggle => {
         toggle.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const dropdown = toggle.parentElement;
-                dropdown.classList.toggle('active');
-
+            e.preventDefault();
+            const dropdown = toggle.parentElement;
+            const isActive = dropdown.classList.contains('active');
+            document.querySelectorAll('.dropdown').forEach(item => {
+                item.classList.remove('active');
+                const menu = item.querySelector('.dropdown-menu');
+                if (menu) menu.style.display = 'none';
+            });
+            if (!isActive) {
+                dropdown.classList.add('active');
                 const menu = dropdown.querySelector('.dropdown-menu');
-                if (menu) {
-                    menu.style.display = dropdown.classList.contains('active') ? 'block' : 'none';
-                }
+                if (menu) menu.style.display = 'block';
             }
         });
     });
-
-    // Закрытие меню при изменении размера окна на десктоп
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && navMenu) {
-            navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
 });
+
