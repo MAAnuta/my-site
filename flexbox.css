@@ -14,7 +14,7 @@
 .wardrobe-bg {
     position: absolute;
     inset: 0;
-    background: url('var3/toy1.png') center/cover no-repeat;
+    background: url('flexbox/toy1.png') center/cover no-repeat;
     z-index: 0;
 }
 
