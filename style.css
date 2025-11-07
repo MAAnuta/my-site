@@ -37,7 +37,7 @@ h1, h2, h3, h4 {
 h1 { font-size: 3.5rem; font-weight: 700; }
 h2 { font-size: 2.5rem; }
 h3 { font-size: 1.8rem; font-weight: 500; }
-h4 { font-size: 1.3rem; font-weight: 500; }
+h4 { padding-bottom: 0.7em; font-size: 1.3rem; font-weight: 500; }
 
 /* ================= HEADER & НАВИГАЦИЯ ================= */
 header {
@@ -944,5 +944,31 @@ section p {
     .accordion-content p,
     .accordion-content ul {
         font-size: 0.95rem;
+    }
+}
+
+.accordion-content p.description {
+    font-style: italic;
+    color: #d0a459;
+    font-size: 1.3rem;
+    background: rgba(208, 164, 89, 0.1);
+    padding: 0.5em 1em;
+    border-left: 0.25em solid #d0a459;
+    margin: 0 0 1em 0;
+    display: block;
+}
+
+/* Адаптивность для цитаты */
+@media (max-width: 768px) {
+    .accordion-content p.description {
+        font-size: 1.1rem;
+        padding: 0.4em 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-content p.description {
+        font-size: 1rem;
+        padding: 0.3em 0.6em;
     }
 }
