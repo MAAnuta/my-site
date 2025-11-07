@@ -26,18 +26,31 @@
       </div>
     </div>
   </a>
-  <nav>
+  <button class="menu-toggle" aria-label="Открыть меню">
+    <span class="menu-icon"></span>
+  </button>
+  <nav class="nav-menu">
+    <div class="nav-header">
+      <a href="index.html" class="logo-link mobile-logo">
+        <div class="logo">
+          <div class="mask sad">
+            <div class="eye"></div>
+            <div class="eye"></div>
+            <div class="mouth"></div>
+          </div>
+          <div class="mask happy">
+            <div class="eye"></div>
+            <div class="eye"></div>
+            <div class="mouth"></div>
+          </div>
+        </div>
+      </a>
+      <button class="menu-close" aria-label="Закрыть меню">&times;</button>
+    </div>
     <ul>
-      <li><a href="index.html#about">О театре</a></li>
-      <li><a href="index.html#shows">Спектакли</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle">Задания</a>
-        <ul class="dropdown-menu">
-          <li><a href="task1.html">Задание 1</a></li>
-          <li><a href="task2.html">Задание 2</a></li>
-          <li><a href="task3.html">Задание 3</a></li>
-        </ul>
-      </li>
+        <li><a href="task1.html">Задание 1</a></li>
+        <li><a href="task2.html">Задание 2</a></li>
+        <li><a href="task3.html">Задание 3</a></li>
     </ul>
   </nav>
 </header>

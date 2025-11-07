@@ -154,76 +154,62 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Карусель
     const carousel = document.querySelector('.carousel');
     const prevBtn = document.querySelector('.carousel-prev');
     const nextBtn = document.querySelector('.carousel-next');
     const hero = document.querySelector('.play-hero');
 
-    if (!carousel || !prevBtn || !nextBtn) return;
+    if (carousel && prevBtn && nextBtn) {
+        const slides = carousel.querySelectorAll('img');
+        const slideCount = slides.length;
+        const slideDuration = window.matchMedia("(max-width: 768px)").matches ? 5000 : 4000;
+        let currentSlide = 0;
+        let timeout = null;
 
-    const slides = carousel.querySelectorAll('img');
-    const slideCount = slides.length;
-    const slideDuration = 4000; // 4 секунды
-    let currentSlide = 0;
-    let timeout = null;
+        const goToSlide = (index) => {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (index + slideCount) % slideCount;
+            slides[currentSlide].classList.add('active');
+        };
 
-    const goToSlide = (index) => {
-        slides.forEach(slide => slide.classList.remove('active'));
-        currentSlide = (index + slideCount) % slideCount;
-        slides[currentSlide].classList.add('active');
-    };
+        const nextSlide = () => goToSlide(currentSlide + 1);
+        const prevSlide = () => goToSlide(currentSlide - 1);
 
-    const nextSlide = () => goToSlide(currentSlide + 1);
-    const prevSlide = () => goToSlide(currentSlide - 1);
+        const startAutoPlay = () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                nextSlide();
+                startAutoPlay();
+            }, slideDuration);
+        };
 
-    const startAutoPlay = () => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            nextSlide();
+        const resetTimer = () => {
+            clearTimeout(timeout);
             startAutoPlay();
-        }, slideDuration);
-    };
+        };
 
-    const resetTimer = () => {
-        clearTimeout(timeout);
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetTimer();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetTimer();
+        });
+
+        if (hero) {
+            hero.addEventListener('mouseenter', () => clearTimeout(timeout));
+            hero.addEventListener('mouseleave', resetTimer);
+        }
+
+        goToSlide(0);
         startAutoPlay();
-    };
-
-    nextBtn.addEventListener('click', () => {
-        nextSlide();
-        resetTimer();
-    });
-
-    prevBtn.addEventListener('click', () => {
-        prevSlide();
-        resetTimer();
-    });
-
-    if (hero) {
-        hero.addEventListener('mouseenter', () => clearTimeout(timeout));
-        hero.addEventListener('mouseleave', resetTimer);
     }
 
-    goToSlide(0);
-    startAutoPlay();
-});
-
-document.querySelectorAll('.flexbox-role').forEach(role => {
-    role.addEventListener('touchstart', function() {
-        this.classList.add('tapped');
-    });
-
-    role.addEventListener('touchend', function() {
-        setTimeout(() => this.classList.remove('tapped'), 3000);
-    });
-
-    role.addEventListener('mouseenter', () => role.classList.add('tapped'));
-    role.addEventListener('mouseleave', () => role.classList.remove('tapped'));
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+    // Аккордеон
     const accordionHeaders = document.querySelectorAll('.accordion-header');
-
     accordionHeaders.forEach(header => {
         header.addEventListener('click', () => {
             const accordionItem = header.parentElement;
@@ -242,83 +228,75 @@ document.addEventListener('DOMContentLoaded', () => {
                 header.classList.add('active');
             }
         });
-    });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    function initVideoModal() {
-        const title = document.querySelector('.hero-text h1');
-        const modal = document.getElementById('videoModal');
-        const closeBtn = document.querySelector('.close');
-        const iframe = document.getElementById('videoIframe');
-
-        if (!title || !modal || !iframe) return;
-
-        const originalSrc = iframe.src;
-
-        const cleanSrc = originalSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
-        iframe.src = cleanSrc;
-
-        title.addEventListener('click', openModal);
-        closeBtn.addEventListener('click', closeModal);
-        window.addEventListener('click', handleOutsideClick);
-        document.addEventListener('keydown', handleEscape);
-
-        function openModal() {
-            let currentSrc = iframe.src;
-            if (!currentSrc.includes('autoplay=1')) {
-                const separator = currentSrc.includes('?') ? '&' : '?';
-                iframe.src = currentSrc + separator + 'autoplay=1';
-            }
-
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 10);
-        }
-
-        function closeModal() {
-            modal.classList.remove('show');
-            modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
-        }
-
-        function handleTransitionEnd() {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-
-            let currentSrc = iframe.src;
-            const cleanSrc = currentSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
-            iframe.src = cleanSrc;
-        }
-
-        function handleOutsideClick(event) {
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        function handleEscape(e) {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                closeModal();
-            }
-        }
-    }
-    initVideoModal();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const carousel = document.querySelector('.carousel');
-    if (carousel && window.innerWidth <= 768) {
-        const slideDuration = 5000;
-    }
-
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
-    accordionHeaders.forEach(header => {
         header.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            header.click();
+            if (header.contains(e.target)) {
+                e.preventDefault();
+                header.click();
+            }
         });
+    });
+
+    // Гамбургер-меню
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const menuClose = document.querySelector('.menu-close');
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+    // Функция для открытия/закрытия меню
+    function toggleMenu() {
+        navMenu.classList.toggle('active');
+        menuToggle.classList.toggle('active');
+        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    // Открытие/закрытие меню
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+    }
+
+    // Закрытие меню
+    if (menuClose) {
+        menuClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+    }
+
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', (e) => {
+        if (navMenu && navMenu.classList.contains('active') &&
+            !navMenu.contains(e.target) &&
+            !menuToggle.contains(e.target)) {
+            toggleMenu();
+        }
+    });
+
+    // Обработка выпадающих меню в мобильной версии
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const dropdown = toggle.parentElement;
+                dropdown.classList.toggle('active');
+
+                const menu = dropdown.querySelector('.dropdown-menu');
+                if (menu) {
+                    menu.style.display = dropdown.classList.contains('active') ? 'block' : 'none';
+                }
+            }
+        });
+    });
+
+    // Закрытие меню при изменении размера окна на десктоп
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navMenu) {
+            navMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     });
 });
