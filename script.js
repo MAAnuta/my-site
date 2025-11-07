@@ -263,8 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Закрытие меню при клике на ссылки
-        navMenu.querySelectorAll('a').forEach(link => {
+        // Закрытие меню только для ссылок, не являющихся .dropdown-toggle
+        navMenu.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 toggleMenu();
             });
