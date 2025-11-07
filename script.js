@@ -277,34 +277,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (title && modal) {
         title.addEventListener('click', () => {
-            modal.style.display = 'flex'; // Сначала показываем, чтобы transition сработал
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
             setTimeout(() => {
-                modal.classList.add('show'); // Добавляем класс для анимации (с задержкой для браузеров)
-            }, 10); // Маленькая задержка, чтобы display применился перед transition
+                modal.classList.add('show');
+            }, 10);
         });
 
-        // Закрытие по клику на крестик
         closeBtn.addEventListener('click', closeModal);
 
-        // Закрытие по клику вне модального
         window.addEventListener('click', (event) => {
             if (event.target === modal) {
                 closeModal();
             }
         });
 
-        // Функция закрытия с анимацией
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+
         function closeModal() {
-            modal.classList.remove('show'); // Убираем класс для обратной анимации
-            modal.addEventListener('transitionend', () => {
-                modal.style.display = 'none'; // Скрываем после завершения transition
-                iframe.src = iframe.src; // Сбрасываем видео
-            }, { once: true }); // Слушатель на один раз
+            modal.classList.remove('show');
+            modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
+        }
+
+        function handleTransitionEnd() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            const currentSrc = iframe.src;
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = currentSrc;
+            }, 100);
         }
     }
 });
 
-// Добавьте этот код в существующий script.js
 document.addEventListener('DOMContentLoaded', () => {
     // Оптимизация карусели для мобильных
     const carousel = document.querySelector('.carousel');

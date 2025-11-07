@@ -106,7 +106,8 @@
           <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A305daa211d3dc432a4dad68af26af2463f5e88f139c5a9871e200259bf491593&amp;source=constructor"
                   width="690"
                   height="400"
-                  frameborder="0">
+                  frameborder="0"
+                  allowfullscreen>
           </iframe>
           <p class="location-desc">Санкт-Петербург, площадь Островского, 6</p>
         </div>
@@ -122,14 +123,13 @@
   <div id="videoModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <iframe src="https://vkvideo.ru/video_ext.php?oid=-63976979&id=456240611&autoplay=1"
-              width="853"
-              height="480"
-              style="background-color: #000"
-              allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-              frameborder="0"
-              allowfullscreen>
-      </iframe>
+      <div class="video-container" id="videoContainer">
+        <iframe id="videoIframe"
+                src="https://vkvideo.ru/video_ext.php?oid=-63976979&id=456240611&autoplay=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                allowfullscreen>
+        </iframe>
+      </div>
     </div>
   </div>
 </main>
