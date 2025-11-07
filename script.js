@@ -303,3 +303,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// Добавьте этот код в существующий script.js
+document.addEventListener('DOMContentLoaded', () => {
+    // Оптимизация карусели для мобильных
+    const carousel = document.querySelector('.carousel');
+    if (carousel && window.innerWidth <= 768) {
+        // Увеличиваем интервал между слайдами на мобильных
+        const slideDuration = 5000; // 5 секунд вместо 4
+        // Остальной код карусели остается без изменений
+    }
+
+    // Оптимизация аккордеона для сенсорных устройств
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    accordionHeaders.forEach(header => {
+        // Добавляем обработчик для touch устройств
+        header.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            header.click();
+        });
+    });
+});
