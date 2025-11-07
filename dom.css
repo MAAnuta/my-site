@@ -353,7 +353,6 @@ h1 {
 
 /* АДАПТИВНОСТЬ */
 @media (max-width:600px) {
-    body { padding: 16px; }
     h1 { font-size:1.9rem; }
     .question-wrapper { border-radius:14px; }
     .question-block { padding:18px; }
