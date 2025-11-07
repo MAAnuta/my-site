@@ -267,3 +267,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+/* ---------- МОДАЛЬНОЕ ОКНО ДЛЯ ВИДЕО ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+    const title = document.querySelector('.hero-text h1');
+    const modal = document.getElementById('videoModal');
+    const closeBtn = document.querySelector('.close');
+    const iframe = document.getElementById('videoIframe');
+
+    if (title && modal) {
+        title.addEventListener('click', () => {
+            modal.style.display = 'flex'; // Сначала показываем, чтобы transition сработал
+            setTimeout(() => {
+                modal.classList.add('show'); // Добавляем класс для анимации (с задержкой для браузеров)
+            }, 10); // Маленькая задержка, чтобы display применился перед transition
+        });
+
+        // Закрытие по клику на крестик
+        closeBtn.addEventListener('click', closeModal);
+
+        // Закрытие по клику вне модального
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Функция закрытия с анимацией
+        function closeModal() {
+            modal.classList.remove('show'); // Убираем класс для обратной анимации
+            modal.addEventListener('transitionend', () => {
+                modal.style.display = 'none'; // Скрываем после завершения transition
+                iframe.src = iframe.src; // Сбрасываем видео
+            }, { once: true }); // Слушатель на один раз
+        }
+    }
+});
