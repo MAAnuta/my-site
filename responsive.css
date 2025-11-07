@@ -1,0 +1,617 @@
+/* responsive.css */
+
+/* ================= BASE.CSS MEDIA QUERIES ================= */
+@media (max-width: 992px) {
+    .container {
+        padding: 0 1.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    section {
+        padding: 1.5em;
+    }
+}
+
+@media (max-width: 480px) {
+    section {
+        padding: 1.25em 0.75em;
+    }
+}
+
+@media (max-width: 360px) {
+    section {
+        padding: 1em 0.5em;
+    }
+}
+
+/* ================= COMPONENTS.CSS MEDIA QUERIES ================= */
+@media (max-width: 992px) {
+    .footer-container {
+        padding: 0 1.5em;
+    }
+
+    .accordion {
+        max-width: 90%;
+    }
+    .accordion-header {
+        font-size: 1.6rem;
+        padding: 0.875em 1.25em;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-menu.active ~ main,
+    .nav-menu.active ~ footer {
+        filter: blur(2px);
+        pointer-events: none;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80%;
+        max-width: 300px;
+        height: 100%;
+        background: #1a1a1a;
+        transform: translateX(-100%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 0 1em rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    nav .dropdown:hover .dropdown-menu, nav .dropdown.active .dropdown-menu {
+        transform: translateX(0);
+    }
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+
+    .nav-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1em;
+        background: #1a1a1a;
+        border-bottom: 1px solid #333;
+    }
+
+    .menu-close {
+        display: block;
+        background: none;
+        border: none;
+        color: #d0a459;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+
+    .nav-menu ul {
+        flex-direction: column;
+        padding: 1em;
+        gap: 0.5em;
+        background: transparent;
+        position: static;
+        width: 100%;
+    }
+
+    .nav-menu li {
+        margin: 0.5em 0;
+    }
+
+    .nav-menu a {
+        font-size: 1.2rem;
+        padding: 0.5em 1em;
+        display: block;
+        color: #fbeccb;
+    }
+
+    .nav-menu .dropdown-menu {
+        position: static;
+        background: #2a2a2a;
+        padding: 0.5em 1em;
+        margin: 0;
+        width: 100%;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        display: none;
+        transform: none;
+    }
+
+    .nav-menu .dropdown.active .dropdown-menu {
+        display: block;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 1.5em;
+        text-align: center;
+        padding: 0 1em;
+    }
+    .footer-section {
+        margin-bottom: 1.5em;
+        width: 100%;
+    }
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .accordion {
+        max-width: 95%;
+        margin: 1.5em auto;
+    }
+    .accordion-header {
+        font-size: 1.4rem;
+        padding: 0.75em 1em;
+    }
+    .accordion-content > * {
+        padding: 1em;
+    }
+    .accordion-content iframe {
+        height: 25em;
+    }
+    .accordion-content p.description {
+        font-size: 1.1rem;
+        padding: 0.4em 0.8em;
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        width: 95%;
+    }
+    .close {
+        right: 0.5em;
+        top: 0.3em;
+        font-size: 1.8rem;
+    }
+    #videoModal.modal {
+        padding: 15px;
+    }
+    #videoModal .modal-content {
+        padding: 15px;
+    }
+    #videoModal .video-container {
+        padding-bottom: 56.25%;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-header {
+        font-size: 1.3rem;
+        padding: 0.7em 0.9em;
+    }
+    .accordion-content > * {
+        padding: 0.8em;
+    }
+    .accordion-content iframe {
+        height: 20em;
+    }
+    .accordion-content p.description {
+        font-size: 1.1rem;
+        padding: 0.4em 0.8em;
+    }
+    .accordion-content p,
+    .accordion-content ul {
+        font-size: 0.95rem;
+    }
+
+    .footer {
+        padding: 1.5em 1em;
+    }
+    .footer-section p, .footer-section a {
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        margin: 15% auto;
+        width: 98%;
+    }
+    .close {
+        right: 0.3em;
+        top: 0.2em;
+        font-size: 1.5rem;
+    }
+    .accordion-content p.description {
+        font-size: 1rem;
+        padding: 0.3em 0.6em;
+    }
+    #videoModal.modal {
+        padding: 10px;
+    }
+    #videoModal .modal-content {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .accordion {
+        margin: 1em auto;
+    }
+    .accordion-header {
+        font-size: 1.2rem;
+        padding: 0.6em 0.8em;
+    }
+    .accordion-content > * {
+        padding: 0.7em;
+    }
+    .accordion-content iframe {
+        height: 18em;
+    }
+    .accordion-content p.description {
+        font-size: 1rem;
+        padding: 0.3em 0.6em;
+    }
+
+    .footer {
+        padding: 1.25em 0.75em;
+    }
+    .footer-section p, .footer-section a {
+        font-size: 0.85rem;
+    }
+    .social-links a {
+        margin: 0 0.4em;
+    }
+}
+
+@media (max-width: 320px) {
+    .accordion-content p.description {
+        font-size: 1rem;
+        padding: 0.3em 0.6em;
+    }
+}
+
+/* ================= PAGES.CSS MEDIA QUERIES ================= */
+@media (max-width: 992px) {
+    .shows-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5em;
+        padding: 1.5em;
+    }
+
+    .hero-content {
+        top: 15%;
+        width: 90%;
+    }
+    .hero-content h1 {
+        font-size: 3.4rem;
+        margin-bottom: 0.5em;
+        line-height: 1.15;
+    }
+    .hero-content p {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    .play-hero {
+        min-height: 80vh;
+    }
+    .play-content {
+        padding: 2em 1.5em;
+        max-width: 90%;
+    }
+
+    .task-section {
+        padding: 1.5em;
+    }
+    .task-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.8em;
+    }
+    .task-desc {
+        font-size: 1.1rem;
+        max-width: 100%;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 70vh;
+        margin-top: 4em;
+    }
+    .hero-content {
+        top: 20%;
+        width: 95%;
+        padding: 0 0.75em;
+    }
+    .hero-content h1 {
+        font-size: 2.8rem;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.4em;
+    }
+    .hero-content p {
+        font-size: 1.1rem;
+        line-height: 1.35;
+    }
+
+    .column {
+        width: 2.2em;
+    }
+
+    .parallax {
+        min-height: 25em;
+        padding-bottom: 4em;
+    }
+
+    .carousel-prev, .carousel-next {
+        width: 2.8em;
+        height: 2.8em;
+        font-size: 1.1rem;
+    }
+    .carousel-prev {
+        left: 0.8em;
+    }
+    .carousel-next {
+        right: 0.8em;
+    }
+
+    .play-hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.3em;
+    }
+    .play-hero .tagline {
+        font-size: 1.1rem;
+    }
+    .play-hero {
+        min-height: 70vh;
+        padding: 3em 0.75em;
+    }
+    .play-content {
+        padding: 1.5em 1em;
+        max-width: 95%;
+    }
+
+    .info-block p, .cast li {
+        font-size: 1rem;
+        margin: 0.4em 0;
+    }
+    .description p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .task-page .hero-wrapper,
+    .task-page .curtain,
+    .task-page .column {
+        display: none;
+    }
+
+    .task-page {
+        padding-top: 14em;
+        min-height: 100vh;
+        height: auto;
+        overflow: visible;
+    }
+
+    .task-section {
+        padding-bottom: 1.5em;
+        text-align: center;
+        justify-content: flex-start;
+    }
+
+    .task-title {
+        font-size: 1.9rem;
+        margin-bottom: 1em;
+    }
+
+    .task-desc {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5em;
+    }
+
+    .task-demo {
+        max-width: 200px;
+        margin: 2em auto;
+        padding: 0;
+        perspective: none;
+    }
+
+    .demo-wrapper {
+        width: 200px;
+        height: 200px;
+        margin: 2em auto;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+        background: #fff;
+    }
+
+    .task-demo .box,
+    .task-demo .flexbox-role {
+        width: 200px;
+        height: 200px;
+        min-width: 200px;
+        min-height: 200px;
+    }
+
+    .task-page .hero-wrapper,
+    .task-page .curtain-left,
+    .task-page .curtain-right,
+    .task-page .column-left,
+    .task-page .column-right {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        height: 60vh;
+        margin-top: 3.5em;
+    }
+    .hero-content {
+        top: 25%;
+        padding: 0 0.5em;
+    }
+    .hero-content h1 {
+        font-size: 2.2rem;
+        line-height: 1.15;
+        margin-bottom: 0.3em;
+        letter-spacing: 0.5px;
+    }
+    .hero-content p {
+        font-size: 1rem;
+        line-height: 1.35;
+        letter-spacing: 0.3px;
+    }
+
+    .column {
+        width: 1.5em;
+    }
+
+    .shows-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25em;
+        padding: 1.25em 1em;
+    }
+    .show-item {
+        height: 20em;
+        margin-bottom: 0.5em;
+    }
+
+    .play-hero {
+        min-height: 60vh;
+        padding: 2.5em 0.5em;
+    }
+    .play-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 0.2em;
+    }
+    .play-hero .tagline {
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+    .play-content {
+        padding: 1.25em 0.75em;
+    }
+
+    .info-block p, .cast li, .description p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+    .cast ul {
+        padding-left: 0.8em;
+    }
+    .cast li {
+        padding: 0.3em 0;
+    }
+
+    .carousel-prev, .carousel-next {
+        width: 2.5em;
+        height: 2.5em;
+        font-size: 1rem;
+    }
+    .carousel-prev {
+        left: 0.5em;
+    }
+    .carousel-next {
+        right: 0.5em;
+    }
+
+    .task-section {
+        padding: 1em 0.75em;
+    }
+    .task-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.6em;
+    }
+    .task-desc {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 1.25em;
+    }
+    .task-demo .box, .task-demo .flexbox-role {
+        max-width: 18em;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero {
+        height: 55vh;
+        margin-top: 3em;
+    }
+    .hero-content {
+        top: 28%;
+    }
+    .hero-content h1 {
+        font-size: 1.9rem;
+        line-height: 1.1;
+        margin-bottom: 0.2em;
+    }
+    .hero-content p {
+        font-size: 0.95rem;
+        line-height: 1.3;
+    }
+
+    .column {
+        width: 1.2em;
+    }
+
+    .play-hero {
+        min-height: 55vh;
+        padding: 2em 0.4em;
+    }
+    .play-hero h1 {
+        font-size: 1.8rem;
+    }
+    .play-hero .tagline {
+        font-size: 0.9rem;
+    }
+    .play-content {
+        padding: 1em 0.5em;
+    }
+
+    .info-block p, .cast li, .description p {
+        font-size: 0.9rem;
+    }
+
+    .shows-grid {
+        gap: 1em;
+        padding: 1em 0.75em;
+    }
+    .show-item {
+        height: 18em;
+    }
+    .show-info {
+        padding: 10em 0.8em 0.8em;
+    }
+
+    .task-section {
+        padding: 0.8em 0.5em;
+    }
+    .task-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.5em;
+    }
+    .task-desc {
+        font-size: 0.9rem;
+        line-height: 1.3;
+        margin-bottom: 1em;
+    }
+    .task-demo .box, .task-demo .flexbox-role {
+        max-width: 16em;
+    }
+}
+
+@media (max-width: 320px) {
+    .hero-content h1 {
+        font-size: 1.7rem;
+    }
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+    .play-hero h1 {
+        font-size: 1.6rem;
+    }
+    .task-title {
+        font-size: 1.5rem;
+    }
+    .show-item {
+        height: 16em;
+    }
+}
