@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const isTaskPage = document.body.classList.contains('task-page') ||
-        document.querySelector('.task-page');
+    // Проверка на task-page для мобильных
+    const isTaskPage = document.body.classList.contains('task-page') || document.querySelector('.task-page');
     const isMobile = window.innerWidth <= 768;
 
     if (isTaskPage && isMobile) {
@@ -16,96 +16,95 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const curtainLeft  = document.querySelector('.curtain-left');
+    // Управление шторами
+    const curtainLeft = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
-    const heroSection  = document.querySelector('.hero');
-    const reveals      = document.querySelectorAll('.reveal');
+    const heroSection = document.querySelector('.hero');
+    const reveals = document.querySelectorAll('.reveal');
 
-    let currentX = -80;
-    let targetX  = -80;
-    let inertiaX = -80;
-    let animating = false;
-    let lastScrollY = 0;
+    if (curtainLeft && curtainRight && heroSection) {
+        let currentX = -80;
+        let targetX = -80;
+        let inertiaX = -80;
+        let animating = false;
 
-    const animateCurtains = () => {
-        if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
-            currentX = targetX;
-            inertiaX = targetX;
-            animating = false;
-            return;
-        }
-
-        inertiaX += (targetX - inertiaX) * 0.08;
-        currentX += (inertiaX - currentX) * 0.15;
-
-        curtainLeft.style.transform  = `translateX(${currentX}%)`;
-        curtainRight.style.transform = `translateX(${-currentX}%)`;
-
-        requestAnimationFrame(animateCurtains);
-    };
-
-    const setTargetX = value => {
-        if (Math.abs(targetX - value) > 0.1) {
-            targetX = value;
-            if (!animating) {
-                animating = true;
-                requestAnimationFrame(animateCurtains);
+        const animateCurtains = () => {
+            if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
+                currentX = targetX;
+                inertiaX = targetX;
+                animating = false;
+                return;
             }
-        }
-    };
 
-    const initCurtains = () => {
-        currentX = -80;
-        targetX = -80;
-        inertiaX = -80;
-        curtainLeft.style.transform  = 'translateX(-80%)';
-        curtainRight.style.transform = 'translateX(80%)';
-    };
-    setTimeout(initCurtains, 100);
+            inertiaX += (targetX - inertiaX) * 0.08;
+            currentX += (inertiaX - currentX) * 0.15;
 
-    let ticking = false;
+            curtainLeft.style.transform = `translateX(${currentX}%)`;
+            curtainRight.style.transform = `translateX(${-currentX}%)`;
 
-    const updateCurtains = () => {
-        const rect = heroSection.getBoundingClientRect();
-        const winH = window.innerHeight;
-        const winW = window.innerWidth;
+            requestAnimationFrame(animateCurtains);
+        };
 
-        const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
+        const setTargetX = value => {
+            if (Math.abs(targetX - value) > 0.1) {
+                targetX = value;
+                if (!animating) {
+                    animating = true;
+                    requestAnimationFrame(animateCurtains);
+                }
+            }
+        };
 
-        if (rect.top > -150 && rect.top < winH * 0.4) {
-            setTargetX(-80);
+        const initCurtains = () => {
+            currentX = -80;
+            targetX = -80;
+            inertiaX = -80;
+            curtainLeft.style.transform = 'translateX(-80%)';
+            curtainRight.style.transform = 'translateX(80%)';
+        };
+        setTimeout(initCurtains, 100);
+
+        let ticking = false;
+
+        const updateCurtains = () => {
+            const rect = heroSection.getBoundingClientRect();
+            const winH = window.innerHeight;
+            const winW = window.innerWidth;
+
+            const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
+
+            if (rect.top > -150 && rect.top < winH * 0.4) {
+                setTargetX(-80);
+                ticking = false;
+                return;
+            }
+
+            if (rect.bottom > 0 && rect.top < buffer) {
+                const progress = Math.max(0, Math.min(1, (winH - rect.top) / (winH + rect.height)));
+                const newTarget = -80 + 80 * progress;
+                setTargetX(newTarget);
+            } else if (rect.bottom <= 0) {
+                setTargetX(0);
+            }
+
             ticking = false;
-            return;
-        }
+        };
 
-        if (rect.bottom > 0 && rect.top < buffer) {
-            const progress = Math.max(0, Math.min(1,
-                (winH - rect.top) / (winH + rect.height)
-            ));
-            const newTarget = -80 + 80 * progress;
-            setTargetX(newTarget);
-        }
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(updateCurtains);
+                ticking = true;
+            }
+        };
 
-        else if (rect.bottom <= 0) {
-            setTargetX(0);
-        }
-
-        ticking = false;
-    };
-
-    const handleScroll = () => {
-        if (!ticking) {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            lastScrollY = window.scrollY;
             requestAnimationFrame(updateCurtains);
-            ticking = true;
-        }
-    };
+        });
+    }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', () => {
-        lastScrollY = window.scrollY;
-        requestAnimationFrame(updateCurtains);
-    });
-
+    // Intersection Observer для .reveal
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('active');
@@ -113,47 +112,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     reveals.forEach(el => observer.observe(el));
-});
 
-document.querySelectorAll('.show-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const slug = item.dataset.slug;
-        window.location.href = `${slug}.html`;
-    });
-});
-
-document.querySelectorAll('.buy-ticket').forEach(btn => {
-    btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const slug = btn.closest('.show-item').dataset.slug;
-        window.location.href = `${slug}.html`;
-    });
-});
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', e => {
-        e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (target) {
-            window.scrollTo({
-                top: target.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const images = document.querySelectorAll('img');
-    images.forEach(img => {
-        img.addEventListener('error', function() {
-            this.alt = 'Изображение не загружено';
-            console.warn('Не удалось загрузить изображение:', this.src);
+    // Обработка кликов по .show-item
+    document.querySelectorAll('.show-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const slug = item.dataset.slug;
+            window.location.href = `${slug}.html`;
         });
     });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
+    // Обработка кликов по .buy-ticket
+    document.querySelectorAll('.buy-ticket').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const slug = btn.closest('.show-item').dataset.slug;
+            window.location.href = `${slug}.html`;
+        });
+    });
+
+    // Плавная прокрутка для якорей
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(anchor.getAttribute('href'));
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Обработка ошибок загрузки изображений
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', () => {
+            console.error('Не удалось загрузить изображение:', img.src);
+        });
+    });
+
     // Карусель
     const carousel = document.querySelector('.carousel');
     const prevBtn = document.querySelector('.carousel-prev');
@@ -229,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        header.addEventListener('touchend', (e) => {
+        header.addEventListener('touchend', e => {
             if (header.contains(e.target)) {
                 e.preventDefault();
                 header.click();
@@ -244,40 +241,127 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
     if (menuToggle && navMenu && menuClose) {
-        menuToggle.addEventListener('click', () => {
+        const toggleMenu = () => {
             navMenu.classList.toggle('active');
             menuToggle.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        };
+
+        menuToggle.addEventListener('click', e => {
+            e.stopPropagation();
+            toggleMenu();
         });
 
-        menuClose.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
+        menuClose.addEventListener('click', e => {
+            e.stopPropagation();
+            toggleMenu();
         });
 
-        document.addEventListener('click', (e) => {
-            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+        document.addEventListener('click', e => {
+            if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                toggleMenu();
+            }
+        });
+
+        // Закрытие меню при клике на ссылки
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMenu();
+            });
+        });
+
+        // Управление выпадающим подменю
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', e => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const dropdown = toggle.parentElement;
+                    const isActive = dropdown.classList.contains('active');
+                    document.querySelectorAll('.dropdown').forEach(item => {
+                        item.classList.remove('active');
+                        const menu = item.querySelector('.dropdown-menu');
+                        if (menu) menu.style.display = 'none';
+                    });
+                    if (!isActive) {
+                        dropdown.classList.add('active');
+                        const menu = dropdown.querySelector('.dropdown-menu');
+                        if (menu) menu.style.display = 'block';
+                    }
+                }
+            });
+        });
+
+        // Закрытие меню при смене на десктоп
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
                 navMenu.classList.remove('active');
-                menuToggle.classList.toggle('active');
+                menuToggle.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                document.querySelectorAll('.dropdown').forEach(item => {
+                    item.classList.remove('active');
+                    const menu = item.querySelector('.dropdown-menu');
+                    if (menu) menu.style.display = '';
+                });
             }
         });
     }
 
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            const dropdown = toggle.parentElement;
-            const isActive = dropdown.classList.contains('active');
-            document.querySelectorAll('.dropdown').forEach(item => {
-                item.classList.remove('active');
-                const menu = item.querySelector('.dropdown-menu');
-                if (menu) menu.style.display = 'none';
-            });
-            if (!isActive) {
-                dropdown.classList.add('active');
-                const menu = dropdown.querySelector('.dropdown-menu');
-                if (menu) menu.style.display = 'block';
-            }
-        });
-    });
-});
+    // Модальное окно видео
+    const initVideoModal = () => {
+        const title = document.querySelector('.hero-text h1');
+        const modal = document.getElementById('videoModal');
+        const closeBtn = document.querySelector('.close');
+        const iframe = document.getElementById('videoIframe');
 
+        if (!title || !modal || !closeBtn || !iframe) {
+            console.warn('Отсутствуют элементы для модального окна видео');
+            return;
+        }
+
+        const originalSrc = iframe.src;
+        const cleanSrc = originalSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
+        iframe.src = cleanSrc;
+
+        const openModal = () => {
+            let currentSrc = iframe.src;
+            if (!currentSrc.includes('autoplay=1')) {
+                const separator = currentSrc.includes('?') ? '&' : '?';
+                iframe.src = currentSrc + separator + 'autoplay=1';
+            }
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => modal.classList.add('show'), 10);
+        };
+
+        const closeModal = () => {
+            modal.classList.remove('show');
+            modal.addEventListener('transitionend', handleTransitionEnd, { once: true });
+        };
+
+        const handleTransitionEnd = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            iframe.src = cleanSrc;
+        };
+
+        const handleOutsideClick = event => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        const handleEscape = e => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        };
+
+        title.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', handleOutsideClick);
+        document.addEventListener('keydown', handleEscape);
+    };
+
+    initVideoModal();
+});
