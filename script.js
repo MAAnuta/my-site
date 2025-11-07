@@ -268,36 +268,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ---------- МОДАЛЬНОЕ ОКНО ДЛЯ ВИДЕО ---------- */
+/* ---------- МОДАЛЬНОЕ ОКНО ДЛЯ ВИДЕО (УНИВЕРСАЛЬНЫЙ ДЛЯ ВСЕХ СТРАНИЦ) ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-    const title = document.querySelector('.hero-text h1');
-    const modal = document.getElementById('videoModal');
-    const closeBtn = document.querySelector('.close');
-    const iframe = document.getElementById('videoIframe');
+    function initVideoModal() {
+        const title = document.querySelector('.hero-text h1');
+        const modal = document.getElementById('videoModal');
+        const closeBtn = document.querySelector('.close');
+        const iframe = document.getElementById('videoIframe');
 
-    if (title && modal) {
-        title.addEventListener('click', () => {
+        // Проверяем, есть ли все необходимые элементы на странице
+        if (!title || !modal || !iframe) return;
+
+        // Получаем оригинальную ссылку
+        const originalSrc = iframe.src;
+
+        // Убираем автоплей из начальной загрузки
+        const cleanSrc = originalSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
+        iframe.src = cleanSrc;
+
+        title.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', handleOutsideClick);
+        document.addEventListener('keydown', handleEscape);
+
+        function openModal() {
+            // Добавляем автоплей только если его еще нет
+            let currentSrc = iframe.src;
+            if (!currentSrc.includes('autoplay=1')) {
+                const separator = currentSrc.includes('?') ? '&' : '?';
+                iframe.src = currentSrc + separator + 'autoplay=1';
+            }
+
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
             setTimeout(() => {
                 modal.classList.add('show');
             }, 10);
-        });
-
-        closeBtn.addEventListener('click', closeModal);
-
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                closeModal();
-            }
-        });
+        }
 
         function closeModal() {
             modal.classList.remove('show');
@@ -307,13 +315,28 @@ document.addEventListener('DOMContentLoaded', () => {
         function handleTransitionEnd() {
             modal.style.display = 'none';
             document.body.style.overflow = '';
-            const currentSrc = iframe.src;
-            iframe.src = '';
-            setTimeout(() => {
-                iframe.src = currentSrc;
-            }, 100);
+
+            // Убираем автоплей при закрытии
+            let currentSrc = iframe.src;
+            const cleanSrc = currentSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
+            iframe.src = cleanSrc;
+        }
+
+        function handleOutsideClick(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        function handleEscape(e) {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
         }
     }
+
+    // Инициализируем модальное окно видео
+    initVideoModal();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
