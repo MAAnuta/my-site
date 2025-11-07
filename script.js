@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.task-page');
     const isMobile = window.innerWidth <= 768;
 
-    // Если это страница задания И мобильное устройство — отключаем занавесы
     if (isTaskPage && isMobile) {
         const curtains = document.querySelectorAll('.curtain');
         const columns = document.querySelectorAll('.column');
@@ -13,25 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
         columns.forEach(c => c.style.display = 'none');
         if (heroWrapper) heroWrapper.style.display = 'none';
 
-        // Отключаем scroll-событие для занавесов
         window.removeEventListener('scroll', handleScroll);
-        return; // Прерываем инициализацию анимации
+        return;
     }
-    /* ---------- ELEMENTS ---------- */
+
     const curtainLeft  = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
     const heroSection  = document.querySelector('.hero');
     const reveals      = document.querySelectorAll('.reveal');
 
-    /* ---------- ПЛАВНЫЙ Занавес с ИНЕРЦИЕЙ ---------- */
-    /* ---------- ПЕРЕМЕННЫЕ ---------- */
     let currentX = -80;
     let targetX  = -80;
     let inertiaX = -80;
     let animating = false;
     let lastScrollY = 0;
 
-    /* ---------- АНИМАЦИЯ С ИНЕРЦИЕЙ ---------- */
     const animateCurtains = () => {
         if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
             currentX = targetX;
@@ -59,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /* ---------- ИНИЦИАЛИЗАЦИЯ ---------- */
     const initCurtains = () => {
         currentX = -80;
         targetX = -80;
@@ -69,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     setTimeout(initCurtains, 100);
 
-    /* ---------- SCROLL LOGIC — ПОЛНОЕ ЗАКРЫТИЕ + ТОЧНОЕ ВОЗВРАЩЕНИЕ ---------- */
     let ticking = false;
 
     const updateCurtains = () => {
@@ -79,24 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
 
-        // === 1. ВОЗВРАТ В НАЧАЛЬНОЕ СОСТОЯНИЕ (ТОЧНО -80%) ===
         if (rect.top > -150 && rect.top < winH * 0.4) {
-            setTargetX(-80); // ← ТОЧНОЕ ПОЛОЖЕНИЕ, КАК ПРИ ЗАГРУЗКЕ
+            setTargetX(-80);
             ticking = false;
             return;
         }
 
-        // === 2. В ЗОНЕ ВИДИМОСТИ — ПЛАВНО ЗАКРЫВАТЬ ДО ПОЛНОГО ЗАКРЫТИЯ ===
         if (rect.bottom > 0 && rect.top < buffer) {
             const progress = Math.max(0, Math.min(1,
                 (winH - rect.top) / (winH + rect.height)
             ));
-            const newTarget = -80 + 80 * progress; // от -80% до 0%
+            const newTarget = -80 + 80 * progress;
             setTargetX(newTarget);
         }
-        // === 3. СЕКЦИЯ УШЛА ВВЕРХ — ПОЛНОСТЬЮ ЗАКРЫТЬ ===
+
         else if (rect.bottom <= 0) {
-            setTargetX(0); // ← ПОЛНОСТЬЮ ЗАКРЫТ
+            setTargetX(0);
         }
 
         ticking = false;
@@ -115,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(updateCurtains);
     });
 
-    /* ---------- REVEAL АНИМАЦИИ ---------- */
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('active');
@@ -125,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
     reveals.forEach(el => observer.observe(el));
 });
 
-/* ---------- КЛИК ПО КАРТОЧКЕ СПЕКТАКЛЯ ---------- */
 document.querySelectorAll('.show-item').forEach(item => {
     item.addEventListener('click', () => {
         const slug = item.dataset.slug;
@@ -133,16 +122,14 @@ document.querySelectorAll('.show-item').forEach(item => {
     });
 });
 
-/* Кнопка "Купить билет" — остаётся, но без stopPropagation */
 document.querySelectorAll('.buy-ticket').forEach(btn => {
     btn.addEventListener('click', e => {
-        e.stopPropagation(); // ← Важно! Чтобы не сработал клик по карточке
+        e.stopPropagation();
         const slug = btn.closest('.show-item').dataset.slug;
         window.location.href = `${slug}.html`;
     });
 });
 
-/* ---------- ПЛАВНАЯ ПРОКРУТКА ПО ЯКОРЯМ ---------- */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
         e.preventDefault();
@@ -166,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ---------- КАРУСЕЛЬ С ЭФФЕКТОМ FADE ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.carousel');
     const prevBtn = document.querySelector('.carousel-prev');
@@ -181,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSlide = 0;
     let timeout = null;
 
-    // === Переход к слайду ===
     const goToSlide = (index) => {
         slides.forEach(slide => slide.classList.remove('active'));
         currentSlide = (index + slideCount) % slideCount;
@@ -195,17 +180,15 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
             nextSlide();
-            startAutoPlay(); // запускаем следующий цикл
+            startAutoPlay();
         }, slideDuration);
     };
 
-    // === Сброс таймера (после кнопки или наведения) ===
     const resetTimer = () => {
         clearTimeout(timeout);
         startAutoPlay();
     };
 
-    // === Кнопки ===
     nextBtn.addEventListener('click', () => {
         nextSlide();
         resetTimer();
@@ -216,18 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
         resetTimer();
     });
 
-    // === Пауза при наведении ===
     if (hero) {
         hero.addEventListener('mouseenter', () => clearTimeout(timeout));
         hero.addEventListener('mouseleave', resetTimer);
     }
 
-    // === Инициализация ===
     goToSlide(0);
     startAutoPlay();
 });
 
-// Имитация hover по тапу
 document.querySelectorAll('.flexbox-role').forEach(role => {
     role.addEventListener('touchstart', function() {
         this.classList.add('tapped');
@@ -241,7 +221,6 @@ document.querySelectorAll('.flexbox-role').forEach(role => {
     role.addEventListener('mouseleave', () => role.classList.remove('tapped'));
 });
 
-/* ---------- АККОРДЕОН ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     const accordionHeaders = document.querySelectorAll('.accordion-header');
 
@@ -251,14 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const accordionContent = header.nextElementSibling;
             const isActive = accordionItem.classList.contains('active');
 
-            // Закрываем все открытые секции
             document.querySelectorAll('.accordion-item').forEach(item => {
                 item.classList.remove('active');
                 item.querySelector('.accordion-content').classList.remove('active');
                 item.querySelector('.accordion-header').classList.remove('active');
             });
 
-            // Открываем или закрываем текущую секцию
             if (!isActive) {
                 accordionItem.classList.add('active');
                 accordionContent.classList.add('active');
@@ -268,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/* ---------- МОДАЛЬНОЕ ОКНО ДЛЯ ВИДЕО (УНИВЕРСАЛЬНЫЙ ДЛЯ ВСЕХ СТРАНИЦ) ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     function initVideoModal() {
         const title = document.querySelector('.hero-text h1');
@@ -276,13 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = document.querySelector('.close');
         const iframe = document.getElementById('videoIframe');
 
-        // Проверяем, есть ли все необходимые элементы на странице
         if (!title || !modal || !iframe) return;
 
-        // Получаем оригинальную ссылку
         const originalSrc = iframe.src;
 
-        // Убираем автоплей из начальной загрузки
         const cleanSrc = originalSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
         iframe.src = cleanSrc;
 
@@ -292,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('keydown', handleEscape);
 
         function openModal() {
-            // Добавляем автоплей только если его еще нет
             let currentSrc = iframe.src;
             if (!currentSrc.includes('autoplay=1')) {
                 const separator = currentSrc.includes('?') ? '&' : '?';
@@ -316,7 +288,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
             document.body.style.overflow = '';
 
-            // Убираем автоплей при закрытии
             let currentSrc = iframe.src;
             const cleanSrc = currentSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
             iframe.src = cleanSrc;
@@ -334,24 +305,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
-    // Инициализируем модальное окно видео
     initVideoModal();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Оптимизация карусели для мобильных
     const carousel = document.querySelector('.carousel');
     if (carousel && window.innerWidth <= 768) {
-        // Увеличиваем интервал между слайдами на мобильных
-        const slideDuration = 5000; // 5 секунд вместо 4
-        // Остальной код карусели остается без изменений
+        const slideDuration = 5000;
     }
 
-    // Оптимизация аккордеона для сенсорных устройств
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     accordionHeaders.forEach(header => {
-        // Добавляем обработчик для touch устройств
         header.addEventListener('touchend', (e) => {
             e.preventDefault();
             header.click();

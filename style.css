@@ -263,8 +263,8 @@ nav .dropdown-menu a:hover {
 .hero-text h1 {
     cursor: pointer;
     transition: color 0.3s, text-decoration 0.3s;
-    position: relative; /* Обеспечиваем, что заголовок выше других элементов */
-    z-index: 10; /* Выше .hero-overlay */
+    position: relative;
+    z-index: 10;
 }
 
 .hero-text h1:hover {
@@ -272,14 +272,12 @@ nav .dropdown-menu a:hover {
     text-shadow: 0 0 2px rgba(208, 164, 89, 0.5), 0 0 4px rgba(208, 164, 89, 0.3);
 }
 
-/* Убедимся, что .hero-overlay не блокирует клики */
 .hero-overlay {
-    pointer-events: none; /* Отключаем взаимодействие с оверлеем */
+    pointer-events: none;
 }
 
 /* Колонны */
 .hero-wrapper { position: relative; width: 100%; margin-top: 5em; overflow: hidden; }
-/*.hero-content-wrapper { position: relative; z-index: 3; pointer-events: none; }*/
 
 .column {
     position: absolute;
@@ -507,7 +505,6 @@ section p {
 }
 #shows { padding-bottom: 7.5em; }
 
-/* Анимация появления */
 .reveal {
     opacity: 0;
     transform: translateY(3.125em);
@@ -568,7 +565,6 @@ section p {
     transform: translateY(-0.1875em);
     box-shadow: 0 0.5em 1.25em rgba(208,164,89,0.5);
 }
-/*.note { margin-top: 0.9375em; font-size: 0.95rem; opacity: 0.8; }*/
 
 /* Карусель */
 .carousel { position: absolute; inset: 0; overflow: hidden; }
@@ -688,7 +684,6 @@ section p {
 }
 .task-page .hero-wrapper { height: 100%; overflow: hidden; }
 
-/* Дополнительно: Контейнер для центрирования */
 .container {
     max-width: 75em;
     margin: 0 auto;
@@ -751,7 +746,7 @@ section p {
 }
 
 .accordion-content.active {
-    max-height: 500px; /* Установите достаточно большое значение, чтобы вместить содержимое */
+    max-height: 500px;
     padding: 1em;
 }
 
@@ -787,7 +782,6 @@ section p {
 }
 
 /* ================= МОДАЛЬНОЕ ОКНО ДЛЯ ВИДЕО ================= */
-
 .close {
     position: absolute;
     top: -45px;
@@ -831,7 +825,6 @@ section p {
     border: none;
 }
 
-/* Убедимся, что модальное окно правильно отображается */
 #videoModal.modal {
     display: none;
     position: fixed;
@@ -876,14 +869,12 @@ section p {
 /* ================= АДАПТИВНОСТЬ ================= */
 /* Планшеты в альбомной ориентации и маленькие ноутбуки (992px и меньше) */
 @media (max-width: 992px) {
-    /* Сетка спектаклей - 2 колонки вместо 3 */
     .shows-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1.5em;
         padding: 1.5em;
     }
 
-    /* Герой-секция */
     .hero-content {
         top: 15%;
         width: 90%;
@@ -898,7 +889,6 @@ section p {
         line-height: 1.4;
     }
 
-    /* Страница спектакля */
     .play-hero {
         min-height: 80vh;
     }
@@ -907,7 +897,6 @@ section p {
         max-width: 90%;
     }
 
-    /* Страница заданий */
     .task-section {
         padding: 1.5em;
     }
@@ -921,7 +910,6 @@ section p {
         line-height: 1.5;
     }
 
-    /* Навигация */
     nav ul {
         padding-inline: 1.5em;
     }
@@ -929,12 +917,10 @@ section p {
         margin: 0 0.5em;
     }
 
-    /* Футер */
     .footer-container {
         padding: 0 1.5em;
     }
 
-    /* Аккордеон */
     .accordion {
         max-width: 90%;
     }
@@ -943,7 +929,6 @@ section p {
         padding: 0.875em 1.25em;
     }
 
-    /* Header для страниц спектаклей */
     .play-page header {
         top: 0.8em;
         padding: 0.9em;
@@ -956,7 +941,6 @@ section p {
 
 /* Планшеты в портретной ориентации и большие телефоны (768px и меньше) */
 @media (max-width: 768px) {
-    /* Навигация - вертикальное меню */
     nav ul {
         flex-direction: column;
         padding-inline: 1em;
@@ -969,13 +953,11 @@ section p {
         padding: 1em 0;
     }
 
-    /* Основной header */
     header {
         padding: 0.8em 1em;
         position: relative;
     }
 
-    /* Герой-секция */
     .hero {
         height: 70vh;
         margin-top: 4em;
@@ -995,18 +977,15 @@ section p {
         line-height: 1.35;
     }
 
-    /* Колонны */
     .column {
         width: 2.2em;
     }
 
-    /* Параллакс секции */
     .parallax {
         min-height: 25em;
         padding-bottom: 4em;
     }
 
-    /* Карусель */
     .carousel-prev, .carousel-next {
         width: 2.8em;
         height: 2.8em;
@@ -1019,7 +998,6 @@ section p {
         right: 0.8em;
     }
 
-    /* Страница спектакля */
     .play-hero h1 {
         font-size: 2.5rem;
         margin-bottom: 0.3em;
@@ -1039,7 +1017,6 @@ section p {
         max-width: 95%;
     }
 
-    /* Выпадающее меню */
     nav .dropdown-menu {
         left: 0;
         transform: translateX(0);
@@ -1061,7 +1038,6 @@ section p {
         transform: none;
     }
 
-    /* Контент спектакля */
     .info-block p, .cast li {
         font-size: 1rem;
         margin: 0.4em 0;
@@ -1071,14 +1047,12 @@ section p {
         line-height: 1.5;
     }
 
-    /* Кнопки */
     .btn-gold {
         padding: 0.8em 1.8em;
         font-size: 0.95rem;
         border-radius: 0.4em;
     }
 
-    /* Футер */
     .footer-container {
         flex-direction: column;
         gap: 1.5em;
@@ -1093,7 +1067,6 @@ section p {
         flex-direction: column;
     }
 
-    /* Страница заданий */
     .task-section {
         padding: 1.25em;
     }
@@ -1121,7 +1094,6 @@ section p {
         margin: 0 auto;
     }
 
-    /* Аккордеон */
     .accordion {
         max-width: 95%;
         margin: 1.5em auto;
@@ -1141,7 +1113,6 @@ section p {
         padding-top: 0;
     }
 
-    /* Header для страниц спектаклей */
     .play-page header {
         top: 0.5em;
         padding: 0.7em;
@@ -1155,7 +1126,6 @@ section p {
         height: 2.4em;
     }
 
-    /* Модальное окно */
     .modal-content {
         margin: 10% auto;
         width: 95%;
@@ -1178,13 +1148,12 @@ section p {
     }
 
     #videoModal .video-container {
-        padding-bottom: 56.25%; /* Сохраняем соотношение */
+        padding-bottom: 56.25%;
     }
 }
 
 /* Телефоны среднего размера (480px и меньше) */
 @media (max-width: 480px) {
-    /* Герой-секция */
     .hero {
         height: 60vh;
         margin-top: 3.5em;
@@ -1205,12 +1174,10 @@ section p {
         letter-spacing: 0.3px;
     }
 
-    /* Колонны */
     .column {
         width: 1.5em;
     }
 
-    /* Сетка спектаклей - 1 колонка */
     .shows-grid {
         grid-template-columns: 1fr;
         gap: 1.25em;
@@ -1221,7 +1188,6 @@ section p {
         margin-bottom: 0.5em;
     }
 
-    /* Страница спектакля */
     .play-hero {
         min-height: 60vh;
         padding: 2.5em 0.5em;
@@ -1238,7 +1204,6 @@ section p {
         padding: 1.25em 0.75em;
     }
 
-    /* Контент */
     .info-block p, .cast li, .description p {
         font-size: 0.95rem;
         line-height: 1.4;
@@ -1250,14 +1215,12 @@ section p {
         padding: 0.3em 0;
     }
 
-    /* Кнопки */
     .btn-gold {
         padding: 0.7em 1.5em;
         font-size: 0.9rem;
         border-radius: 0.3em;
     }
 
-    /* Карусель */
     .carousel-prev, .carousel-next {
         width: 2.5em;
         height: 2.5em;
@@ -1270,7 +1233,6 @@ section p {
         right: 0.5em;
     }
 
-    /* Страница заданий */
     .task-section {
         padding: 1em 0.75em;
     }
@@ -1287,7 +1249,6 @@ section p {
         max-width: 18em;
     }
 
-    /* Аккордеон */
     .accordion-header {
         font-size: 1.3rem;
         padding: 0.7em 0.9em;
@@ -1310,7 +1271,6 @@ section p {
         font-size: 0.95rem;
     }
 
-    /* Header для страниц спектаклей */
     .play-page header {
         top: 0.3em;
         padding: 0.6em;
@@ -1324,7 +1284,6 @@ section p {
         height: 2em;
     }
 
-    /* Футер */
     .footer {
         padding: 1.5em 1em;
     }
@@ -1332,7 +1291,6 @@ section p {
         font-size: 0.9rem;
     }
 
-    /* Модальное окно */
     .modal-content {
         margin: 15% auto;
         width: 98%;
@@ -1357,7 +1315,6 @@ section p {
 
 /* Маленькие телефоны (360px и меньше) */
 @media (max-width: 360px) {
-    /* Герой-секция */
     .hero {
         height: 55vh;
         margin-top: 3em;
@@ -1375,12 +1332,10 @@ section p {
         line-height: 1.3;
     }
 
-    /* Колонны */
     .column {
         width: 1.2em;
     }
 
-    /* Страница спектакля */
     .play-hero {
         min-height: 55vh;
         padding: 2em 0.4em;
@@ -1395,18 +1350,15 @@ section p {
         padding: 1em 0.5em;
     }
 
-    /* Контент */
     .info-block p, .cast li, .description p {
         font-size: 0.9rem;
     }
 
-    /* Кнопки */
     .btn-gold {
         padding: 0.6em 1.2em;
         font-size: 0.85rem;
     }
 
-    /* Сетка спектаклей */
     .shows-grid {
         gap: 1em;
         padding: 1em 0.75em;
@@ -1418,7 +1370,6 @@ section p {
         padding: 10em 0.8em 0.8em;
     }
 
-    /* Страница заданий */
     .task-section {
         padding: 0.8em 0.5em;
     }
@@ -1435,7 +1386,6 @@ section p {
         max-width: 16em;
     }
 
-    /* Аккордеон */
     .accordion {
         margin: 1em auto;
     }
@@ -1454,7 +1404,6 @@ section p {
         padding: 0.3em 0.6em;
     }
 
-    /* Header для страниц спектаклей */
     .play-page header {
         top: 0.2em;
         padding: 0.5em;
@@ -1468,7 +1417,6 @@ section p {
         height: 1.8em;
     }
 
-    /* Футер */
     .footer {
         padding: 1.25em 0.75em;
     }
@@ -1479,7 +1427,6 @@ section p {
         margin: 0 0.4em;
     }
 
-    /* Навигация */
     nav ul {
         padding: 0.8em 0;
     }
@@ -1488,7 +1435,6 @@ section p {
     }
 }
 
-/* Очень маленькие телефоны (320px и меньше) */
 @media (max-width: 320px) {
     .hero-content h1 {
         font-size: 1.7rem;
@@ -1510,3 +1456,70 @@ section p {
         height: 16em;
     }
 }
+
+/* ================= АДАПТИВНОСТЬ ДЛЯ ЗАДАНИЙ ================= */
+@media (max-width: 768px) {
+    .task-page .hero-wrapper,
+    .task-page .curtain,
+    .task-page .column {
+        display: none;
+    }
+
+    .task-page {
+        padding-top: 14em;
+        min-height: 100vh;
+        height: auto;
+        overflow: visible;
+    }
+
+    .task-section {
+        padding-bottom: 1.5em;
+        text-align: center;
+        justify-content: flex-start;
+    }
+
+    .task-title {
+        font-size: 1.9rem;
+        margin-bottom: 1em;
+    }
+
+    .task-desc {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5em;
+    }
+
+    .task-demo {
+        max-width: 200px;
+        margin: 2em auto;
+        padding: 0;
+        perspective: none;
+    }
+
+    .demo-wrapper {
+        width: 200px;
+        height: 200px;
+        margin: 2em auto;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+        background: #fff;
+    }
+
+    .task-demo .box,
+    .task-demo .flexbox-role {
+        width: 200px;
+        height: 200px;
+        min-width: 200px;
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .task-page .hero-wrapper,
+    .task-page .curtain-left,
+    .task-page .curtain-right,
+    .task-page .column-left,
+    .task-page .column-right {
+        display: none !important;
+    }
+}
+
