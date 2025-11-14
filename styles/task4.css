@@ -1,0 +1,528 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #302f2d;
+    color: #d0a459;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+    padding: 20px;
+    margin: 0;
+}
+
+.task-desc {
+    padding-left: 20px;
+}
+
+main.task-page {
+    flex: 1 0 auto;
+    padding: 80px 0 60px;
+    min-height: calc(100vh - 140px);
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    padding: 14px;
+    box-sizing: border-box;
+    gap: 14px;
+}
+
+.drag-drop-app {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Верхний блок */
+.top {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 12px;
+    min-height: 110px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    border: 1px solid #cbd5e1;
+    transition: all 0.18s ease;
+}
+
+.top-title {
+    flex-basis: 100%;
+    font-size: 14.5px;
+    color: #475569;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+/* Нижняя часть */
+.bottom {
+    display: flex;
+    flex: 1;
+    gap: 14px;
+    min-height: 0;
+}
+
+/* Левый блок */
+.left {
+    flex: 0 0 33.333%;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border: 1px solid #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    min-height: 0;
+    transition: all 0.18s ease;
+}
+
+.left-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #334155;
+}
+
+.left-container {
+    flex: 1;
+    min-height: 40px;
+    position: relative;
+    overflow: hidden;
+    padding: 8px 0;
+    border-radius: 8px;
+}
+
+/* Правый блок */
+.right {
+    flex: 1 1 66.666%;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border: 1px solid #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    min-height: 0;
+    transition: all 0.18s ease;
+}
+
+.right-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+/* Поле ввода и кнопка */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+    width: 100%;
+    align-items: stretch;
+}
+
+#inputText {
+    width: 100%;
+    min-height: 70px;
+    padding: 18px 22px;
+    border-radius: 12px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    font-size: 16px;
+    font-weight: 500;
+    color: #1e293b;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.18s ease;
+    animation: slideIn 0.3s ease-out;
+}
+
+#inputText:hover:not(:focus), :hover:not(:focus) {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+#inputText:focus {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: scale(1.01);
+    background: #fdfdfd;
+}
+
+#inputText::placeholder {
+    color: #d0a459;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+#inputText:hover::placeholder,
+#inputText:focus::placeholder {
+    color: #b5893e;
+    opacity: 1;
+}
+
+#parseBtn {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    background: #d0a459;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: all 0.18s ease;
+}
+
+#parseBtn:hover {
+    background: #591c1c;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+#parseBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Овалы */
+.oval {
+    display: inline-block;
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    margin: 6px;
+    cursor: grab;
+    user-select: none;
+    white-space: nowrap;
+    font-weight: 500;
+    font-size: 14px;
+    color: #1e293b;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.18s ease;
+    position: relative;
+    z-index: 10;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.oval:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+#leftContainer .oval {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+/* Подсветка зон */
+.left.drop-target, .top.drop-target {
+    outline: 2px dashed #591c1c;
+    outline-offset: -2px;
+    background-color: rgba(148, 163, 184, 0.05);
+}
+
+/* Список выбранных слов */
+.selected-list {
+    min-height: 44px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1.5px dashed #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    transition: all 0.18s ease;
+}
+
+.selected-list:empty::before {
+    content: "Нажмите на овалы слева, чтобы добавить слова";
+    color: #94a3b8;
+    font-size: 13.5px;
+    font-style: italic;
+}
+
+.selected-item {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13.5px;
+    background: #f1f5f9;
+    color: #1e293b;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Подсказки */
+.hint {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 10px;
+    line-height: 1.45;
+    background: #f8fafc;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border-left: 3px solid #cbd5e1;
+}
+
+/* Скрытая подпись */
+.visually-hidden {
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}
+
+/* Футер */
+.footer {
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Анимации */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 15px;
+    }
+    .left, .right {
+        width: 100%;
+        min-height: 200px;
+    }
+    .top {
+        width: 95%;
+        margin-bottom: 15px;
+    }
+    .oval {
+        font-size: 12px;
+        padding: 6px 12px;
+        margin: 3px;
+        min-width: 60px;
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .input-area {
+        flex-direction: column;
+        gap: 10px;
+    }
+    #inputText {
+        width: 100%;
+        min-height: 80px;
+        font-size: 16px;
+    }
+    #parseBtn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+    #selectedWords {
+        max-height: 150px;
+        overflow-y: auto;
+    }
+    .selected-item {
+        font-size: 14px;
+        padding: 4px 8px;
+        margin: 2px;
+    }
+    .oval::after {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+    }
+    .oval:active {
+        transform: scale(0.95);
+        transition: transform 0.1s;
+    }
+    h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    #block3 {
+        min-height: 120px;
+        padding: 10px;
+    }
+    #leftContainer {
+        min-height: 150px;
+        position: relative;
+    }
+    .mobile-logo {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+        gap: 10px;
+    }
+
+    .oval {
+        font-size: 11px;
+        padding: 5px 10px;
+        margin: 2px;
+        min-width: 50px;
+    }
+
+    #inputText {
+        font-size: 14px;
+        min-height: 60px;
+    }
+
+    #parseBtn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    main.task-page {
+        padding-top: 60px;
+        padding-bottom: 70px;
+    }
+
+    .task-section {
+        padding: 10px 8px;
+    }
+
+    .task-title {
+        font-size: 1.6rem;
+    }
+
+    .task-desc {
+        font-size: 0.95rem;
+    }
+
+    .top, .left, .right {
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .oval {
+        padding: 8px 14px;
+        font-size: 13px;
+        margin: 4px;
+    }
+
+    .hint {
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    #inputText {
+        min-height: 55px;
+        padding: 14px 18px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+}
+
+.oval.dragging {
+    opacity: 0.7;
+    transform: scale(1.05);
+    z-index: 100;
+}
+
+.task-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+    /* Улучшение для landscape ориентации */
+    @media (max-height: 500px) and (orientation: landscape) {
+        .container {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .top {
+            width: 100%;
+            order: 1;
+        }
+
+        .left {
+            width: 48%;
+            order: 2;
+        }
+
+        .right {
+            width: 48%;
+            order: 3;
+        }
+
+        #block3, #leftContainer {
+            min-height: 100px;
+        }
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .oval:hover {
+        transform: none;
+    }
+
+    .oval:active {
+        opacity: 0.7;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-logo {
+        display: block;
+    }
+}

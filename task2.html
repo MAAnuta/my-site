@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Задание 2 — Театр Эмоций</title>
-  <link rel="preload" href="image/theater.png" as="image">
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="components.css">
-  <link rel="stylesheet" href="pages.css">
-  <link rel="stylesheet" href="responsive.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages.css">
+  <link rel="stylesheet" href="styles/responsive.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="flexbox.css"> <!-- Подключаем специфические стили для flexbox, если нужно -->
+  <link rel="stylesheet" href="styles/flexbox.css"> <!-- Подключаем специфические стили для flexbox, если нужно -->
 </head>
 <body>
 <header>
@@ -52,8 +51,8 @@
     </div>
     <ul>
         <li><a href="task1.html">Задание 1</a></li>
-        <li><a href="task2.html">Задание 2</a></li>
         <li><a href="task3.html">Задание 3</a></li>
+        <li><a href="task4.html">Задание 4</a></li>
     </ul>
   </nav>
 </header>
@@ -118,14 +117,6 @@
     </div>
   </div>
 </footer>
-<script>
-  // Активируем анимацию появления
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.reveal').forEach(el => {
-      el.classList.add('active');
-    });
-  });
-</script>
 <script src="script.js"></script>
 </body>
 </html>

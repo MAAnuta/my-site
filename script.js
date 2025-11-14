@@ -11,19 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
         curtains.forEach(c => c.style.display = 'none');
         columns.forEach(c => c.style.display = 'none');
         if (heroWrapper) heroWrapper.style.display = 'none';
-
-        window.removeEventListener('scroll', handleScroll);
-        return;
     }
 
-    const curtainLeft  = document.querySelector('.curtain-left');
+    const curtainLeft = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
-    const heroSection  = document.querySelector('.hero');
-    const reveals      = document.querySelectorAll('.reveal');
+    const heroSection = document.querySelector('.hero');
+    const reveals = document.querySelectorAll('.reveal');
 
     let currentX = -80;
-    let targetX  = -80;
-    let inertiaX = -80;
+    let targetX  = 0;
+    let inertiaX = 0;
     let animating = false;
     let lastScrollY = 0;
 
@@ -36,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         inertiaX += (targetX - inertiaX) * 0.08;
-        currentX += (inertiaX - currentX) * 0.15;
+        currentX += (inertiaX - currentX) * 0.08;
 
         curtainLeft.style.transform  = `translateX(${currentX}%)`;
         curtainRight.style.transform = `translateX(${-currentX}%)`;
@@ -56,8 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initCurtains = () => {
         currentX = -80;
-        targetX = -80;
-        inertiaX = -80;
+        targetX = 0;
+        inertiaX = 0;
         curtainLeft.style.transform  = 'translateX(-80%)';
         curtainRight.style.transform = 'translateX(80%)';
     };
@@ -66,10 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let ticking = false;
 
     const updateCurtains = () => {
+        // позиция и размеры hero-секции относительно видимой области
         const rect = heroSection.getBoundingClientRect();
-        const winH = window.innerHeight;
-        const winW = window.innerWidth;
-
+        const winH = window.innerHeight; // высота видимой области браузера
+        const winW = window.innerWidth; // ширина видимой области браузера
+        // расчет области, в которой будет проходить анимация закрытия занавеса
         const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
 
         if (rect.top > -150 && rect.top < winH * 0.4) {
@@ -106,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(updateCurtains);
     });
 
+    // для плавного появления блоков сайта
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('active');
@@ -123,8 +122,7 @@ document.querySelectorAll('.show-item').forEach(item => {
 });
 
 document.querySelectorAll('.buy-ticket').forEach(btn => {
-    btn.addEventListener('click', e => {
-        e.stopPropagation();
+    btn.addEventListener('click',() => {
         const slug = btn.closest('.show-item').dataset.slug;
         window.location.href = `${slug}.html`;
     });
@@ -157,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.carousel');
     const prevBtn = document.querySelector('.carousel-prev');
     const nextBtn = document.querySelector('.carousel-next');
-    const hero = document.querySelector('.play-hero');
 
     if (!carousel || !prevBtn || !nextBtn) return;
 
@@ -183,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startAutoPlay();
         }, slideDuration);
     };
-
+    // после ручного клика
     const resetTimer = () => {
         clearTimeout(timeout);
         startAutoPlay();
@@ -198,11 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
         prevSlide();
         resetTimer();
     });
-
-    if (hero) {
-        hero.addEventListener('mouseenter', () => clearTimeout(timeout));
-        hero.addEventListener('mouseleave', resetTimer);
-    }
 
     goToSlide(0);
     startAutoPlay();
@@ -255,9 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!title || !modal || !iframe) return;
 
         const originalSrc = iframe.src;
-
-        const cleanSrc = originalSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
-        iframe.src = cleanSrc;
+        iframe.src = originalSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
 
         title.addEventListener('click', openModal);
         closeBtn.addEventListener('click', closeModal);
@@ -289,8 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = '';
 
             let currentSrc = iframe.src;
-            const cleanSrc = currentSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
-            iframe.src = cleanSrc;
+            iframe.src = currentSrc.replace(/([?&])autoplay=1(&|$)/, '$1').replace(/[?&]$/, '');
         }
 
         function handleOutsideClick(event) {
@@ -309,21 +298,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const carousel = document.querySelector('.carousel');
-    if (carousel && window.innerWidth <= 768) {
-        const slideDuration = 5000;
-    }
-
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     accordionHeaders.forEach(header => {
         header.addEventListener('touchend', (e) => {
             e.preventDefault();
-            header.click();
+            header.click(); // имитация клика
         });
     });
 });
 
-// --- Гамбургер-меню ---
+// Гамбургер-меню
 const menuToggle = document.querySelector('.menu-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const menuClose = document.querySelector('.menu-close');

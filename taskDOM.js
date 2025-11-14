@@ -65,15 +65,14 @@ function init() {
     statsArea.classList.remove('visible');
     statsArea.classList.add('hidden');
 
-    // Удаляем кнопку перезапуска если она есть
     const existingRestartBtn = statsArea.querySelector('.restart-btn');
     if (existingRestartBtn) {
         existingRestartBtn.remove();
     }
 
-    shuffledQuestions = [...questions].sort(() => Math.random() - .5);
+    shuffledQuestions = [...questions].sort(()=> Math.random() < 0.5 ? -1 : 1);
     shuffledQuestions.forEach(q => {
-        q.answers = q.answers.sort(() => Math.random() - .5);
+        q.answers = q.answers.sort(() => Math.random() < 0.5 ? -1 : 1);
     });
     showNextQuestion();
 }
@@ -92,7 +91,7 @@ function showNextQuestion() {
 
     const qBlock = document.createElement('div');
     qBlock.className = 'question-block';
-    qBlock.dataset.idx = currentQIndex.toString();
+    qBlock.dataset.idx = currentQIndex.toString(); // сохраняем номер текущего вопроса прямо в dom-элементе
 
     const num = document.createElement('div');
     num.className = 'q-num';
@@ -134,12 +133,14 @@ function showNextQuestion() {
 
 // ВЫБОР ОТВЕТА
 function selectAnswer(el, isCorrect) {
-    if (answered || !el || el.classList.contains('disabled')) return;
+    if (answered || !el || el.classList.contains('disabled'))
+        return;
     answered = true;
 
     const qBlock = el.closest('.question-block');
     const wrapper = el.closest('.question-wrapper');
-    if (!qBlock || !wrapper) return;
+    if (!qBlock || !wrapper)
+        return;
 
     const allAnswers = qBlock.querySelectorAll('.answer-block');
 
@@ -287,9 +288,16 @@ function enableReview() {
     const reviewHeaders = document.createElement('div');
     reviewHeaders.id = 'review-headers';
     shuffledQuestions.forEach((q, i) => {
+        const userChoice = userAnswers[i];
+        const isCorrect = userChoice && userChoice.correct;
+        const marker = isCorrect ? '✅' : '❌';
+
         const head = document.createElement('div');
         head.className = 'review-header';
-        head.textContent = `Вопрос ${i + 1}`;
+        head.innerHTML = `
+            <span class="review-marker">${marker}</span>
+            <span>Вопрос ${i + 1}</span>
+        `;
         head.addEventListener('click', () => toggleReview(i));
         reviewHeaders.appendChild(head);
     });

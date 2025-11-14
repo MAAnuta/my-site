@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Задание 4 — Разбор строки</title>
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/task4.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo-link">
+    <div class="logo">
+      <div class="mask sad">
+        <div class="eye"></div>
+        <div class="eye"></div>
+        <div class="mouth"></div>
+      </div>
+      <div class="mask happy">
+        <div class="eye"></div>
+        <div class="eye"></div>
+        <div class="mouth"></div>
+      </div>
+    </div>
+  </a>
+</header>
+
+<main class="task-page reveal">
+  <section class="task-section">
+    <div class="container">
+      <h1 class="task-title">Задание 4: Разбор строки</h1>
+      <p class="task-desc">
+        Перетаскивайте элементы между блоками, сортируйте, раскрашивайте и собирайте слова под строкой ввода.
+      </p>
+      <div class="drag-drop-app">
+        <div class="container">
+          <div id="block3" class="top">
+            <div class="top-title">
+              Исходные элементы (перетащите в левый блок)
+            </div>
+          </div>
+
+          <div class="bottom">
+            <div id="block2" class="left">
+              <div class="left-title">Блок 2 — сюда перетаскивать</div>
+              <div id="leftContainer" class="left-container"></div>
+            </div>
+
+            <div class="right">
+              <div class="right-title">Блок 1 — ввод</div>
+              <div class="controls">
+                <label for="inputText" class="visually-hidden">Введите строку для разбора</label>
+                <input id="inputText" placeholder="Например: лес-бабочка-20-бык-крик-3-Бок" />
+                <button id="parseBtn">Разобрать</button>
+              </div>
+              <div id="selectedWords" class="selected-list" aria-live="polite"></div>
+              <div class="hint">
+                Нажимайте на элементы в левом блоке, чтобы добавлять слова выбранного цвета сюда.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Информация</h4>
+        <p>© 2025 Театр Эмоций. Все права защищены.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Контакты</h4>
+        <p>Email: info@teatr-emociy.ru</p>
+        <p>Телефон: +7 (495) 777-77-77</p>
+      </div>
+      <div class="footer-section">
+        <h4>Социальные сети</h4>
+        <div class="social-links">
+          <a href="#">VK</a>
+          <a href="#">Telegram</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="script.js"></script>
+<script src="task4.js"></script>
+</body>
+</html>

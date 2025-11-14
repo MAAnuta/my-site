@@ -12,7 +12,7 @@ body {
 }
 header {
     text-align: center;
-    margin-bottom: 36px;
+    margin-bottom: 2.25em;
 }
 
 h1 {
@@ -43,8 +43,8 @@ h1 {
 .question-wrapper {
     overflow: hidden;
     background:#ffffff;
-    border-radius:16px;
-    margin-bottom:32px;
+    border-radius:1em;
+    margin-bottom:2em;
     box-shadow:0 6px 20px rgba(0,0,0,.07);
     border: 1px solid #e2e8f0;
 }
@@ -63,13 +63,12 @@ h1 {
     letter-spacing: 0.3px;
 }
 .question-block .q-text {
-    font-size:1.35rem;
-    margin-bottom:18px;
+    font-size: 1.35rem;
+    margin-bottom: 18px;
     color: #1a202c;
     font-weight: 500;
 }
 
-/* БЛОКИ ОТВЕТОВ - В ОДНУ ЛИНИЮ */
 .answers-container {
     display: flex;
     gap: 12px;
@@ -79,13 +78,13 @@ h1 {
 
 .answer-block {
     background:#f7fafc;
-    border:2px solid transparent;
-    border-radius:12px;
+    border: 2px solid transparent;
+    border-radius: 12px;
     padding:16px 20px;
-    cursor:pointer;
+    cursor: pointer;
     transition: all .25s ease;
-    position:relative;
-    overflow:hidden;
+    position: relative;
+    overflow: hidden;
     font-weight: 500;
     color: #2d3748;
     box-shadow: 0 1px 3px rgba(0,0,0,.05);

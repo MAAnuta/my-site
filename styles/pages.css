@@ -14,7 +14,7 @@
 .hero-bg {
     position: absolute;
     inset: 0;
-    background: url('image/theater.png') center/cover no-repeat;
+    background: url('../image/theater.webp') center/cover no-repeat;
     z-index: 0;
 }
 
