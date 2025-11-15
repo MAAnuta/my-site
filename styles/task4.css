@@ -42,6 +42,7 @@ main.task-page {
 
 .drag-drop-app {
     width: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -81,6 +82,7 @@ main.task-page {
 /* Левый блок */
 .left {
     background: #ffffff;
+    max-height: 80%;
     flex: 0 0 33.333%;
     border-radius: 12px;
     padding: 16px;
@@ -88,7 +90,6 @@ main.task-page {
     border: 1px solid #cbd5e1;
     display: flex;
     flex-direction: column;
-    height: 80%;
     min-height: 0;
     transition: all 0.18s ease;
 }
@@ -112,6 +113,7 @@ main.task-page {
 /* Правый блок */
 .right {
     background: #ffffff;
+    max-height: 80%;
     flex: 1 1 66.666%;
     border-radius: 12px;
     padding: 16px;
@@ -119,7 +121,6 @@ main.task-page {
     border: 1px solid #cbd5e1;
     display: flex;
     flex-direction: column;
-    height: 80%;
     min-height: 0;
     transition: all 0.18s ease;
 }
@@ -260,6 +261,7 @@ main.task-page {
     gap: 8px;
     align-items: center;
     transition: all 0.18s ease;
+    overflow-y: auto;
 }
 
 .selected-list:empty::before {
@@ -270,7 +272,7 @@ main.task-page {
 }
 
 .selected-item {
-    display: inline-block;
+    display: flex;
     padding: 6px 11px;
     border-radius: 8px;
     font-weight: 600;

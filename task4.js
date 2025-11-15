@@ -139,8 +139,11 @@ const OnDropToBlock2 = e => {
     const el = token.element;
     if (from === 'block3' && el.parentElement === DOM.block3) el.remove();
 
-    if (!token.color) token.color = RndColor();
+    if (!token.color) {
+        token.color = RndColor();
+    }
     el.style.background = token.color;
+
     if (token.widthPx) {
         el.style.width = `${token.widthPx}px`;
         el.style.height = `${token.heightPx}px`;
@@ -164,7 +167,6 @@ const OnDropToBlock3 = e => {
     const el = token.element;
     if (el.parentElement === DOM.leftContainer) el.remove();
 
-    token.color = null;
     el.style.background = '#e2e8f0';
     el.style.width = '';
     el.style.height = '';
