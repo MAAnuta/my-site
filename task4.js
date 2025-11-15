@@ -14,7 +14,7 @@ const DOM = {
 };
 
 // Вспомогательные функции
-const IsNumberStr = str => /^-?(0|[1-9]\d*)(\.\d+)?$/.test(str);
+const IsNumberStr = str => /^(0|[1-9]\d*)(\.\d+)?$/.test(str);
 const IsFirstCharUpper = str => str && str[0] !== str[0].toLowerCase();
 const RndColor = () => {
     const h = Math.floor(Math.random() * 360); // оттенок (0-359)
@@ -61,8 +61,8 @@ const BuildAssociativeArrayAndRender = input => {
         else lowers.push({ raw: p, origIndex: i });
     });
 
-    lowers.sort((a, b) => a.raw.localeCompare(b.raw, 'ru'));
-    uppers.sort((a, b) => a.raw.localeCompare(b.raw, 'ru'));
+    lowers.sort((a, b) => a.raw.localeCompare(b.raw));
+    uppers.sort((a, b) => a.raw.localeCompare(b.raw));
     nums.sort((a, b) => Number(a.raw) - Number(b.raw));
 
     let aIdx = 1, bIdx = 1, nIdx = 1;

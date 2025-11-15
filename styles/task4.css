@@ -80,6 +80,7 @@ main.task-page {
 
 /* Левый блок */
 .left {
+    background: #ffffff;
     flex: 0 0 33.333%;
     border-radius: 12px;
     padding: 16px;
@@ -110,6 +111,7 @@ main.task-page {
 
 /* Правый блок */
 .right {
+    background: #ffffff;
     flex: 1 1 66.666%;
     border-radius: 12px;
     padding: 16px;
