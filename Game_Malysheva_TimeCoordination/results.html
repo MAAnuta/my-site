@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Координация по времени - Рейтинг</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+  <div class="results-panel">
+    <h1>Рейтинг игроков</h1>
+
+
+    <div class="rating-table-container">
+      <table class="rating-table">
+        <thead>
+        <tr>
+          <th>Место</th>
+          <th>Имя</th>
+          <th>Общий счет</th>
+          <th>Средняя точность (%)</th>
+          <th>Последняя игра</th>
+        </tr>
+        </thead>
+        <tbody id="ratingTableBody">
+        <!-- Заполняется динамически -->
+        </tbody>
+      </table>
+      <div id="emptyRating" class="empty-message hidden">
+        Рейтинг пуст. Сыграйте игру, чтобы попасть в рейтинг!
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="backBtn" class="btn btn-primary">Назад в меню</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/dataManager.js"></script>
+<script src="js/utils.js"></script>
+<script>
+  // Инициализация страницы рейтинга
+  document.addEventListener('DOMContentLoaded', () => {
+    const ratingTableBody = document.getElementById('ratingTableBody');
+    const emptyRating = document.getElementById('emptyRating');
+    const backBtn = document.getElementById('backBtn');
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ru-RU') + ' ' + date.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+    }
+
+    function renderRating() {
+      let rating = DataManager.getRating();
+
+      if (!rating || rating.length === 0) {
+        ratingTableBody.innerHTML = '';
+        emptyRating.classList.remove('hidden');
+        return;
+      }
+
+      emptyRating.classList.add('hidden');
+
+      // Сортировка по общему счету
+      const sorted = [...rating].sort((a, b) => b.score - a.score);
+
+      // Показываем топ-10
+      const top10 = sorted.slice(0, 10);
+
+      ratingTableBody.innerHTML = top10.map((entry, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${entry.name}</td>
+                        <td>${entry.score.toLocaleString()}</td> <!-- Форматируем число -->
+                        <td>${entry.accuracy.toFixed(1)}%</td>
+                        <td>${formatDate(entry.date)}</td>
+                    </tr>
+                `).join('');
+    }
+
+    // Назад в меню
+    backBtn.addEventListener('click', () => {
+      window.location.href = 'menu.html';
+    });
+
+
+    // Первоначальная загрузка
+    renderRating();
+  });
+</script>
+</body>
+</html>

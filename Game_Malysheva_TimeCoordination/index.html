@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Координация по времени - Авторизация</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+<!-- Анимированный фон -->
+<div class="animated-background">
+  <div class="floating-circle" style="--delay: 0s; --duration: 20s; --x: 10%; --y: 20%;"></div>
+  <div class="floating-circle" style="--delay: 2s; --duration: 25s; --x: 80%; --y: 10%;"></div>
+  <div class="floating-circle" style="--delay: 4s; --duration: 18s; --x: 50%; --y: 60%;"></div>
+  <div class="floating-circle" style="--delay: 6s; --duration: 22s; --x: 20%; --y: 80%;"></div>
+  <div class="floating-circle" style="--delay: 8s; --duration: 30s; --x: 90%; --y: 70%;"></div>
+  <div class="floating-circle" style="--delay: 10s; --duration: 15s; --x: 30%; --y: 40%;"></div>
+</div>
+
+<div class="auth-container">
+  <h1 class="auth-title">Координация по времени</h1>
+
+  <div class="auth-panel">
+    <h2>Вход в игру</h2>
+    <div class="auth-form">
+      <div class="form-group">
+        <label for="playerName">Введите ваше имя:</label>
+        <input type="text" id="playerName" placeholder="Ваше имя" maxlength="20">
+      </div>
+
+      <div class="form-group">
+        <label>Выберите аватарку:</label>
+        <div class="avatar-selection">
+          <div class="avatar-option" data-avatar="0" role="button" tabindex="0" aria-label="Выбрать аватарку 1">
+            <div class="avatar-preview avatar-0"></div>
+          </div>
+          <div class="avatar-option" data-avatar="1" role="button" tabindex="0" aria-label="Выбрать аватарку 2">
+            <div class="avatar-preview avatar-1"></div>
+          </div>
+          <div class="avatar-option" data-avatar="2" role="button" tabindex="0" aria-label="Выбрать аватарку 3">
+            <div class="avatar-preview avatar-2"></div>
+          </div>
+          <div class="avatar-option" data-avatar="3" role="button" tabindex="0" aria-label="Выбрать аватарку 4">
+            <div class="avatar-preview avatar-3"></div>
+          </div>
+          <div class="avatar-option" data-avatar="4">
+            <div class="avatar-preview avatar-4"></div>
+          </div>
+        </div>
+      </div>
+
+      <button id="startGameBtn" class="btn btn-primary btn-large" aria-label="Начать игру с выбранным именем и аватаркой">Начать игру</button>
+    </div>
+  </div>
+</div>
+
+<!-- Экран загрузки -->
+<div id="loadingScreen" class="loading-screen hidden">
+  <div class="loading-content">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Загрузка игры...</p>
+  </div>
+</div>
+
+<script src="js/dataManager.js"></script>
+<script src="js/utils.js"></script>
+<script>
+  // Инициализация страницы авторизации
+  document.addEventListener('DOMContentLoaded', () => {
+    const playerNameInput = document.getElementById('playerName');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const loadingScreen = document.getElementById('loadingScreen');
+    const avatarOptions = document.querySelectorAll('.avatar-option');
+
+    let selectedAvatar = 0;
+
+    // Загрузить сохраненные данные игрока
+    const savedPlayer = DataManager.getPlayer();
+    if (savedPlayer) {
+      if (savedPlayer.name) {
+        playerNameInput.value = savedPlayer.name;
+      }
+      if (savedPlayer.avatarId !== undefined) {
+        selectedAvatar = savedPlayer.avatarId;
+        updateAvatarSelection(selectedAvatar);
+      }
+    }
+
+    // Выбор аватарки
+    avatarOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        selectedAvatar = parseInt(option.dataset.avatar);
+        updateAvatarSelection(selectedAvatar);
+      });
+    });
+
+    function updateAvatarSelection(avatarId) {
+      avatarOptions.forEach((opt, index) => {
+        if (index === avatarId) {
+          opt.classList.add('selected');
+        } else {
+          opt.classList.remove('selected');
+        }
+      });
+    }
+
+    // Обработчик начала игры
+    startGameBtn.addEventListener('click', () => {
+      const name = playerNameInput.value.trim();
+      if (!name) {
+        alert('Пожалуйста, введите ваше имя');
+        return;
+      }
+
+      // Проверить, что DataManager загружен
+      if (typeof DataManager === 'undefined') {
+        alert('Ошибка загрузки системы данных. Попробуйте перезагрузить страницу.');
+        return;
+      }
+
+      // Сохранить данные игрока
+      const result = DataManager.savePlayer(name, selectedAvatar, true);
+
+      // Проверяем результат сохранения
+      if (!result || !result.success) {
+        const errorMessage = result?.error || 'Не удалось создать профиль. Попробуйте еще раз.';
+        alert(errorMessage);
+        return;
+      }
+
+      // Показать экран загрузки
+      loadingScreen.classList.remove('hidden');
+
+      // Имитация загрузки
+      setTimeout(() => {
+        window.location.href = 'menu.html';
+      }, 2000);
+    });
+
+    // Enter для начала игры
+    playerNameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        startGameBtn.click();
+      }
+    });
+
+    // Инициализация выбранной аватарки
+    updateAvatarSelection(selectedAvatar);
+  });
+
+  // Глобальная очистка таймеров при выходе
+  window.addEventListener('beforeunload', function() {
+    try {
+      // Очищаем таймеры LevelManager если он существует
+      if (window.LevelManager && window.LevelManager.currentInstance) {
+        window.LevelManager.currentInstance.clearTimers();
+      }
+      // Очищаем все оставшиеся таймеры через глобальную функцию
+      if (typeof clearAllTimers === 'function') {
+        // Собираем все возможные таймеры из window
+        const allTimers = [];
+        for (let key in window) {
+          if (key.includes('Timer') || key.includes('timer') || key.includes('Interval') || key.includes('interval')) {
+            if (typeof window[key] === 'number') {
+              allTimers.push(window[key]);
+            }
+          }
+        }
+        if (allTimers.length > 0) {
+          clearAllTimers(allTimers);
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка очистки таймеров при выходе:', error);
+    }
+  });
+</script>
+</body>
+</html>

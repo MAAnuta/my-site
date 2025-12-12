@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Игра Лампочки</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+<div class="game-container">
+  <!-- Верхняя панель -->
+  <div class="game-header">
+    <div class="header-info">
+      <span id="levelInfo">Загрузка...</span>
+      <span id="scoreInfo">Очки: 0</span>
+      <span id="accuracyInfo">Точность: 0%</span>
+      <span id="attemptsInfo">Попытки: 3</span>
+    </div>
+    <div class="header-actions">
+      <button id="menuBtn" class="btn-small">Меню</button>
+    </div>
+  </div>
+
+  <!-- Игровая область -->
+  <div class="game-area" id="gameArea">
+    <div style="text-align: center; padding: 50px;">
+      <div class="loading-spinner"></div>
+      <p>Загрузка игры...</p>
+    </div>
+  </div>
+
+  <!-- Нижняя панель -->
+  <div class="game-footer">
+    <div class="hint-text" id="hintText" aria-live="polite" aria-atomic="true">Подготовка к запуску...</div>
+    <button id="actionBtn" class="btn btn-primary btn-large" disabled>СТАРТ</button>
+  </div>
+</div>
+
+<script src="js/dataManager.js"></script>
+<script src="js/utils.js"></script>
+
+<script src="js/levelManager.js"></script>
+<script src="js/gameCore.js"></script>
+
+<script>
+  // Получить параметры из URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const levelId = urlParams.get('level') || 'level1';
+  let sublevelId = urlParams.get('sublevel') || '1-1';
+  const gameMode = urlParams.get('mode') || 'classic';
+
+  // Преобразовать sublevelId в правильный формат (level-sublevel)
+  // Если sublevelId не содержит '-', добавляем номер уровня
+  if (!sublevelId.includes('-')) {
+    const levelNum = levelId.replace('level', '');
+    sublevelId = `${levelNum}-${sublevelId}`;
+  }
+
+  // Имена уровней для отображения
+  const levelNames = {
+    'level1': 'Измерение времени',
+    'level2': 'Рабочая память',
+    'level3': 'Логика и прогнозирование',
+    'level4': 'Стратегия и скорость'
+  };
+
+  // Инициализация при загрузке страницы
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM загружен, начинаем инициализацию игры');
+    console.log('Параметры:', { levelId, sublevelId, gameMode });
+
+    // Обновить информацию в заголовке
+    const levelName = levelNames[levelId] || `Уровень ${levelId}`;
+    const modeText = gameMode === 'training' ? 'Тренировка' : 'Классическая игра';
+    document.getElementById('levelInfo').textContent = `${modeText}: ${levelName}`;
+
+    // Проверяем загрузку модулей
+    setTimeout(() => {
+      console.log('Проверка загрузки модулей...');
+
+      // Проверяем ключевые модули
+      const requiredModules = [
+        { name: 'DataManager', module: DataManager },
+        { name: 'BaseLevelHandler', module: BaseLevelHandler },
+        { name: 'LevelManager', module: LevelManager },
+        { name: 'Level1Handler', module: Level1Handler }
+      ];
+
+      const missingModules = requiredModules.filter(m => !m.module);
+
+      if (missingModules.length > 0) {
+        const errorMsg = `Не удалось загрузить следующие модули:\n` +
+                missingModules.map(m => `• ${m.name}`).join('\n') +
+                `\n\nПожалуйста, обновите страницу или проверьте консоль браузера.`;
+
+        showLoadingError('Ошибка загрузки ресурсов', errorMsg);
+        return;
+      }
+
+      console.log('✅ Все модули успешно загружены');
+
+      // Инициализируем игру
+      try {
+        const gameCore = new GameCore(gameMode);
+        window.gameCore = gameCore;
+
+        setTimeout(() => {
+          console.log('Запуск уровня...');
+          const success = gameCore.init(levelId, sublevelId);
+
+          if (!success) {
+            console.error('Не удалось запустить уровень');
+
+            // Показать выбор в режиме тренировки
+            if (gameMode === 'training' && gameCore.levelManager) {
+              showTrainingLevels(gameCore, levelId);
+            }
+          } else {
+            console.log('✅ Уровень успешно запущен');
+          }
+        }, 100);
+
+      } catch (error) {
+        console.error('Ошибка создания GameCore:', error);
+        showLoadingError('Ошибка инициализации игры', error.message);
+      }
+    }, 500);
+
+    // Кнопка меню
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      if (confirm('Вернуться в меню? Текущий прогресс будет сохранен.')) {
+        if (window.gameCore) {
+          window.gameCore.cleanup();
+        }
+        window.location.href = 'menu.html';
+      }
+    });
+
+    // Обработчик ошибок
+    window.addEventListener('error', (event) => {
+      console.error('Глобальная ошибка:', event.error);
+      showLoadingError('Произошла ошибка', event.error?.message);
+    });
+  });
+
+  // Функция для показа ошибки
+  function showLoadingError(message, details) {
+    const gameArea = document.getElementById('gameArea');
+    if (!gameArea) return;
+
+    gameArea.innerHTML = `
+            <div class="error-container">
+                <h2 style="color: #f44336;">⚠️ Ошибка</h2>
+                <p style="font-size: 18px; margin: 20px 0;">${message}</p>
+                ${details ? `<div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <pre style="font-size: 12px; color: #666;">${details}</pre>
+                </div>` : ''}
+                <div style="margin-top: 30px;">
+                    <button onclick="window.location.href='menu.html'"
+                            class="btn" style="margin: 0 10px;">
+                        Вернуться в меню
+                    </button>
+                    <button onclick="window.location.reload()"
+                            class="btn" style="margin: 0 10px;">
+                        Обновить
+                    </button>
+                </div>
+            </div>
+        `;
+  }
+
+  // Показать выбор уровней для тренировки
+  function showTrainingLevels(gameCore, currentLevelId) {
+    const gameArea = document.getElementById('gameArea');
+    if (!gameArea || !gameCore.levelManager) return;
+
+    const level = gameCore.levelManager.getLevelInfo(currentLevelId);
+    if (!level) return;
+
+    gameArea.innerHTML = `
+            <div style="text-align: center; padding: 30px;">
+                <h3>Выберите подуровень для тренировки:</h3>
+                <div style="margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                    ${level.sublevels.map(sublevel => `
+                        <button onclick="startTrainingSublevel('${currentLevelId}', '${sublevel.id}')"
+                                style="margin: 5px; padding: 12px 24px; background: #4CAF50;
+                                       color: white; border: none; border-radius: 8px;
+                                       cursor: pointer; font-size: 14px;">
+                            ${sublevel.name}
+                        </button>
+                    `).join('')}
+                </div>
+                <button onclick="window.location.href='menu.html'"
+                        style="margin-top: 30px; padding: 10px 20px; background: #364548;
+                               color: white; border: none; border-radius: 8px; cursor: pointer;">
+                    ← Назад в меню
+                </button>
+            </div>
+        `;
+  }
+
+  // Запуск подуровня в режиме тренировки
+  function startTrainingSublevel(levelId, sublevelId) {
+    if (window.gameCore) {
+      window.gameCore.levelManager.stopCurrentLevel();
+      window.gameCore.init(levelId, sublevelId);
+    }
+  }
+
+  // Обработчик перед закрытием
+  window.addEventListener('beforeunload', () => {
+    try {
+      if (window.gameCore) {
+        window.gameCore.cleanup();
+      }
+      // Дополнительная очистка таймеров LevelManager
+      if (window.LevelManager && window.LevelManager.currentInstance) {
+        window.LevelManager.currentInstance.clearTimers();
+      }
+    } catch (error) {
+      console.error('Ошибка очистки при выходе из игры:', error);
+    }
+  });
+</script>
+</body>
+</html>

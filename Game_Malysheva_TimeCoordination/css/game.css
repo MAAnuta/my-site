@@ -1,0 +1,509 @@
+@keyframes glow {
+    from {
+        filter: drop-shadow(0 0 25px currentColor);
+    }
+    to {
+        filter: drop-shadow(0 0 35px currentColor);
+    }
+}
+
+.game-header {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-info {
+    display: flex;
+    gap: 20px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.header-info span {
+    padding: 8px 16px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    color: #333;
+}
+
+.game-footer {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+}
+
+#hintText {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+/* Таймер по центру сверху */
+.game-timer {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    padding: 15px 25px;
+    background: rgba(134,181,218,0.9);
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    min-width: 180px;
+}
+
+.game-timer.error {
+    background: rgba(207,144,141,0.9);
+}
+
+/* Контейнер лампочек */
+.bulbs-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+    position: relative;
+    min-height: 300px;
+}
+
+/* Индивидуальная лампочка */
+.bulb-container {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.bulb-container:hover {
+    transform: scale(1.05);
+}
+
+.bulb-label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Контейнер для ввода */
+.input-container {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+}
+
+.input-label {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-field {
+    padding: 10px 15px;
+    font-size: 16px;
+    width: 120px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.input-unit {
+    font-size: 16px;
+}
+
+.submit-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #90bc92;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #79ae7b;
+}
+
+/* Контейнер карт */
+.cards-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    margin-top: 0;
+    overflow: visible;
+    pointer-events: auto;
+    z-index: 1000;
+}
+
+/* Индивидуальная карта */
+.card {
+    position: absolute;
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #364548 0%, #708F96 100%);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    user-select: none;
+    z-index: 1001;
+}
+
+.card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    z-index: 1002;
+}
+
+/* Кнопка записи */
+.record-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    background: #9bd59d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.record-btn:hover {
+    background: #8bc88c;
+}
+
+.record-btn.recording {
+    background: #d19e9a;
+}
+
+/* Подсказка */
+.hint-text {
+    text-align: center;
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Целевая карта */
+.target-card {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 15px 30px;
+    background: rgba(119,154,182,0.9);
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Контейнер кнопок */
+.buttons-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.game-btn {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    background: #666;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn:hover {
+    background: #555;
+}
+
+#actionBtn {
+    font-size: 20px;
+    padding: 15px 40px;
+    border-radius: 12px;
+    font-weight: 600;
+    background: var(--text-dark);
+    color: var(--primary-color);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#actionBtn:hover:not(:disabled) {
+    background: var(--secondary-color);
+    color: var(--text-dark);
+}
+
+#actionBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #cccccc;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    background: #666;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.game-area {
+    padding: 30px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbulbs-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    position: relative;
+    min-height: 400px;
+}
+
+.lightbulb-container {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 20px;
+}
+
+.lightbulb-svg {
+    transition: all 0.3s ease;
+}
+
+.input-container {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+}
+
+.time-cards-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-top: 30px;
+}
+
+.time-card {
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    user-select: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.time-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(5px, 10px) rotate(1deg); }
+    50% { transform: translate(-5px, 5px) rotate(-1deg); }
+    75% { transform: translate(3px, -5px) rotate(2deg); }
+}
+
+.error-message {
+    background: #ffebee;
+    color: #8a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
+    border: 1px solid #ffcdd2;
+}
+
+.loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 20px;
+    color: #666;
+}
+
+.level-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.level-button {
+    padding: 12px 24px;
+    background: #6c8f6e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    min-width: 200px;
+}
+
+.level-button:hover {
+    background: #6c8f6e;
+    transform: scale(1.05);
+}
+
+.level-button.secondary {
+    background: #666;
+}
+
+.level-button.secondary:hover {
+    background: #555;
+}
+
+.level-button.locked {
+    background: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.level-button.locked:hover {
+    transform: none;
+    background: #cccccc;
+}
+
+.time-cards-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    z-index: 1000;
+}
+
+.time-card {
+    position: absolute;
+    padding: 20px 30px;
+    background: linear-gradient(135deg, rgba(178, 209, 220, 0.6) 0%, #b9d0da 100%);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    user-select: none;
+    z-index: 1001;
+    min-width: 100px;
+    text-align: center;
+}
+
+.time-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    z-index: 1002;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translate(5px, -10px) rotate(1deg) scale(1.02);
+    }
+    50% {
+        transform: translate(-5px, 5px) rotate(-1deg) scale(0.98);
+    }
+    75% {
+        transform: translate(3px, 10px) rotate(2deg) scale(1.01);
+    }
+}
+
+/* Убедимся, что game-area имеет относительное позиционирование */
+#gameArea {
+    position: relative;
+    min-height: 500px;
+}
+
+.selection-timer-display {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.selection-timer-display.warning {
+    background: rgba(186, 142, 72, 0.9) !important;
+    animation: pulse-fast 0.8s ease-in-out infinite;
+}
+
+.selection-timer-display.critical {
+    background: rgba(151, 70, 62, 0.9) !important;
+    animation: pulse-very-fast 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+}
+
+@keyframes pulse-fast {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.1); }
+}
+
+@keyframes pulse-very-fast {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.15); }
+}

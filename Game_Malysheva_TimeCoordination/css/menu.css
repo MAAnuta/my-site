@@ -1,0 +1,891 @@
+/* Карусель стили */
+.carousel-container {
+    position: relative;
+    max-width: 800px;
+    margin: 30px auto;
+    overflow: hidden;
+    border-radius: 20px;
+    min-height: 500px; /* Увеличиваем высоту */
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%;
+}
+
+.carousel-card {
+    min-width: 100%;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    height: 100%;
+    display: flex;
+}
+
+.mode-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px; /* Уменьшаем отступы */
+    margin: 0 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Полная высота */
+    overflow: hidden; /* Скрываем переполнение */
+}
+
+/* Улучшенные стрелки навигации */
+.carousel-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 0 30px;
+    gap: 25px;
+    position: relative;
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+}
+
+.carousel-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    border: 2px solid rgba(255,255,255,0.6);
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.3);
+    box-shadow: 0 0 10px var(--success-color);
+}
+
+.carousel-arrow {
+    width: 50px; /* Увеличиваем размер */
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: 3px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 3;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.carousel-arrow:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.carousel-arrow:active {
+    transform: scale(0.95);
+}
+
+/* Обновленные стили карточек */
+.mode-header {
+    text-align: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.mode-icon {
+    font-size: 40px; /* Уменьшаем иконку */
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.mode-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: var(--primary-color);
+}
+
+.mode-title {
+    font-size: 24px; /* Уменьшаем заголовок */
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.mode-description {
+    font-size: 14px; /* Уменьшаем описание */
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+/* Адаптивный контейнер для классической игры */
+.compact-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 10px 0;
+    flex: 1;
+    overflow-y: auto; /* Добавляем прокрутку */
+    max-height: 280px; /* Ограничиваем высоту */
+    padding-right: 8px;
+    padding-bottom: 5px;
+}
+
+/* Стили для скроллбара */
+.compact-selection::-webkit-scrollbar {
+    width: 8px;
+}
+
+.compact-selection::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+}
+
+.compact-selection::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.compact-selection::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+.selection-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    min-height: 60px; /* Уменьшаем высоту */
+}
+
+.selection-row:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.level-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 70px;
+}
+
+.level-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 50%;
+}
+
+.level-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.sublevels-container {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.sublevel-btn {
+    padding: 6px 10px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 50px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sublevel-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.sublevel-btn.available {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.sublevel-btn.completed {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.sublevel-btn.locked {
+    background: rgba(200,200,200,0.5);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.sublevel-btn.locked:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.sublevel-btn.active {
+    background: var(--warning-color);
+    color: white;
+    border-color: var(--warning-color);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
+}
+
+/* Тренировка - улучшенные стили */
+.training-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+    flex: 1;
+    justify-content: center;
+    max-height: 280px; /* Такая же высота как у compact-selection */
+    overflow-y: auto; /* Добавляем прокрутку */
+    padding-right: 8px;
+}
+
+.training-selection::-webkit-scrollbar {
+    width: 8px;
+}
+
+.training-selection::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+}
+
+.training-selection::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.selection-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.selection-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.level-select, .sublevel-select {
+    padding: 10px 14px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    appearance: none;
+}
+
+.level-select:focus, .sublevel-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.training-preview {
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.preview-header {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text-dark);
+}
+
+.preview-content {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Кнопки в карточках */
+.mode-actions {
+    text-align: center;
+    margin-top: 20px;
+    flex-shrink: 0;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.btn-large {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    min-width: 220px;
+}
+
+/* Панель пользователя */
+.user-panel {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 800px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    min-height: 500px; /* Увеличиваем высоту */
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.user-avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid var(--primary-color);
+    background: var(--bg-light);
+}
+
+.user-details {
+    flex-grow: 1;
+}
+
+.user-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.user-level {
+    display: inline-block;
+    padding: 5px 15px;
+    background: var(--bg-light);
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+    flex: 1;
+}
+
+.stat-card {
+    background: var(--bg-light);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.stat-name {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Действия меню */
+.menu-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px auto;
+    flex-wrap: wrap;
+    max-width: 800px;
+}
+
+.menu-actions .btn {
+    min-width: 180px;
+}
+
+.menu-actions .btn svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Прогресс для классической игры */
+.level-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 8px;
+    font-size: 13px;
+    flex-shrink: 0;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.progress-info {
+    font-weight: 600;
+}
+
+/* Выравнивание контейнеров */
+.mode-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Важно для работы скролла */
+}
+
+/* Легенда статусов */
+.status-legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.status-color.available {
+    background: var(--primary-color);
+}
+
+.status-color.completed {
+    background: var(--success-color);
+}
+
+.status-color.locked {
+    background: rgba(200,200,200,0.5);
+}
+
+.status-color.active {
+    background: var(--warning-color);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .carousel-container {
+        margin: 20px auto;
+        min-height: 450px;
+    }
+
+    .mode-card {
+        padding: 20px;
+        margin: 0 5px;
+    }
+
+    .mode-title {
+        font-size: 22px;
+    }
+
+    .selection-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        min-height: auto;
+    }
+
+    .level-indicator {
+        flex-direction: row;
+        gap: 8px;
+        min-width: auto;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .sublevels-container {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-large {
+        padding: 10px 25px;
+        font-size: 15px;
+        min-width: 200px;
+    }
+
+    .menu-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-actions .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .carousel-arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+
+    .user-panel {
+        min-height: 450px;
+        padding: 25px;
+    }
+
+    .compact-selection,
+    .training-selection {
+        max-height: 250px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mode-card {
+        padding: 15px;
+    }
+
+    .level-progress {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        padding: 8px;
+    }
+
+    .sublevel-btn {
+        padding: 5px 8px;
+        font-size: 12px;
+        min-width: 45px;
+        height: 32px;
+    }
+
+    .level-select, .sublevel-select {
+        padding: 8px 10px;
+        font-size: 13px;
+        padding-right: 30px;
+        background-position: right 8px center;
+    }
+
+    .user-panel {
+        min-height: 420px;
+        padding: 20px;
+    }
+
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .carousel-dot {
+        width: 12px;
+        height: 12px;
+    }
+
+    .status-legend {
+        gap: 10px;
+        font-size: 10px;
+    }
+}
+
+/* ========== ЭКРАН ВЫБОРА ПРОФИЛЯ ========== */
+.profile-selection-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.profile-selection-screen.hidden {
+    display: none;
+}
+
+.profile-selection-container {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.profile-selection-title {
+    font-size: 28px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.profiles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(76, 175, 80, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.profile-card.current {
+    border-color: var(--primary-color);
+    background: rgba(76, 175, 80, 0.05);
+}
+
+.profile-card-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-avatar {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-avatar-large {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+}
+
+.current-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.profile-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.profile-stats {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.profile-last-active {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.btn-danger {
+    background: #f44336;
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background: #d32f2f;
+}
+
+.no-profiles-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
+.profile-selection-actions {
+    text-align: center;
+}
+
+/* Кнопка выхода из профиля */
+.btn-logout {
+    background: transparent;
+    border: 2px solid var(--text-muted);
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+}
+
+.btn-logout:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.user-info {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .profile-selection-container {
+        padding: 25px;
+    }
+
+    .profile-card-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .profile-stats {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 360px) {
+    .sublevel-btn {
+        min-width: 40px;
+        padding: 4px 6px;
+        font-size: 11px;
+    }
+
+    .mode-title {
+        font-size: 20px;
+    }
+
+    .user-name {
+        font-size: 20px;
+    }
+}
+
+/* Анимация для активного подуровня */
+@keyframes pulse-active {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 6px 12px rgba(251, 191, 36, 0.4);
+    }
+}
+
+.sublevel-btn.active {
+    animation: pulse-active 2s ease-in-out infinite;
+}

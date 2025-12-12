@@ -1,0 +1,2033 @@
+/* CSS переменные */
+:root {
+    --primary-color: #E0D8CC;
+    --secondary-color: #708F96;
+    --accent-color: #4cc9f0;
+    --success-color: #6c8f6e;
+    --error-color: #f87171;
+    --warning-color: #ffde84;
+    --background-dark: #0f172a;
+    --background-light: #1e293b;
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --border-radius: 16px;
+
+    /* Дополнительные переменные для совместимости */
+    --bg-light: #f5f5f5;
+    --border-color: #e2e8f0;
+    --text-dark: #364548;
+    --text-muted: #64748b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Главная страница */
+.auth-panel {
+    position: relative;
+    width: 100%;
+    margin: 0 auto 4rem;
+    max-width: 40.625rem; /* 650px */
+    padding: 3rem 2.5rem;
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+    box-sizing: border-box;
+
+    /* Основная "стеклянная" рамка + белая подсветка сверху/снизу */
+    border: 0.0625rem solid rgba(255, 255, 255, 0.15);
+    box-shadow: /* Белая яркая подсветка сверху и снизу */ 0 -0.0625rem 0 rgb(255, 255, 255) inset,
+    0 0.0625rem 0 rgb(255, 255, 255) inset,
+        /* Тёмные боковые и нижняя тени */ -0.0625rem 0 0 rgba(0, 0, 0, 0.2) inset,
+    0.0625rem 0 0 rgba(0, 0, 0, 0.2) inset,
+    0 0.25rem 0.625rem rgba(0, 0, 0, 0.25),
+        /* Общая глубина и "парение" */ 0 0.625rem 1.25rem rgba(0, 0, 0, 0.3),
+        /* Дополнительная внутренняя глубина */ inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.auth-panel h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+    font-size: 32px;
+}
+
+.auth-panel .auth-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.auth-panel .auth-form input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: calc(var(--border-radius) / 2);
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: var(--transition);
+    color: var(--text-dark);
+}
+
+.auth-panel .auth-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.auth-panel .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Кнопки */
+.btn {
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: calc(var(--border-radius) / 2);
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn.btn-primary {
+    background-color: var(--text-dark);
+}
+
+.btn.btn-secondary {
+    background-color: var(--primary-color);
+}
+
+.btn.btn-tertiary {
+    background-color: var(--primary-color);
+}
+
+.btn.btn-danger {
+    background-color: var(--primary-color);
+}
+
+.btn.btn-small {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.btn.btn-large {
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.btn.active {
+    background-color: var(--secondary-color);
+}
+
+/* Игровой экран */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.game-header .header-info {
+    display: flex;
+    gap: 20px;
+    font-weight: 600;
+}
+
+.game-header .header-info span {
+    padding: 8px 16px;
+    background: var(--bg-light);
+    border-radius: calc(var(--border-radius) / 2);
+    color: var(--text-dark);
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.game-area {
+    flex: 1;
+    position: relative;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+}
+
+.game-footer {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.game-footer .hint-text {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+/* Игровые объекты */
+.lightbulb-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.lightbulb-svg {
+    transition: var(--transition);
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+}
+
+.lightbulb-svg.on {
+    filter: drop-shadow(0 0 20px currentColor);
+    animation: lightbulb-glow 1s infinite alternate;
+}
+
+@keyframes lightbulb-glow {
+    from {
+        filter: drop-shadow(0 0 20px currentColor);
+    }
+    to {
+        filter: drop-shadow(0 0 40px currentColor);
+    }
+}
+
+.lightbulb {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    transition: var(--transition);
+}
+
+.lightbulb.off {
+    background: radial-gradient(circle, #555 0%, #333 100%);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.lightbulb.on {
+    background: radial-gradient(circle, var(--warning-color) 0%, #f59e0b 100%);
+    box-shadow: 0 0 40px rgba(251, 191, 36, 0.8), inset 0 0 20px rgba(251, 191, 36, 0.5);
+    animation: glow 1s infinite alternate;
+}
+
+.lightbulb.on.green {
+    background: radial-gradient(circle, var(--success-color) 0%, #a1d5a4 100%);
+    box-shadow: 0 0 40px #6c8f6e, inset 0 0 20px #526c54;
+}
+
+.lightbulb.on.yellow {
+    background: radial-gradient(circle, var(--warning-color) 0%, #f59e0b 100%);
+    box-shadow: 0 0 40px rgba(251, 191, 36, 0.8), inset 0 0 20px rgba(251, 191, 36, 0.5);
+}
+
+.lightbulb.on.orange {
+    background: radial-gradient(circle, #fb923c 0%, #ea580c 100%);
+    box-shadow: 0 0 40px rgba(251, 146, 60, 0.8), inset 0 0 20px rgba(251, 146, 60, 0.5);
+}
+
+.lightbulb.on.red {
+    background: radial-gradient(circle, var(--error-color) 0%, #dc2626 100%);
+    box-shadow: 0 0 40px rgba(248, 113, 113, 0.8), inset 0 0 20px rgba(248, 113, 113, 0.5);
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 40px rgba(251, 191, 36, 0.8);
+    }
+    to {
+        box-shadow: 0 0 60px rgba(251, 191, 36, 1);
+    }
+}
+
+/* Контейнер для лампочек уровня 1 */
+.lightbulbs-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    max-width: 850px;
+}
+
+/* Отвлекающие элементы для уровня 1 */
+.distraction-lightbulb {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.distraction-lightbulb.pulsing {
+    animation: distraction-pulse 0.5s ease-in-out;
+}
+
+@keyframes distraction-pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.distraction {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    opacity: 0.5;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+/* Текст интервала */
+.interval-text {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    border-radius: calc(var(--border-radius) / 2);
+    z-index: 10;
+}
+
+.circles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.circle.blinking {
+    box-shadow: 0 0 20px currentColor;
+    animation: blink 0.5s;
+}
+
+.circle.blinking.blue {
+    background: var(--primary-color);
+    box-shadow: 0 0 20px rgba(67, 97, 238, 0.6);
+}
+
+.circle.blinking.red {
+    background: var(--error-color);
+    box-shadow: 0 0 20px rgba(248, 113, 113, 0.6);
+}
+
+.circle.blinking.green {
+    background: var(--success-color);
+    box-shadow: 0 0 20px #6c8f6e;
+}
+
+.circle.blinking.purple {
+    background: var(--secondary-color);
+    box-shadow: 0 0 20px rgba(58, 12, 163, 0.6);
+}
+
+.circle.pulse-pair {
+    animation: pulse-pair 0.5s ease-in-out;
+}
+
+@keyframes pulse-pair {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.circle.smooth-pulse {
+    animation: smooth-pulse 2s ease-in-out infinite;
+}
+
+@keyframes smooth-pulse {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.9;
+    }
+}
+
+.circle.target-highlight {
+    animation: target-highlight 0.5s ease-in-out 4;
+    border: 4px solid var(--success-color);
+    box-shadow: 0 0 30px #6c8f6e;
+}
+
+@keyframes target-highlight {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+}
+
+.circle:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.mouse {
+    width: 60px;
+    height: 40px;
+    background: #8b4513;
+    border-radius: 20px 20px 20px 5px;
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.mouse::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--background-dark);
+    border-radius: 50%;
+    top: 10px;
+    left: 15px;
+}
+
+.mouse::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: var(--background-dark);
+    bottom: 5px;
+    left: 20px;
+}
+
+.mouse-hole {
+    width: 80px;
+    height: 60px;
+    background: var(--background-dark);
+    border-radius: 50% 50% 0 0;
+    position: absolute;
+}
+
+.mouse-start {
+    width: 60px;
+    height: 40px;
+    background: #8b4513;
+    border-radius: 5px 20px 20px 5px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+/* Прогресс-бар и счетчик для уровня 3 */
+.mouse-progress-container {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 500px;
+    z-index: 10;
+}
+
+.progress-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.progress-bar {
+    width: 0;
+    height: 20px;
+    background: linear-gradient(90deg, var(--success-color) 0%, #9dd3a0 100%);
+    border-radius: 10px;
+    transition: width 0.1s linear;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.progress-text {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-top: 5px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.blink-counter {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 16px;
+    border-radius: calc(var(--border-radius) / 2);
+    z-index: 10;
+}
+
+.indicators-container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.indicator {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.indicator.blinking {
+    animation: indicator-blink 0.5s;
+    box-shadow: 0 0 30px currentColor;
+}
+
+@keyframes indicator-blink {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* Модальные окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal .modal-content {
+    background: var(--text-primary);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.modal .modal-content h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.modal .modal-content .button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* Страница рейтинга */
+.results-panel {
+    background: var(--text-primary);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    box-shadow: var(--shadow);
+    max-width: 900px;
+    width: 100%;
+}
+
+.results-panel h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+
+.results-panel .sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.results-panel .sort-controls label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.results-panel .rating-table-container {
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.results-panel .rating-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.results-panel .rating-table th,
+.results-panel .rating-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-dark);
+}
+
+.results-panel .rating-table th {
+    background: var(--bg-light);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.results-panel .rating-table tr:hover {
+    background: var(--bg-light);
+}
+
+.results-panel .empty-message {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 18px;
+}
+
+.results-panel .empty-message.hidden {
+    display: none;
+}
+
+/* Страница авторизации */
+.auth-page {
+    position: relative;
+    overflow: hidden;
+}
+
+.animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.floating-circle {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: float var(--duration) infinite ease-in-out;
+    animation-delay: var(--delay);
+    left: var(--x);
+    top: var(--y);
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.3;
+    }
+    25% {
+        transform: translate(30px, -30px) scale(1.1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(-20px, 20px) scale(0.9);
+        opacity: 0.4;
+    }
+    75% {
+        transform: translate(20px, 30px) scale(1.05);
+        opacity: 0.6;
+    }
+}
+
+.auth-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-title {
+    font-size: 48px;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+}
+
+.auth-panel h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--text-dark);
+    font-size: 28px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Выбор аватарки */
+.avatar-selection {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.avatar-option {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 12px;
+    transition: var(--transition);
+    border: 3px solid transparent;
+}
+
+.avatar-option:hover {
+    transform: scale(1.1);
+    border-color: var(--primary-color);
+}
+
+.avatar-option.selected {
+    border-color: var(--primary-color);
+    transform: scale(1.15);
+}
+
+.avatar-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.avatar-0 {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.avatar-1 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.avatar-2 {
+    background: linear-gradient(135deg, var(--accent-color) 0%, #06b6d4 100%);
+}
+
+.avatar-3 {
+    background: linear-gradient(135deg, var(--success-color) 0%, #9bcc9e 100%);
+}
+
+.avatar-4 {
+    background: linear-gradient(135deg, #fa709a 0%, var(--warning-color) 100%);
+}
+
+/* Экран загрузки */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loading-screen.hidden {
+    display: none;
+}
+
+.loading-content {
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Анимация мышки для уровня 1 */
+.mouse-animation {
+    position: absolute;
+    font-size: 40px;
+    z-index: 10;
+    transition: left 0.3s ease-in-out;
+}
+
+.loading-text {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Главное меню */
+.menu-page {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    min-height: 100vh;
+}
+
+.menu-container {
+    display: flex;
+    min-height: 100vh;
+    padding: 50px;
+    gap: 30px;
+}
+
+/* Плашка пользователя */
+.user-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    width: 400px;
+    height: fit-content;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 20px;
+}
+
+.user-avatar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-avatar .avatar-preview {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border: 4px solid var(--primary-color);
+}
+
+.user-info h3 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.user-level {
+    text-align: center;
+    padding: 10px;
+    background: var(--bg-light);
+    border-radius: calc(var(--border-radius) / 2);
+}
+
+.level-label {
+    display: block;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.level-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Основное меню */
+.main-menu {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    box-shadow: var(--shadow);
+}
+
+.menu-title {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.game-modes {
+    margin-bottom: 40px;
+}
+
+.game-modes h2 {
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.mode-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    gap: 15px;
+    min-height: 180px;
+}
+
+#startTrainingBtn {
+    color: var(--text-dark);
+}
+
+.mode-icon {
+    font-size: 48px;
+}
+
+.mode-text {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.mode-desc {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Статистика */
+.player-stats {
+    margin-bottom: 40px;
+}
+
+.player-stats h2 {
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-item {
+    background: var(--bg-light);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Действия меню */
+.menu-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.menu-actions .btn {
+    width: auto;
+    min-width: 150px;
+}
+
+/* Модальные окна */
+.training-modal,
+.instructions-modal {
+    max-width: 600px;
+}
+
+.training-options {
+    margin: 30px 0;
+}
+
+.training-group {
+    margin-bottom: 20px;
+}
+
+.training-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: calc(var(--border-radius) / 2);
+    font-size: 16px;
+    background: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-dark);
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.modal-buttons .btn {
+    width: auto;
+    min-width: 120px;
+}
+
+.instructions-content {
+    text-align: left;
+    margin: 20px 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.instructions-content h3 {
+    color: var(--primary-color);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.instructions-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Адаптивность */
+@media (max-width: 1920px) {
+    .game-area {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 1440px) {
+    .game-area {
+        padding: 20px;
+    }
+
+    .lightbulb {
+        width: 100px;
+        height: 100px;
+    }
+
+    .circle {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .game-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .game-header .header-info {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .game-area {
+        min-height: calc(100vh - 250px);
+    }
+
+    .circles-container {
+        gap: 20px;
+    }
+
+    .circle {
+        width: 70px;
+        height: 70px;
+    }
+
+    .indicators-container {
+        gap: 20px;
+    }
+
+    .indicator {
+        width: 100px;
+        height: 100px;
+    }
+
+    .menu-container {
+        flex-direction: column;
+    }
+
+    .user-panel {
+        width: 100%;
+        position: static;
+    }
+
+    .mode-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-panel {
+        padding: 30px 20px;
+    }
+
+    .auth-title {
+        font-size: 36px;
+    }
+
+    .results-panel {
+        padding: 20px;
+    }
+
+    .results-panel .rating-table {
+        font-size: 14px;
+    }
+
+    .results-panel .rating-table th,
+    .results-panel .rating-table td {
+        padding: 8px;
+    }
+
+    .menu-title {
+        font-size: 28px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-actions {
+        flex-direction: column;
+    }
+
+    .menu-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Уровень 2: Синхронный прыгун */
+.jump-track {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(90deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
+    border-radius: 20px;
+    margin: 20px 0;
+    overflow: hidden;
+    border: 3px solid #654321;
+}
+
+.jumper {
+    position: absolute;
+    left: 20px;
+    bottom: 10px;
+    font-size: 40px;
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+.jumper.jumping {
+    animation: character-jump 0.6s ease-in-out;
+}
+
+.jumper.crawling {
+    animation: character-crawl 0.8s ease-in-out;
+}
+
+.jumper.short-jump {
+    animation: short-jump 0.4s ease-in-out;
+}
+
+.jumper.long-jump {
+    animation: long-jump 0.8s ease-in-out;
+}
+
+.jumper.on-platform {
+    bottom: 60px;
+}
+
+@keyframes character-jump {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-40px) scale(1.1); }
+}
+
+@keyframes character-crawl {
+    0%, 100% { transform: translateY(0) scale(0.8); }
+    50% { transform: translateY(10px) scale(0.9); }
+}
+
+@keyframes short-jump {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+}
+
+@keyframes long-jump {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-60px) scale(1.15); }
+}
+
+.platform {
+    position: absolute;
+    bottom: 50px;
+    width: 60px;
+    height: 20px;
+    background: #654321;
+    border-radius: 10px;
+    z-index: 5;
+    border: 2px solid #4a3c28;
+}
+
+.crawl-obstacle {
+    position: absolute;
+    bottom: 40px;
+    width: 40px;
+    height: 30px;
+    background: #2c3e50;
+    border-radius: 5px;
+    z-index: 5;
+    border: 2px solid #1a252f;
+}
+
+.jump-effect {
+    animation: jump-burst 0.5s ease-out;
+}
+
+@keyframes jump-burst {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+}
+
+.sync-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--primary-color);
+}
+
+.sync-light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sync-light.synced {
+    background-color: var(--success-color);
+    box-shadow: 0 0 15px var(--success-color);
+}
+
+.sync-light.unsynced {
+    background-color: var(--error-color);
+    box-shadow: 0 0 15px var(--error-color);
+}
+
+.rhythm-change-signal {
+    animation: signal-flash 0.5s infinite alternate;
+}
+
+@keyframes signal-flash {
+    0% { opacity: 1; transform: translateX(-50%) scale(1); }
+    100% { opacity: 0.7; transform: translateX(-50%) scale(1.1); }
+}
+
+.platform-success {
+    animation: success-celebration 1s ease-out;
+}
+
+@keyframes success-celebration {
+    0%, 100% { transform: translateY(0) scale(1); }
+    25% { transform: translateY(-10px) scale(1.2); }
+    50% { transform: translateY(-5px) scale(1.1); }
+    75% { transform: translateY(-15px) scale(1.3); }
+}
+
+/* Уровень 3: Спаси мышонка! */
+.event-element {
+    transition: all 0.5s ease;
+    font-size: 40px;
+    z-index: 15;
+}
+
+.event-element.cat {
+    animation: cat-entrance 0.5s ease-in;
+}
+
+.event-element.cheese {
+    animation: cheese-fall 0.8s ease-out;
+}
+
+@keyframes cat-entrance {
+    0% { transform: translateY(-50%) scale(0.5) rotate(-10deg); opacity: 0; }
+    50% { transform: translateY(-50%) scale(1.2) rotate(10deg); opacity: 1; }
+    100% { transform: translateY(-50%) scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes cheese-fall {
+    0% { transform: translateY(-200%) scale(0.8); opacity: 0; }
+    50% { transform: translateY(-50%) scale(1.2); opacity: 1; }
+    100% { transform: translateY(-50%) scale(1); opacity: 1; }
+}
+
+/* Анимации для перемешивания лампочек */
+.lightbulb-clone {
+    position: absolute;
+    z-index: 100;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
+}
+
+.lightbulb-container.blurred {
+    filter: blur(2px) brightness(0.8);
+    opacity: 0.6;
+    transition: all 0.5s ease;
+}
+
+/* Контейнер для анимации */
+.lightbulbs-container {
+    position: relative;
+    min-height: 400px;
+}
+
+/* Эффект дрожания */
+@keyframes gentleShake {
+    0%, 100% { transform: translate(-50%, -50%); }
+    25% { transform: translate(-50%, -50%) translateX(2px) translateY(-1px); }
+    50% { transform: translate(-50%, -50%) translateX(-1px) translateY(2px); }
+    75% { transform: translate(-50%, -50%) translateX(1px) translateY(-2px); }
+}
+
+/* Эффект подъема */
+@keyframes liftUp {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, -50%) scale(1.1) translateY(-30px); }
+}
+
+/* Эффект опускания */
+@keyframes sinkDown {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, -50%) scale(0.95) translateY(10px); }
+}
+
+/* Анимации для перемешивания лампочек - четкие */
+.lightbulb-clone {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 1;
+    filter: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    transition: all 0.3s ease;
+}
+
+/* Оригинальные лампочки во время перемешивания */
+.lightbulb-container {
+    transition: opacity 0.5s ease, filter 0.5s ease;
+}
+
+/* Эффект быстрого появления */
+@keyframes quickAppear {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Эффект подскока */
+@keyframes bounceLand {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    30% { transform: translate(-50%, -50%) scale(1.1); }
+    50% { transform: translate(-50%, -50%) scale(0.95); }
+    70% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* В файле style.css добавьте: */
+@keyframes ray-pulse {
+    0% {
+        opacity: 0.3;
+        stroke-width: 0.2;
+    }
+    100% {
+        opacity: 0.8;
+        stroke-width: 0.5;
+    }
+}
+
+.lightbulb-svg.on {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7));
+    animation: gentleGlow 1.5s ease-in-out infinite alternate;
+}
+
+.lightbulb-svg.off {
+    filter: none;
+}
+
+@keyframes gentleGlow {
+    0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)); }
+    100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.9)); }
+}
+
+/* Общие анимации */
+@keyframes successful-jump {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-60px) scale(1.1); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes failed-jump {
+    0% { transform: translateY(0) scale(1); }
+    25% { transform: translateY(-20px) scale(0.9); }
+    50% { transform: translateY(10px) scale(0.95); }
+    75% { transform: translateY(-5px) scale(0.92); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes falling {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(100px) rotate(90deg); opacity: 0; }
+}
+
+@keyframes platform-reached {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes combo-bonus {
+    0% { transform: scale(1); color: var(--warning-color); }
+    50% { transform: scale(1.3); color: var(--success-color); }
+    100% { transform: scale(1); color: var(--warning-color); }
+}
+
+/* Исправления для ошибок CSS */
+
+/* Убираем неправильные градиенты в border */
+.platform {
+    border: 2px solid #4a3c28;
+}
+
+.crawl-obstacle {
+    border: 2px solid #1a252f;
+}
+
+.jump-track {
+    border: 3px solid #654321;
+}
+
+.sync-indicator {
+    border: 2px solid var(--primary-color);
+}
+
+/* Исправляем background с множественными значениями */
+.auth-page {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    min-height: 100vh;
+}
+
+.menu-page {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    min-height: 100vh;
+}
+
+/* Исправляем border с множественными значениями */
+.avatar-option {
+    border: 3px solid transparent;
+}
+
+.avatar-option.selected {
+    border: 3px solid var(--primary-color);
+}
+
+.circle.target-highlight {
+    border: 4px solid var(--success-color);
+}
+
+/* Исправляем line с неправильными значениями */
+.mouse::before {
+    width: 8px;
+    height: 8px;
+    background: var(--background-dark);
+}
+
+.mouse::after {
+    width: 20px;
+    height: 2px;
+    background: var(--background-dark);
+}
+
+/* Убираем неправильные фильтры */
+.lightbulb-clone {
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
+}
+
+/* Исправляем box-shadow с цветами */
+.btn {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Исправляем неправильные значения трансформации */
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(30px, -30px) scale(1.1);
+    }
+    50% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    75% {
+        transform: translate(20px, 30px) scale(1.05);
+    }
+}
+
+/* Убираем неправильные значения opacity в анимациях */
+@keyframes distraction-pulse {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes smooth-pulse {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.9;
+    }
+}
+
+/* ===== СТИЛИ ДЛЯ ИГРЫ ЛАМПОЧКИ ===== */
+
+/* Плавающие карточки с временем */
+.time-cards-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-top: 30px;
+}
+
+.time-card {
+    position: absolute;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    user-select: none;
+    backdrop-filter: blur(5px);
+}
+
+.time-card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border-color: var(--primary-color);
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-10px) rotate(1deg);
+    }
+    66% {
+        transform: translateY(10px) rotate(-1deg);
+    }
+}
+
+/* Поле ввода времени */
+.input-container {
+    margin-top: 30px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.input-container input {
+    padding: 10px;
+    font-size: 16px;
+    width: 100px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin: 0 10px;
+    transition: border-color 0.3s ease;
+}
+
+.input-container input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Кнопка записи паттерна */
+.record-button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.record-button.recording {
+    background: var(--error-color) !important;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Анимации для Level 2 */
+@keyframes move-around {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(20px, -10px) rotate(90deg);
+    }
+    50% {
+        transform: translate(-15px, 15px) rotate(180deg);
+    }
+    75% {
+        transform: translate(10px, 20px) rotate(270deg);
+    }
+}
+
+.lightbulb-container.moving {
+    animation: move-around 3s ease-in-out infinite;
+}
+
+.lightbulb-container.blurred {
+    filter: blur(3px);
+    opacity: 0.7;
+}
+
+.lightbulb-container.target-highlight {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+    animation: pulse 1s infinite;
+}
+
+/* Оттенки лампочек */
+.lightbulb-container.shade-light {
+    filter: brightness(1.2);
+}
+
+.lightbulb-container.shade-medium {
+    filter: brightness(1.0);
+}
+
+.lightbulb-container.shade-dark {
+    filter: brightness(0.8);
+}
+
+/* Кнопки записи для Level 2 */
+.record-button {
+    margin: 10px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.record-button:hover {
+    transform: scale(1.05);
+}
+
+/* Стили для Level 3 */
+
+/* Уравнения и вопросы */
+.equation-display, .question-display {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.question-display {
+    font-size: 20px;
+}
+
+/* Варианты ответов */
+.answer-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.answer-options button {
+    padding: 15px 20px;
+    font-size: 16px;
+    min-width: 100px;
+}
+
+.answer-options button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Индикатор прогресса последовательности */
+.progress-indicator {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+/* Выделение правильных/неправильных ответов */
+.lightbulb-container.correct {
+    box-shadow: 0 0 15px var(--success-color);
+}
+
+.lightbulb-container.incorrect {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+}
+
+/* ===== СТИЛИ ДЛЯ LEVEL 4 ===== */
+
+/* Лабиринт */
+.maze-container {
+    display: inline-grid;
+    margin: 20px auto;
+    padding: 10px;
+    background: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.maze-cell {
+    width: 40px;
+    height: 40px;
+    background: #666;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.maze-player {
+    width: 30px;
+    height: 30px;
+    background: var(--success-color);
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.2s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Управление лабиринтом */
+.maze-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.maze-timer {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Энергетическая система */
+.energy-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.energy-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--success-color), #a7daaa);
+    transition: width 0.3s ease;
+    border-radius: 15px;
+}
+
+.energy-info {
+    margin-top: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+/* Рефлексы + память */
+.flash-target {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.flash-timer {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Анимированные эффекты для Level 4 */
+@keyframes energyPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.energy-low .energy-bar {
+    animation: energyPulse 1s infinite;
+}
+
+.maze-cell.target {
+    animation: pulse 1s infinite;
+}
+
+.maze-cell.player-path {
+    background: rgba(76, 175, 80, 0.3);
+}
+
+/* Адаптивность для лампочек */
+@media (max-width: 768px) {
+    .lightbulbs-container {
+        gap: 10px;
+    }
+
+    .time-cards-container {
+        height: 250px;
+    }
+
+    .time-card {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .record-button {
+        margin: 5px;
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
+    .equation-display, .question-display {
+        font-size: 18px;
+        padding: 15px;
+    }
+
+    .answer-options button {
+        padding: 12px 16px;
+        font-size: 14px;
+        min-width: 80px;
+    }
+
+    .maze-container {
+        grid-template-columns: repeat(auto-fit, 30px);
+        grid-template-rows: repeat(auto-fit, 30px);
+    }
+
+    .maze-cell {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .maze-player {
+        width: 25px;
+        height: 25px;
+    }
+
+    .maze-controls {
+        gap: 5px;
+    }
+
+    .maze-controls button {
+        padding: 8px 12px;
+        font-size: 16px;
+    }
+}
+
