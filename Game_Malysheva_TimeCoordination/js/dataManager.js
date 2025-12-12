@@ -162,7 +162,6 @@ const DataManager = {
     },
 
     // Рассчитать очки за уровень с учетом всех модификаторов
-    // Рассчитать очки за уровень с учетом всех модификаторов
     calculateScore(levelId, sublevelId, accuracy, timeBonus = 1.0, roundNumber = null) {
         const baseScores = {
             'level1': 1000,

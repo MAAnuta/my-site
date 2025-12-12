@@ -123,7 +123,7 @@ class LevelManager {
                     }
                 }
             },
-            // ========== УРОВЕНЬ 3: ПАМЯТЬ И СМЕКАЛКА ==========
+            // ========== УРОВЕНЬ 3: ЛОГИКА И ПРОГНОЗИРОВАНИЕ ==========
             'level3': {
                 id: 'level3',
                 name: 'Логика и прогнозирование',
@@ -164,7 +164,7 @@ class LevelManager {
                 }
             },
 
-            // ========== УРОВЕНЬ 4: ЛАБИРИНТ ==========
+            // ========== УРОВЕНЬ 4: СТРАТЕГИЯ И СКОРОСТЬ ==========
             'level4': {
                 id: 'level4',
                 name: 'Стратегия и скорость',
@@ -866,6 +866,19 @@ class BaseLevelHandler {
         this.isActive = false;
         this.clearTimers();
         this.stopTimeLimit();
+
+        // Удаляем обработчик клавиш для лабиринта
+        if (this.keyPressHandler) {
+            document.removeEventListener('keydown', this.keyPressHandler);
+            this.keyPressHandler = null;
+        }
+
+        // Удаляем подсказку управления
+        const hint = document.getElementById('controls-hint');
+        if (hint && hint.parentNode) {
+            hint.parentNode.removeChild(hint);
+        }
+
         // Удаляем все лампочки из DOM
         this.lightbulbs.forEach(lightbulb => {
             if (lightbulb.container && lightbulb.container.parentNode) {
@@ -2825,7 +2838,7 @@ class Level2Handler extends BaseLevelHandler {
     }
 }
 
-// ========== УРОВЕНЬ 3: ПАМЯТЬ И СМЕКАЛКА ==========
+// ========== УРОВЕНЬ 3: ЛОГИКА И ПРОГНОЗИРОВАНИЕ ==========
 class Level3Handler extends BaseLevelHandler {
     constructor(core, sublevel) {
         super(core, sublevel);
@@ -3338,13 +3351,13 @@ class Level3Handler extends BaseLevelHandler {
 
     checkAnswer(userInput) {
         if (!userInput || userInput.trim() === '') {
-            this.showMessage('Введите ответ!', '#9e453f');
+            this.showMessage('Введите ответ!', '#f44336');
             return;
         }
 
         const userAnswer = parseFloat(userInput.replace(',', '.'));
         if (isNaN(userAnswer)) {
-            this.showMessage('Введите корректное число!', '#9e453f');
+            this.showMessage('Введите корректное число!', '#f44336');
             return;
         }
 
@@ -3379,19 +3392,19 @@ class Level3Handler extends BaseLevelHandler {
 
         if (delta <= 0.1) {
             message = `Идеально! Ответ: ${this.correctAnswer.toFixed(1)} секунд`;
-            color = '#699f6b';
+            color = '#4caf50';
             resultType = 'perfect';
         } else if (delta <= 0.5) {
             message = `Очень хорошо! Правильно: ${this.correctAnswer.toFixed(1)} сек, ваш ответ: ${userAnswer.toFixed(1)} сек`;
-            color = '#819f5c';
+            color = '#8bc34a';
             resultType = 'good';
         } else if (delta <= 1.0) {
             message = `Неплохо! Правильно: ${this.correctAnswer.toFixed(1)} сек, ваш ответ: ${userAnswer.toFixed(1)} сек`;
-            color = '#ba965d';
+            color = '#ff9800';
             resultType = 'ok';
         } else {
             message = `Есть ошибка. Правильно: ${this.correctAnswer.toFixed(1)} сек, ваш ответ: ${userAnswer.toFixed(1)} сек`;
-            color = '#9f4941';
+            color = '#f44336';
             resultType = 'bad';
         }
 
@@ -3430,6 +3443,7 @@ class Level3Handler extends BaseLevelHandler {
 
     // ========== ОБЩИЕ МЕТОДЫ ДЛЯ LEVEL 3 ==========
     handleLightbulbClick(index) {
+        // Для 3-2 клики по лампочкам не обрабатываются
         if (this.sublevel.type !== 'simon_pattern') {
             return;
         }
@@ -3460,7 +3474,7 @@ class Level3Handler extends BaseLevelHandler {
                 1.0
             );
 
-            this.showMessage('Неправильно! Попробуйте еще раз.', '#884945');
+            this.showMessage('Неправильно! Попробуйте еще раз.', '#f44336');
 
             if (this.core.handleAttemptResult) {
                 this.core.handleAttemptResult({
@@ -3494,7 +3508,7 @@ class Level3Handler extends BaseLevelHandler {
             timeBonus
         );
 
-        this.showResult('Отлично! Последовательность воспроизведена правильно!', 'Идеально!', '#648364');
+        this.showResult('Отлично! Последовательность воспроизведена правильно!', 'Идеально!', '#4caf50');
 
         if (this.core.handleAttemptResult) {
             this.core.handleAttemptResult({
@@ -3522,7 +3536,7 @@ class Level3Handler extends BaseLevelHandler {
             0
         );
 
-        this.showResult('Время вышло! Не успели ввести ответ.', 'Попробуйте еще раз!', '#8a443f');
+        this.showResult('Время вышло! Не успели ввести ответ.', 'Попробуйте еще раз!', '#f44336');
 
         if (this.core.handleAttemptResult) {
             this.core.handleAttemptResult({
@@ -3572,7 +3586,7 @@ class Level3Handler extends BaseLevelHandler {
     }
 }
 
-// ========== УРОВЕНЬ 4: ЛАБИРИНТ ==========
+// ========== УРОВЕНЬ 4: СТРАТЕГИЯ И СКОРОСТЬ ==========
 class Level4Handler extends BaseLevelHandler {
     constructor(core, sublevel) {
         super(core, sublevel);
@@ -3888,6 +3902,17 @@ class Level4Handler extends BaseLevelHandler {
         const params = this.sublevel.params;
         const duration = params.lightbulbDuration || 3.0;
 
+        // Очищаем предыдущие обработчики клавиш
+        if (this.keyPressHandler) {
+            document.removeEventListener('keydown', this.keyPressHandler);
+            this.keyPressHandler = null;
+        }
+        const oldHint = document.getElementById('controls-hint');
+        if (oldHint && oldHint.parentNode) {
+            oldHint.parentNode.removeChild(oldHint);
+        }
+
+        // ПОКАЗЫВАЕМ ЛАБИРИНТ ПЕРЕД НАЧАЛОМ ИГРЫ
         this.showMaze();
 
         this.showMessage(`Запомните путь к лампочке! У вас ${duration} секунд...`, 'blue');
@@ -3908,25 +3933,114 @@ class Level4Handler extends BaseLevelHandler {
                 targetCell.style.background = '#f5f5f5';
             }
 
-            this.showMessage('Теперь пройдите по пути к лампочке! Кликайте на соседние клетки.', 'blue');
-            this.setupMazeControls();
+            this.showMessage('Теперь пройдите по пути к лампочке! Используйте стрелки на клавиатуре.', 'blue');
+            this.setupKeyboardControls();
         }, duration * 1000);
 
         this.addTimer(timer);
     }
 
-    setupMazeControls() {
-        const cells = document.querySelectorAll('.maze-cell:not([style*="background: #333"])');
-        cells.forEach(cell => {
-            const x = parseInt(cell.dataset.x);
-            const y = parseInt(cell.dataset.y);
+    setupKeyboardControls() {
+        // Добавляем обработчик клавиш стрелок
+        this.keyPressHandler = (event) => this.handleKeyPress(event);
+        document.addEventListener('keydown', this.keyPressHandler);
 
-            cell.addEventListener('click', () => this.handleMazeClick(x, y));
-        });
+        // Добавляем визуальные подсказки о управлении
+        this.showControlsHint();
     }
 
-    handleMazeClick(x, y) {
-        // Проверяем, является ли клик на соседнюю клетку
+    showControlsHint() {
+        const container = document.getElementById('gameArea');
+        if (!container) return;
+
+        const hint = document.createElement('div');
+        hint.id = 'controls-hint';
+        hint.style.position = 'absolute';
+        hint.style.bottom = '20px';
+        hint.style.right = '20px';
+        hint.style.background = 'rgba(74, 106, 165, 0.95)';
+        hint.style.color = 'white';
+        hint.style.padding = '12px 18px';
+        hint.style.borderRadius = '10px';
+        hint.style.fontSize = '14px';
+        hint.style.zIndex = '1000';
+        hint.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        hint.style.border = '2px solid rgba(255,255,255,0.2)';
+        hint.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 8px; font-size: 16px;">Управление:</div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 18px; margin-right: 8px;">↑</span>
+                    <span>Вверх</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 18px; margin-right: 8px;">↓</span>
+                    <span>Вниз</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 18px; margin-right: 8px;">←</span>
+                    <span>Влево</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 18px; margin-right: 8px;">→</span>
+                    <span>Вправо</span>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(hint);
+
+        // Анимируем появление подсказки
+        hint.style.opacity = '0';
+        hint.style.transform = 'translateY(10px)';
+        hint.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+
+        setTimeout(() => {
+            hint.style.opacity = '1';
+            hint.style.transform = 'translateY(0)';
+        }, 100);
+    }
+
+    handleKeyPress(event) {
+        // Игнорируем, если игра не активна
+        if (!this.maze || !this.playerPosition) return;
+
+        let newX = this.playerPosition.x;
+        let newY = this.playerPosition.y;
+
+        // Определяем направление движения по клавише
+        switch (event.code) {
+            case 'ArrowUp':
+                newY = this.playerPosition.y - 1;
+                event.preventDefault();
+                break;
+            case 'ArrowDown':
+                newY = this.playerPosition.y + 1;
+                event.preventDefault();
+                break;
+            case 'ArrowLeft':
+                newX = this.playerPosition.x - 1;
+                event.preventDefault();
+                break;
+            case 'ArrowRight':
+                newX = this.playerPosition.x + 1;
+                event.preventDefault();
+                break;
+            default:
+                return; // Игнорируем другие клавиши
+        }
+
+        this.movePlayer(newX, newY);
+    }
+
+    movePlayer(x, y) {
+        // Проверяем границы лабиринта
+        if (x < 0 || x >= this.maze[0].length || y < 0 || y >= this.maze.length) {
+            this.showMessage('Выход за пределы лабиринта!', 'red');
+            return;
+        }
+
+        // Проверяем, является ли движение на соседнюю клетку
         const isAdjacent = (
             (Math.abs(x - this.playerPosition.x) === 1 && y === this.playerPosition.y) ||
             (Math.abs(y - this.playerPosition.y) === 1 && x === this.playerPosition.x)
@@ -3939,7 +4053,7 @@ class Level4Handler extends BaseLevelHandler {
 
         // Проверяем, не стена ли
         if (this.maze[y][x].isWall) {
-            this.showMessage('Это стена! Выберите другую клетку.', 'red');
+            this.showMessage('Это стена! Выберите другое направление.', 'red');
             return;
         }
 
@@ -3956,11 +4070,28 @@ class Level4Handler extends BaseLevelHandler {
         if (newCell) {
             newCell.textContent = '🚶';
             newCell.style.background = '#8cbf8e';
+            // Добавляем небольшую анимацию движения
+            newCell.style.transform = 'scale(1.1)';
+            newCell.style.transition = 'transform 0.2s ease';
+            setTimeout(() => {
+                if (newCell) {
+                    newCell.style.transform = 'scale(1)';
+                }
+            }, 200);
         }
 
         // Проверяем, достиг ли игрок цели
         if (x === this.targetPosition.x && y === this.targetPosition.y) {
             this.showMazeSuccess();
+            // Удаляем обработчик клавиш и подсказку при завершении
+            if (this.keyPressHandler) {
+                document.removeEventListener('keydown', this.keyPressHandler);
+                this.keyPressHandler = null;
+            }
+            const hint = document.getElementById('controls-hint');
+            if (hint && hint.parentNode) {
+                hint.parentNode.removeChild(hint);
+            }
         }
     }
 
