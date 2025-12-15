@@ -270,9 +270,11 @@ class GameCore {
         console.log('Новое состояние:', this.state);
 
         // Сохраняем прогресс для этой попытки
-        this.saveAttemptProgress(calculatedScore, attemptAccuracy);
+        const isCompleted = result.isCompleted || (this.state.attempts <= 0);
+        this.saveAttemptProgress(calculatedScore, attemptAccuracy, isCompleted);
 
-        if (this.state.attempts <= 0) {
+        // Для подуровня 1-2 или при завершении всех попыток сразу показываем результаты
+        if (result.isCompleted || this.state.attempts <= 0) {
             setTimeout(() => {
                 this.showGameOver();
             }, 3000);
@@ -280,7 +282,7 @@ class GameCore {
     }
 
     // Сохранить прогресс попытки
-    saveAttemptProgress(score, accuracy) {
+    saveAttemptProgress(score, accuracy, isCompleted = false) {
         try {
             // Рассчитываем номер раунда
             const roundNumber = 4 - this.state.attempts; // attempts уменьшается после, так что это правильный round
@@ -293,11 +295,12 @@ class GameCore {
                     score,
                     accuracy,
                     this.gameMode, // mode
-                    roundNumber // roundNumber
+                    roundNumber, // roundNumber
+                    isCompleted // isCompleted
                 );
             }
 
-            console.log('Прогресс попытки сохранен:', { score, accuracy, mode: this.gameMode });
+            console.log('Прогресс попытки сохранен:', { score, accuracy, mode: this.gameMode, isCompleted });
         } catch (error) {
             console.error('Ошибка сохранения прогресса попытки:', error);
         }
@@ -489,72 +492,72 @@ class GameCore {
         const modeColor = this.gameMode === 'classic' ? '#648364' : '#83af9d';
 
         gameArea.innerHTML = `
-            <div style="text-align: center; padding: 50px;">
-                <div style="margin-bottom: 20px;">
-                    <svg viewBox="0 0 24 24" width="80" height="80" style="fill: ${modeColor};">
+            <div style="text-align: center; padding: 15px; max-height: 100vh; overflow-y: auto;">
+                ${this.gameMode === 'classic' && nextLevelInfo && nextLevelInfo.type === 'sublevel' && progressPercentage >= 80 ?
+            `<div style="margin: 10px 0; padding: 12px; background: #fff3e0; border-radius: 8px; color: #d68910; font-size: 16px; font-weight: bold; border: 2px solid #f39c12;">
+                 ⏰ Автоматический переход к следующему подуровню через 3 секунды...
+            </div>` : ''
+        }
+                <div style="margin-bottom: 15px;">
+                    <svg viewBox="0 0 24 24" width="60" height="60" style="fill: ${modeColor};">
                         <path d="M19,8.99c0-.88-.39-1.71-1.06-2.29-.67-.57-1.56-.82-2.44-.67-1.22,.2-2.18,1.19-2.44,2.42l-2.68-2.68c-.55-.55-1.32-.84-2.09-.77-.78,.06-1.49,.47-1.95,1.11-.05,.07-.09,.14-.13,.21-.52-.41-1.18-.61-1.85-.55-.78,.06-1.49,.47-1.95,1.11-.41,.57-.55,1.28-.44,1.96-.52,.18-.99,.51-1.32,.98-.75,1.04-.6,2.54,.35,3.49l.29,.29c-.31,.19-.59,.44-.81,.74-.75,1.04-.6,2.54,.35,3.49l4.13,4.13c1.38,1.38,3.19,2.07,5.01,2.07s3.63-.69,5.01-2.07l1.98-1.98c1.32-1.32,2.05-3.08,2.05-4.95v-6.01Zm-2,6.01c0,1.32-.53,2.6-1.46,3.54l-1.98,1.98c-1.98,1.98-5.2,1.98-7.18,0l-4.13-4.13c-.26-.26-.32-.65-.14-.9,.16-.22,.38-.27,.49-.28,.19,0,.38,.05,.52,.19l2.1,2.1c.39,.39,1.02,.39,1.41,0s.39-1.02,0-1.41L2.42,11.86c-.26-.26-.32-.65-.14-.9,.16-.22,.38-.27,.49-.28,.19-.02,.38,.05,.52,.19l4.28,4.28c.39,.39,1.02,.39,1.41,0s.39-1.02,0-1.41l-4.8-4.8c-.26-.26-.32-.65-.14-.9,.16-.22,.38-.27,.49-.28,.19-.02,.38,.05,.52,.19l4.86,4.86c.2,.2,.45,.29,.71,.29s.51-.1,.71-.29c.39-.39,.39-1.02,0-1.41l-3.2-3.2s-.01-.01-.02-.02c-.26-.26-.32-.65-.14-.9,.16-.22,.38-.27,.49-.28,.19-.02,.38,.05,.52,.19l4.32,4.32c.29,.29,.71,.37,1.09,.22,.37-.15,.62-.52,.62-.92v-1.7c0-.54,.36-1.02,.82-1.09,.3-.05,.6,.03,.82,.22,.22,.19,.35,.47,.35,.76v6.01Zm7-6.01v6.3c0,1.66-.59,3.26-1.66,4.53l-2.51,2.96c-.45,.45-.88,.79-1.34,1.08-.16,.1-.35,.15-.52,.15-.34,0-.66-.17-.85-.47-.29-.47-.15-1.09,.33-1.38,.33-.2,.64-.45,.92-.73l2.46-2.9c.77-.9,1.19-2.05,1.19-3.23v-6.3c0-.29-.13-.57-.35-.76-.23-.19-.52-.27-.82-.22-.55,.1-1.06-.28-1.15-.83-.09-.55,.28-1.06,.83-1.15,.88-.15,1.77,.1,2.44,.67,.67,.57,1.06,1.4,1.06,2.29ZM10.29,3.71c-.39-.39-.39-1.02,0-1.41l1-1c.39-.39,1.02-.39,1.41,0s.39,1.02,0,1.41l-1,1c-.2,.2-.45,.29-.71,.29s-.51-.1-.71-.29ZM3.29,2.71c-.39-.39-.39-1.02,0-1.41s1.02-.39,1.41,0l1,1c.39,.39,.39,1.02,0,1.41-.2,.2-.45,.29-.71,.29s-.51-.1-.71-.29l-1-1Zm3.71-.71V1c0-.55,.45-1,1-1s1,.45,1,1v1c0,.55-.45,1-1,1s-1-.45-1-1Z"/>
                     </svg>
                 </div>
-                <h2 style="color: ${modeColor}; margin-bottom: 10px;">${modeText} завершена!</h2>
-                <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px auto; max-width: 500px;">
-                    <div style="font-size: 32px; margin: 20px 0; color: #364447;">
+                <h2 style="color: ${modeColor}; margin-bottom: 8px; font-size: 24px;">${modeText} завершена!</h2>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 10px; margin: 15px auto; max-width: 480px;">
+                    <div style="font-size: 28px; margin: 15px 0; color: #364447;">
                         <strong>${this.state.totalScore}</strong> очков
                     </div>
-                    <div style="margin: 15px 0;">
-                        <div style="font-size: 20px; margin-bottom: 5px;">
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 18px; margin-bottom: 3px;">
                             Точность: <strong style="color: ${accuracy >= 80 ? '#648364' : '#e6685f'}">${accuracy.toFixed(1)}%</strong>
                         </div>
-                        <small style="font-size: 14px; color: #666;">
+                        <small style="font-size: 13px; color: #666;">
                             (${this.state.successfulAttempts} из ${this.state.totalAttempts})
                         </small>
                     </div>
-                    <div style="margin: 15px 0;">
-                        <div style="font-size: 18px; margin-bottom: 10px;">
+                    <div style="margin: 12px 0;">
+                        <div style="font-size: 16px; margin-bottom: 8px;">
                             Прогресс подуровня: <strong style="color: ${progressColor}">${progressPercentage}%</strong>
                         </div>
-                        <div style="background: #ddd; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: #ddd; height: 18px; border-radius: 9px; overflow: hidden;">
                             <div style="background: ${progressColor}; height: 100%; width: ${progressPercentage}%; transition: width 1s ease;"></div>
                         </div>
-                        <small style="font-size: 12px; color: #666;">
+                        <small style="font-size: 11px; color: #666;">
                             ${this.state.totalScore} / ${maxScore} очков
                         </small>
                     </div>
                     ${this.gameMode === 'classic' && progressPercentage >= 80 ?
-            '<div style="margin: 15px 0; padding: 10px; background: #e8f5e9; border-radius: 8px; color: #5e8e60;"> Отлично! Вы разблокировали доступ к следующему уровню!</div>' :
+            '<div style="margin: 12px 0; padding: 8px; background: #e8f5e9; border-radius: 6px; color: #5e8e60; font-size: 14px;"> Отлично! Вы разблокировали доступ к следующему уровню!</div>' :
             this.gameMode === 'classic' && progressPercentage < 80 ?
-                '<div style="margin: 15px 0; padding: 10px; background: #ffebee; border-radius: 8px; color: #c15f5f;"> Для разблокировки следующего уровня нужно набрать минимум 80%</div>' :
-                '<div style="margin: 15px 0; padding: 10px; background: #fff3e0; border-radius: 8px; color: #e4a774;"> Тренировка: результат не влияет на прогресс разблокировки</div>'
+                '<div style="margin: 12px 0; padding: 8px; background: #ffebee; border-radius: 6px; color: #c15f5f; font-size: 14px;"> Для разблокировки следующего уровня нужно набрать минимум 80%</div>' :
+                '<div style="margin: 12px 0; padding: 8px; background: #fff3e0; border-radius: 6px; color: #e4a774; font-size: 14px;"> Тренировка: результат не влияет на прогресс разблокировки</div>'
         }
                 </div>
-                <div style="margin: 30px 0;">
-                        <button onclick="window.location.href='menu.html?t=' + Date.now()"
-                            style="padding: 15px 30px; font-size: 18px; background: #364447; 
-                                   color: white; border: none; border-radius: 8px; cursor: pointer; margin: 0 10px;">
+                <div style="margin: 20px 0;">
+                        <button onclick="window.location.href='menu.html${this.gameMode === 'training' ? `?from=training&level=${this.state.currentLevel}&sublevel=${this.state.currentSublevel}` : ''}&t=' + Date.now()"
+                            style="padding: 12px 24px; font-size: 16px; background: #364447;
+                                   color: white; border: none; border-radius: 6px; cursor: pointer; margin: 0 8px 8px 8px;">
                         Вернуться в меню
                     </button>
-                    <button onclick="window.location.reload()" 
-                            style="padding: 15px 30px; font-size: 18px; background: ${modeColor}; 
-                                   color: white; border: none; border-radius: 8px; cursor: pointer; margin: 0 10px;">
+                    <button onclick="window.location.reload()"
+                            style="padding: 12px 24px; font-size: 16px; background: ${modeColor};
+                                   color: white; border: none; border-radius: 6px; cursor: pointer; margin: 0 8px 8px 8px;">
                         Сыграть ещё
                     </button>
                     ${this.gameMode === 'training' ?
-            `<button onclick="window.location.href='game.html?mode=classic&level=${this.state.currentLevel}&sublevel=${this.state.currentSublevel}'" 
-                                style="padding: 15px 30px; font-size: 18px; background: #648364; 
-                                       color: white; border: none; border-radius: 8px; cursor: pointer; margin: 10px 10px 0 10px;">
+            `<button onclick="window.location.href='game.html?mode=classic&level=${this.state.currentLevel}&sublevel=${this.state.currentSublevel}'"
+                                style="padding: 12px 24px; font-size: 16px; background: #648364;
+                                       color: white; border: none; border-radius: 6px; cursor: pointer; margin: 8px 8px 0 8px;">
                             Попробовать в классическом режиме
                         </button>` : ''
         }
-                    ${nextLevelInfo ?
+                    ${nextLevelInfo && progressPercentage >= 80 ?
             `<button onclick="window.location.href='game.html?mode=classic&level=${nextLevelInfo.levelId}&sublevel=${nextLevelInfo.sublevelId}&t=' + Date.now()"
-                                style="padding: 15px 30px; font-size: 18px; background: #d8ad70;
-                                       color: white; border: none; border-radius: 8px; cursor: pointer; margin: 10px 10px 0 10px;">
+                                style="padding: 12px 24px; font-size: 16px; background: #d8ad70;
+                                       color: white; border: none; border-radius: 6px; cursor: pointer; margin: 8px 8px 0 8px;">
                             ${nextLevelInfo.type === 'level' ? 'Следующий уровень' : 'Следующий подуровень'}
                         </button>` : ''
-        }
-                    ${this.gameMode === 'classic' && nextLevelInfo && nextLevelInfo.type === 'sublevel' && shouldAutoAdvance ?
-            `<div style="margin: 10px 0; padding: 10px; background: #fff3e0; border-radius: 8px; color: rgba(234,175,127,0.85); font-size: 14px;">
-                 Автоматический переход к следующему подуровню через 3 секунды...
-            </div>` : ''
         }
                 </div>
             </div>
@@ -565,7 +568,7 @@ class GameCore {
         });
 
         // Автоматический переход к следующему подуровню в классическом режиме
-        if (this.gameMode === 'classic' && nextLevelInfo && nextLevelInfo.type === 'sublevel' && shouldAutoAdvance) {
+        if (this.gameMode === 'classic' && nextLevelInfo && nextLevelInfo.type === 'sublevel' && progressPercentage >= 80) {
             setTimeout(() => {
                 window.location.href = `game.html?mode=classic&level=${nextLevelInfo.levelId}&sublevel=${nextLevelInfo.sublevelId}&t=${Date.now()}`;
             }, 3000); // Переход через 3 секунды

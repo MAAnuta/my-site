@@ -28,8 +28,25 @@
   </div>
 
   <!-- Панель пользователя -->
-  <div class="user-panel" id="userPanel">
-    <!-- Заполняется JavaScript -->
+  <div class="user-panel loading" id="userPanel">
+    <!-- Placeholder для предотвращения CLS -->
+    <div class="user-info" style="visibility: hidden;">
+      <div class="avatar-preview avatar-0 user-avatar-large"></div>
+      <div class="user-details">
+        <div class="user-name">Загрузка...</div>
+        <div class="user-level">Уровень</div>
+        <div class="user-sublevels">Подуровней пройдено: 0/13</div>
+      </div>
+      <button class="btn-logout" style="visibility: hidden;">
+        <svg viewBox="0 0 24 24"><path d="M16,17V14H9V10H16V7L21,12L16,17M14,2A2,2 0 0,1 16,4V6H14V4H5V20H14V18H16V20A2,2 0 0,1 14,22H5A2,2 0 0,1 3,20V4A2,2 0 0,1 5,2H14Z"/></svg>
+      </button>
+    </div>
+    <div class="stats-grid" style="visibility: hidden;">
+      <div class="stat-card"><div class="stat-number">0</div><div class="stat-name">Игр сыграно</div></div>
+      <div class="stat-card"><div class="stat-number">0</div><div class="stat-name">Лучший счет</div></div>
+      <div class="stat-card"><div class="stat-number">0</div><div class="stat-name">Всего очков</div></div>
+      <div class="stat-card"><div class="stat-number">0</div><div class="stat-name">Подуровней пройдено</div></div>
+    </div>
   </div>
 
   <!-- Карусель режимов игры -->
@@ -48,14 +65,13 @@
             <p class="mode-description">Проходите уровни последовательно, открывая новые подуровни</p>
           </div>
 
-          <div class="level-progress" id="levelProgress">
-            <div class="progress-info">Прогресс: <span id="progressText">0%</span></div>
-            <div class="progress-info">Лучший счет: <span id="bestScore">0</span></div>
-          </div>
-
           <div class="mode-content-wrapper">
-            <div class="compact-selection" id="compactLevelSelection">
-              <!-- Уровни будут добавлены через JavaScript -->
+            <div class="compact-selection loading" id="compactLevelSelection">
+              <!-- Placeholder для уровней -->
+              <div class="selection-row" style="visibility: hidden;"><div class="level-indicator"><div class="level-number">1</div><div class="level-name">Уровень</div></div><div class="sublevels-container"><button class="sublevel-btn">1-1</button><button class="sublevel-btn">1-2</button><button class="sublevel-btn">1-3</button></div></div>
+              <div class="selection-row" style="visibility: hidden;"><div class="level-indicator"><div class="level-number">2</div><div class="level-name">Уровень</div></div><div class="sublevels-container"><button class="sublevel-btn">2-1</button><button class="sublevel-btn">2-2</button><button class="sublevel-btn">2-3</button></div></div>
+              <div class="selection-row" style="visibility: hidden;"><div class="level-indicator"><div class="level-number">3</div><div class="level-name">Уровень</div></div><div class="sublevels-container"><button class="sublevel-btn">3-1</button><button class="sublevel-btn">3-2</button></div></div>
+              <div class="selection-row" style="visibility: hidden;"><div class="level-indicator"><div class="level-number">4</div><div class="level-name">Уровень</div></div><div class="sublevels-container"><button class="sublevel-btn">4-1</button></div></div>
             </div>
 
             <div class="status-legend">
@@ -113,18 +129,18 @@
           </div>
 
           <div class="mode-content-wrapper">
-            <div class="training-selection">
+            <div class="training-selection loading">
               <div class="selection-group">
                 <label class="selection-label">Выберите уровень:</label>
                 <select class="level-select" id="trainingLevelSelect">
-                  <!-- Уровни будут добавлены через JavaScript -->
+                  <option>Уровень 1</option><option>Уровень 2</option><option>Уровень 3</option><option>Уровень 4</option>
                 </select>
               </div>
 
               <div class="selection-group">
                 <label class="selection-label">Выберите подуровень:</label>
                 <select class="sublevel-select" id="trainingSublevelSelect">
-                  <!-- Подуровни будут добавлены через JavaScript -->
+                  <option>1-1</option><option>1-2</option><option>1-3</option>
                 </select>
               </div>
 
@@ -170,7 +186,7 @@
     <button onclick="showInstructions()" class="btn btn-tertiary">
       <!-- SVG инструкции -->
       <svg viewBox="0 0 24 24">
-        <path   fill="#364548"
+        <path fill="#364548"
                 d="m17,10c-3.86,0-7,3.14-7,7s3.14,7,7,7,7-3.14,7-7-3.14-7-7-7Zm0,12c-2.757,0-5-2.243-5-5s2.243-5,5-5,5,2.243,5,5-2.243,5-5,5Zm1-4v2c0,.552-.448,1-1,1s-1-.448-1-1v-2c0-.552.448-1,1-1s1,.448,1,1Zm.5-3.5c0,.828-.672,1.5-1.5,1.5s-1.5-.672-1.5-1.5.672-1.5,1.5-1.5,1.5.672,1.5,1.5Zm-9.5,7.5h-5c-1.103,0-2-.897-2-2s.897-2,2-2h3c.552,0,1-.448,1-1s-.448-1-1-1h-1V2h9c1.654,0,3,1.346,3,3v2c0,.552.448,1,1,1s1-.448,1-1v-2c0-2.757-2.243-5-5-5H5C2.244,0,0,2.243,0,5v15C0,22.206,1.795,24,4,24h5c.552,0,1-.448,1-1s-.448-1-1-1ZM2,5c0-1.302.839-2.402,2-2.816v13.816c-.732,0-1.409.212-2,.556V5Z"/>
       </svg>
       Инструкция
@@ -196,7 +212,9 @@
         </svg>
         Классическая игра
       </h3>
-      <p>Начните с первого подуровня уровня 1 и последовательно проходите все уровни. Новые подуровни открываются только после прохождения предыдущих.</p>
+      <p><strong>Цель:</strong> Развивать навыки восприятия времени через последовательное прохождение уровней.</p>
+      <p><strong>Как играть:</strong> Начните с первого подуровня уровня 1 и последовательно проходите все уровни. Каждый уровень содержит несколько подуровней с возрастающей сложностью. Новые подуровни открываются только после успешного прохождения предыдущих (с прогрессом не менее 80%).</p>
+      <p><strong>Система прогресса:</strong> Ваши результаты сохраняются в рейтинговой таблице. Чем выше точность и скорость выполнения, тем больше очков вы получаете.</p>
 
       <h3>
         <!-- SVG мишени для тренировки -->
@@ -205,7 +223,9 @@
         </svg>
         Тренировка
       </h3>
-      <p>Выберите любой уровень и подуровень для тренировки конкретных навыков. В тренировочном режиме доступны все подуровни.</p>
+      <p><strong>Цель:</strong> Оттачивать конкретные навыки без влияния на рейтинг.</p>
+      <p><strong>Как играть:</strong> Выберите любой уровень и подуровень для тренировки конкретных навыков. В тренировочном режиме доступны все подуровни независимо от прогресса в классической игре.</p>
+      <p><strong>Особенности:</strong> Результаты тренировок не влияют на статистику и рейтинг. Идеально подходит для повторения сложных заданий или закрепления навыков.</p>
 
       <h3>
         <!-- SVG лампочки для уровней игры -->
@@ -223,8 +243,8 @@
 
       <h3>
         <!-- SVG медали для системы очков -->
-        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px; fill: #ffeb8c">
-          <path d="m8,12c -3.309,0-6-2.691-6-6S4.691,0,8,0s6,2.691,6,6-2.691,6-6,6Zm6.744,12c-.211,0-.422-.067-.6-.2-.34-.254-.481-.696-.354-1.101l.941-3.016-2.377-1.934c-.32-.271-.437-.713-.292-1.107.145-.394.519-.655.938-.655h3.001l1.062-2.98c.146-.391.52-.651.937-.651s.791.26.937.651l1.062,2.98h3.001c.42,0,.795.263.939.657s.026.837-.295,1.108l-2.366,1.927.979,2.98c.134.403-.002.847-.339,1.106-.337.259-.801.277-1.156.046l-2.754-1.793-2.708,1.812c-.168.113-.362.169-.556.169Zm-4.807,0H1c-.552,0-1-.448-1-1,0-4.962,4.038-9,9-9h.937c.346,0,.667.18.85.474.182.294.199.662.045.971-.552,1.11-.832,2.307-.832,3.555s.28,2.444.832,3.555c.154.31.137.678-.045.972-.182.294-.504.473-.85.473Z"/>
+        <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px; fill: #ffeb8c">
+          <path d="m.439,6.561c-.586-.585-.586-1.536,0-2.121l2-2c.43-.43,1.075-.558,1.635-.325.561.232.926.779.926,1.386v9c0,.829-.672,1.5-1.5,1.5s-1.5-.671-1.5-1.5v-5.585c-.527.186-1.139.067-1.561-.354Zm14.561,1.439v-4c0-2.206,1.794-4,4-4s4,1.794,4,4v4c0,2.206-1.794,4-4,4s-4-1.794-4-4Zm3,0c0,.551.448,1,1,1s1-.449,1-1v-4c0-.551-.448-1-1-1s-1,.449-1,1v4Zm-12,1v-4c0-2.206,1.794-4,4-4s4,1.794,4,4v4c0,2.206-1.794,4-4,4s-4-1.794-4-4Zm3,0c0,.551.448,1,1,1s1-.449,1-1v-4c0-.551-.448-1-1-1s-1,.449-1,1v4Zm14.974,5.219c-.154-.814-.947-1.349-1.754-1.193L1.22,17.026c-.814.155-1.349.94-1.193,1.754.137.719.766,1.22,1.472,1.22.094,0,.188-.009.282-.027l21-4c.814-.155,1.349-.94,1.193-1.754Zm-1.757,4.308l-13,2.5c-.813.157-1.347.943-1.189,1.756.138.718.766,1.217,1.471,1.217.094,0,.189-.009.285-.027l13-2.5c.813-.157,1.347-.943,1.189-1.756-.156-.813-.942-1.347-1.756-1.19Z"/>
         </svg>
         Система очков
       </h3>
@@ -306,42 +326,65 @@
       return;
     }
 
-    loadPlayerData();
-    renderUserPanel();
-    updateProgressInfo();
-    renderClassicLevels();
-    renderTrainingSelectors();
+    // Считываем параметры URL (для возврата из тренировки)
+    const urlParams = new URLSearchParams(window.location.search);
+    const from = urlParams.get('from');
+    const returnLevel = urlParams.get('level');
+    const returnSublevel = urlParams.get('sublevel'); // формат X-Y
 
-    // Инициализация карусели
-    updateCarousel();
+    // Если вернулись из тренировки, запоминаем желаемый слайд и выбор уровня/подуровня
+    if (from === 'training' && returnLevel && returnSublevel) {
+      window.initialCarouselSlide = 1; // 0 — классика, 1 — тренировка
+      window.initialTrainingSelection = {
+        levelId: returnLevel,
+        sublevelId: returnSublevel
+      };
+    }
 
-    // Выравниваем высоту карточек с user panel
-    alignCarouselHeight();
+    // Загружаем все данные последовательно для предотвращения множественных пересчетов
+    loadPlayerData().then(() => {
+      // Применяем все изменения одновременно в следующем цикле перерисовки
+      requestAnimationFrame(() => {
+        renderUserPanel();
+        renderClassicLevels();
+        renderTrainingSelectors();
 
-    // Добавляем обработчики для стрелок
-    document.querySelectorAll('.carousel-arrow').forEach(arrow => {
-      arrow.style.visibility = 'visible';
-      arrow.style.opacity = '1';
+        // Инициализация карусели: если есть предварительный слайд — переходим на него
+        if (typeof window.initialCarouselSlide === 'number') {
+          currentSlide = window.initialCarouselSlide;
+        }
+        updateCarousel();
+
+        // Выравниваем высоту карточек с user panel (один раз после загрузки)
+        alignCarouselHeight();
+
+        // Добавляем обработчики для стрелок
+        document.querySelectorAll('.carousel-arrow').forEach(arrow => {
+          arrow.style.visibility = 'visible';
+          arrow.style.opacity = '1';
+        });
+      });
     });
 
     // Проверяем параметр refresh в URL
-    const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('refresh') === '1') {
       console.log('[Menu] Обновление после возврата из игры');
       // Принудительное обновление данных
       setTimeout(() => {
-        loadPlayerData();
-        renderUserPanel();
-        updateProgressInfo();
-        renderClassicLevels();
-        renderTrainingSelectors();
+        loadPlayerData().then(() => {
+          requestAnimationFrame(() => {
+            renderUserPanel();
+            renderClassicLevels();
+            renderTrainingSelectors();
+            alignCarouselHeight();
+          });
+        });
       }, 100);
     }
 
     // Автоматическое обновление каждые 5 секунд
     setInterval(() => {
       if (window.player) {
-        updateProgressInfo();
         renderClassicLevels(); // Обновляем доступность уровней
       }
     }, 5000);
@@ -392,35 +435,42 @@
     });
   }
 
-  // Выравнивание высоты карточек карусели с user panel
+  // Выравнивание высоты карточек карусели с user panel (оптимизировано для CLS)
   function alignCarouselHeight() {
     const userPanel = document.querySelector('.user-panel');
     const modeCards = document.querySelectorAll('.mode-card');
 
     if (userPanel && modeCards.length > 0) {
-      const userPanelHeight = userPanel.offsetHeight;
+      // Используем getBoundingClientRect для точного измерения без пересчетов
+      const userPanelHeight = userPanel.getBoundingClientRect().height;
 
+      // Применяем высоту ко всем карточкам одновременно для предотвращения множественных пересчетов
+      const heightValue = userPanelHeight + 'px';
       modeCards.forEach(card => {
-        card.style.minHeight = userPanelHeight + 'px';
+        card.style.minHeight = heightValue;
       });
 
       // Обновляем высоту контейнера карусели
       const carouselContainer = document.querySelector('.carousel-container');
       if (carouselContainer) {
-        carouselContainer.style.minHeight = userPanelHeight + 'px';
+        carouselContainer.style.minHeight = heightValue;
       }
     }
   }
 
   // Функции карусели
   function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length;
-    updateCarousel();
+    if (currentSlide < slides.length - 1) {
+      currentSlide++;
+      updateCarousel();
+    }
   }
 
   function prevSlide() {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-    updateCarousel();
+    if (currentSlide > 0) {
+      currentSlide--;
+      updateCarousel();
+    }
   }
 
   function goToSlide(index) {
@@ -441,11 +491,25 @@
       }
     });
 
-    // Добавляем визуальный эффект для активной стрелки
-    const arrows = document.querySelectorAll('.carousel-arrow');
-    arrows.forEach(arrow => {
-      arrow.style.transform = 'scale(1)';
-    });
+    // Обновляем состояние стрелок
+    const prevArrow = document.querySelector('.carousel-arrow:first-child');
+    const nextArrow = document.querySelector('.carousel-arrow:last-child');
+
+    if (prevArrow) {
+      if (currentSlide === 0) {
+        prevArrow.classList.add('disabled');
+      } else {
+        prevArrow.classList.remove('disabled');
+      }
+    }
+
+    if (nextArrow) {
+      if (currentSlide === slides.length - 1) {
+        nextArrow.classList.add('disabled');
+      } else {
+        nextArrow.classList.remove('disabled');
+      }
+    }
   }
 
   // Назначаем обработчики для точек
@@ -490,51 +554,56 @@
   });
 
   function loadPlayerData() {
-    console.log('Загрузка данных игрока...');
+    return new Promise((resolve) => {
+      console.log('Загрузка данных игрока...');
 
-    if (typeof DataManager === 'undefined') {
-      console.error('DataManager не определен');
-      window.location.href = 'index.html';
-      return;
-    }
-
-    const player = DataManager.getPlayer();
-    console.log('Получен игрок:', player);
-
-    if (!player) {
-      console.log('Игрок не найден, показываем экран выбора профиля');
-      showProfileSelection();
-      return;
-    }
-
-    window.player = player;
-
-    // Загружаем прогресс
-    const progress = DataManager.getProgress() || {};
-    console.log('Получен прогресс:', progress);
-
-    window.gameProgress = {
-      level1: progress.level1 || {},
-      level2: progress.level2 || {},
-      level3: progress.level3 || {},
-      level4: progress.level4 || {}
-    };
-
-    // Создаем экземпляр LevelManager для получения информации о разблокированных уровнях
-    try {
-      if (typeof LevelManager !== 'undefined') {
-        // Создаем временный core объект для LevelManager
-        const tempCore = {
-          getGameMode: () => 'classic'
-        };
-        window.levelManagerInstance = new LevelManager(tempCore);
-        console.log('LevelManager создан для меню');
+      if (typeof DataManager === 'undefined') {
+        console.error('DataManager не определен');
+        window.location.href = 'index.html';
+        resolve();
+        return;
       }
-    } catch (error) {
-      console.warn('Не удалось создать LevelManager для меню:', error);
-    }
 
-    console.log('Данные игрока загружены успешно');
+      const player = DataManager.getPlayer();
+      console.log('Получен игрок:', player);
+
+      if (!player) {
+        console.log('Игрок не найден, показываем экран выбора профиля');
+        showProfileSelection();
+        resolve();
+        return;
+      }
+
+      window.player = player;
+
+      // Загружаем прогресс
+      const progress = DataManager.getProgress() || {};
+      console.log('Получен прогресс:', progress);
+
+      window.gameProgress = {
+        level1: progress.level1 || {},
+        level2: progress.level2 || {},
+        level3: progress.level3 || {},
+        level4: progress.level4 || {}
+      };
+
+      // Создаем экземпляр LevelManager для получения информации о разблокированных уровнях
+      try {
+        if (typeof LevelManager !== 'undefined') {
+          // Создаем временный core объект для LevelManager
+          const tempCore = {
+            getGameMode: () => 'classic'
+          };
+          window.levelManagerInstance = new LevelManager(tempCore);
+          console.log('LevelManager создан для меню');
+        }
+      } catch (error) {
+        console.warn('Не удалось создать LevelManager для меню:', error);
+      }
+
+      console.log('Данные игрока загружены успешно');
+      resolve();
+    });
   }
 
   function renderUserPanel() {
@@ -545,13 +614,16 @@
 
     if (!playerStats) return;
 
+    // Убираем класс loading перед рендерингом
+    userPanel.classList.remove('loading');
+
     userPanel.innerHTML = `
     <div class="user-info">
         <div class="avatar-preview avatar-${playerStats.avatarId || 0} user-avatar-large"></div>
         <div class="user-details">
             <div class="user-name">${playerStats.name}</div>
             <div class="user-level">${playerStats.levelName}</div>
-            <div class="user-sublevels">Подуровней пройдено: ${playerStats.completedSublevels || 0}/13</div>
+            <div class="user-sublevels">Подуровней пройдено: ${playerStats.completedSublevels || 0}/9</div>
         </div>
         <button onclick="showProfileSelection()" class="btn-logout" aria-label="Выйти из профиля" title="Выйти из профиля">
             <svg viewBox="0 0 24 24" style="width: 20px; height: 20px;">
@@ -584,6 +656,9 @@
     const container = document.getElementById('compactLevelSelection');
     if (!container) return;
 
+    // Убираем класс loading перед рендерингом
+    container.classList.remove('loading');
+
     container.innerHTML = '';
 
     // Отображаем все 4 уровня
@@ -600,7 +675,7 @@
       indicator.className = 'level-indicator';
       indicator.innerHTML = `
                 <div class="level-number">${levelIndex + 1}</div>
-                <div class="level-name">${levelData.title}</div>
+                <div class="level-name">Уровень</div>
             `;
 
       // Контейнер для подуровней
@@ -667,9 +742,9 @@
     const btn = document.getElementById('startClassicBtn');
     if (btn && sublevelData) {
       if (status === 'completed') {
-        btn.textContent = `Перепройти ${levelId.replace('level', '')}-${sublevelId}`;
+        btn.textContent = `Перепройти ${sublevelId}`;
       } else {
-        btn.textContent = `Начать ${levelId.replace('level', '')}-${sublevelId}`;
+        btn.textContent = `Начать ${sublevelId}`;
       }
     }
   }
@@ -677,21 +752,34 @@
   function renderTrainingSelectors() {
     const levelSelect = document.getElementById('trainingLevelSelect');
     const sublevelSelect = document.getElementById('trainingSublevelSelect');
+    const trainingSelection = document.querySelector('.training-selection');
+
+    // Убираем класс loading перед рендерингом
+    if (trainingSelection) {
+      trainingSelection.classList.remove('loading');
+    }
 
     // Очищаем селекторы
     levelSelect.innerHTML = '';
     sublevelSelect.innerHTML = '';
 
     // Заполняем селектор уровней
-    Object.keys(levelsData).forEach(levelId => {
+    Object.keys(levelsData).forEach((levelId, index) => {
       const levelData = levelsData[levelId];
       const option = document.createElement('option');
       option.value = levelId;
       option.textContent = `${levelId.replace('level', '')}. ${levelData.title}`;
       levelSelect.appendChild(option);
+      // Если есть предварительный выбор из тренировки — используем его
+      if (window.initialTrainingSelection && window.initialTrainingSelection.levelId === levelId) {
+        option.selected = true;
+      } else if (!window.initialTrainingSelection && index === 0) {
+        // Если предварительного выбора нет — выбираем первый уровень по умолчанию
+        option.selected = true;
+      }
     });
 
-    // Заполняем селектор подуровней для первого уровня
+    // Заполняем селектор подуровней для выбранного уровня
     updateTrainingSublevels();
 
     // Назначаем обработчики
@@ -713,12 +801,19 @@
     // Очищаем и заполняем селектор подуровней
     sublevelSelect.innerHTML = '';
 
-    Object.values(levelData.sublevels).forEach(sublevel => {
+    Object.values(levelData.sublevels).forEach((sublevel, index) => {
       const sublevelNum = sublevel.id.split('-')[1];
       const option = document.createElement('option');
       option.value = sublevelNum;
       option.textContent = `${sublevel.id}. ${sublevel.title}`;
       sublevelSelect.appendChild(option);
+      // Если есть предварительный выбор из тренировки — используем его
+      if (window.initialTrainingSelection && window.initialTrainingSelection.levelId === levelId && window.initialTrainingSelection.sublevelId === sublevel.id) {
+        option.selected = true;
+      } else if (!window.initialTrainingSelection && index === 0) {
+        // Если предварительного выбора нет — выбираем первый подуровень по умолчанию
+        option.selected = true;
+      }
     });
 
     // Обновляем превью
@@ -921,39 +1016,10 @@
         renderProfilesList();
         loadPlayerData();
         renderUserPanel();
-        updateProgressInfo();
         renderClassicLevels();
       }
     } else {
       alert('Не удалось удалить профиль');
-    }
-  }
-
-  function updateProgressInfo() {
-    const totalSublevels = calculateTotalSublevels();
-    const completed = calculateCompletedSublevels();
-    const progressPercent = totalSublevels > 0 ? Math.round((completed / totalSublevels) * 100) : 0;
-
-    // Находим лучший счет из прогресса
-    let bestScore = 0;
-    const progress = DataManager.getProgress() || {};
-
-    Object.keys(progress).forEach(levelKey => {
-      const levelProgress = progress[levelKey];
-      if (levelProgress) {
-        Object.values(levelProgress).forEach(score => {
-          if (score > bestScore) bestScore = score;
-        });
-      }
-    });
-
-    document.getElementById('progressText').textContent = `${progressPercent}%`;
-    document.getElementById('bestScore').textContent = bestScore;
-
-    // Обновляем подсказку о прогрессе
-    const progressElement = document.querySelector('.progress-info');
-    if (progressElement) {
-      progressElement.title = `Пройдено: ${completed}/${totalSublevels} подуровней`;
     }
   }
 
@@ -1026,7 +1092,6 @@
       setTimeout(() => {
         loadPlayerData();
         renderUserPanel();
-        updateProgressInfo();
         renderClassicLevels();
         renderTrainingSelectors();
       }, 100);
@@ -1039,7 +1104,6 @@
       // Страница загружена из кэша браузера
       loadPlayerData();
       renderUserPanel();
-      updateProgressInfo();
       renderClassicLevels();
       renderTrainingSelectors();
     }

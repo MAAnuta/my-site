@@ -19,14 +19,14 @@ class LevelManager {
             'level1': {
                 id: 'level1',
                 name: 'Измерение времени',
-                description: 'Базовые навыки восприятия времени',
+                description: 'Развитие базовых навыков восприятия и измерения времени',
                 color: 'var(--text-dark)',
                 unlocked: true, // Первый уровень разблокирован сразу
                 sublevels: {
                     '1-1': {
                         id: '1-1',
                         name: 'Одна лампочка',
-                        description: 'Определите время горения одной лампочка',
+                        description: 'Научитесь оценивать время горения одной лампочки с высокой точностью',
                         type: 'input_time', // Подуровень 1-1
                         difficulty: 'easy',
                         attempts: 3,
@@ -41,7 +41,7 @@ class LevelManager {
                     '1-2': {
                         id: '1-2',
                         name: 'Летающие карточки',
-                        description: 'Найдите правильное время среди движущихся карточек',
+                        description: 'Тренируйте внимание и точность при выборе правильного времени среди отвлекающих карточек',
                         type: 'select_time', // Подуровень 1-2
                         difficulty: 'easy',
                         attempts: 3,
@@ -56,7 +56,7 @@ class LevelManager {
                     '1-3': {
                         id: '1-3',
                         name: 'Двойной интервал',
-                        description: 'Запомните два последовательных времени горения',
+                        description: 'Развивайте память и точность при запоминании двух интервалов времени',
                         type: 'two_intervals', // Подуровень 1-3
                         difficulty: 'medium',
                         attempts: 3,
@@ -72,14 +72,14 @@ class LevelManager {
             'level2': {
                 id: 'level2',
                 name: 'Рабочая память',
-                description: 'Поиск паттернов среди отвлекающих факторов',
+                description: 'Развитие рабочей памяти и внимания при поиске закономерностей',
                 color: 'var(--text-dark)',
                 unlocked: false, // Будет разблокирован после прохождения уровня 1
                 sublevels: {
                     '2-1': {
                         id: '2-1',
                         name: 'Движущиеся лампочки',
-                        description: 'Найдите целевую лампочку среди движущихся',
+                        description: 'Тренируйте внимание и память при поиске целевой лампочки среди отвлекающих факторов',
                         type: 'pattern_blur', // Подуровень 2-1
                         difficulty: 'medium',
                         attempts: 3,
@@ -93,7 +93,7 @@ class LevelManager {
                     '2-2': {
                         id: '2-2',
                         name: 'Найди время',
-                        description: 'Найдите лампочку с нужным временем среди движущихся',
+                        description: 'Комбинируйте внимание и восприятие времени при поиске лампочки с заданным интервалом',
                         type: 'find_duration', // Подуровень 2-2
                         difficulty: 'hard',
                         attempts: 3,
@@ -108,7 +108,7 @@ class LevelManager {
                     '2-3': {
                         id: '2-3',
                         name: 'Повтори паттерн',
-                        description: 'Запомните и повторите паттерн мигания',
+                        description: 'Развивайте память и моторные навыки при повторении сложных паттернов мигания',
                         type: 'repeat_pattern', // Подуровень 2-3
                         difficulty: 'hard',
                         attempts: 3,
@@ -127,14 +127,14 @@ class LevelManager {
             'level3': {
                 id: 'level3',
                 name: 'Логика и прогнозирование',
-                description: 'Развитие логического мышления и предсказания',
+                description: 'Формирование логического мышления и навыков прогнозирования',
                 color: 'var(--text-dark)',
                 unlocked: false, // Будет разблокирован после прохождения уровня 2
                 sublevels: {
                     '3-1': {
                         id: '3-1',
                         name: 'Ритмические последовательности',
-                        description: 'Повторите порядок и длительность горения последовательности лампочек',
+                        description: 'Тренируйте память и точность при воспроизведении ритмических последовательностей',
                         type: 'simon_pattern', // Подуровень 3-1
                         difficulty: 'medium',
                         attempts: 3,
@@ -149,7 +149,7 @@ class LevelManager {
                     '3-2': {
                         id: '3-2',
                         name: 'Математика времени',
-                        description: 'Решите уравнение и найдите лампочку с нужным временем',
+                        description: 'Комбинируйте математическое мышление с восприятием времени для решения задач',
                         type: 'time_math', // Подуровень 3-2
                         difficulty: 'hard',
                         attempts: 3,
@@ -168,14 +168,14 @@ class LevelManager {
             'level4': {
                 id: 'level4',
                 name: 'Стратегия и скорость',
-                description: 'Комбинация скорости реакции и стратегического мышления',
+                description: 'Комплексное развитие скорости реакции и стратегического мышления',
                 color: 'var(--text-dark)',
                 unlocked: false, // Будет разблокирован после прохождения уровня 3
                 sublevels: {
                     '4-1': {
                         id: '4-1',
                         name: 'Лабиринт времени',
-                        description: 'Запомните путь к лампочке за ограниченное время',
+                        description: 'Комплексная тренировка памяти, внимания и скорости принятия решений',
                         type: 'maze_memory', // Подуровень 4-1
                         difficulty: 'hard',
                         attempts: 3,
@@ -194,7 +194,6 @@ class LevelManager {
 
     // 2. ЗАПУСК УРОВНЯ (с улучшенной проверкой доступности)
     startLevel(levelId, sublevelId) {
-        console.log(`[LevelManager] Запуск ${levelId}, подуровень ${sublevelId}, режим: ${this.core.getGameMode()}`);
 
         this.stopLevel(); // Останавливаем текущий уровень
         this.clearTimers(); // Очищаем таймеры
@@ -263,7 +262,6 @@ class LevelManager {
                 return true;
             }
         } catch (error) {
-            console.error('Ошибка при создании уровня:', error);
             this.showError(`Ошибка: ${error.message}`);
             return false;
         }
@@ -356,7 +354,6 @@ class LevelManager {
 
         // Проверяем, доступен ли DataManager
         if (typeof DataManager === 'undefined') {
-            console.warn('[LevelManager] DataManager не загружен. Не могу проверить прогресс.');
             return false;
         }
 
@@ -368,7 +365,6 @@ class LevelManager {
     saveSublevelProgress(levelId, sublevelId, score, accuracy, mode = 'classic', roundNumber = null, isCompleted = false) {
         // Проверяем, доступен ли DataManager
         if (typeof DataManager === 'undefined') {
-            console.warn('[LevelManager] DataManager не загружен. Прогресс не сохранен.');
             return;
         }
 
@@ -385,7 +381,6 @@ class LevelManager {
         // Всегда используем логику накопления раундов
         this.saveRoundProgress(levelId, sublevelId, score, accuracy, currentRound, gameMode, isCompleted);
 
-        console.log(`[LevelManager] Прогресс сохранен: ${levelId}-${sublevelId}, очки: ${score}, режим: ${gameMode}, раунд: ${currentRound}`);
     };
 
     /**
@@ -407,7 +402,6 @@ class LevelManager {
         // Сохраняем данные раундов
         this.saveRoundsData(progressKey, roundsData);
 
-        console.log(`[LevelManager] Раунд ${roundNumber} сохранен: ${score} очков, ${accuracy}% точности`);
 
         // Если это финальный раунд (3-й) или isFinal=true, рассчитываем итоговый результат
         if (roundNumber === 3 || isFinal) {
@@ -420,10 +414,22 @@ class LevelManager {
      */
     getRoundsData(key) {
         try {
+            // Проверяем доступность sessionStorage
+            if (typeof sessionStorage === 'undefined') {
+                console.warn('sessionStorage недоступен');
+                return {};
+            }
+
             const data = sessionStorage.getItem(`levelmanager_${key}`);
             return data ? JSON.parse(data) : {};
         } catch (error) {
             console.error('Ошибка загрузки данных раундов:', error);
+            // При ошибке парсинга удаляем поврежденные данные
+            try {
+                sessionStorage.removeItem(`levelmanager_${key}`);
+            } catch (removeError) {
+                console.error('Не удалось удалить поврежденные данные:', removeError);
+            }
             return {};
         }
     }
@@ -433,9 +439,17 @@ class LevelManager {
      */
     saveRoundsData(key, data) {
         try {
+            // Проверяем доступность sessionStorage
+            if (typeof sessionStorage === 'undefined') {
+                console.warn('sessionStorage недоступен, данные не сохранены');
+                return false;
+            }
+
             sessionStorage.setItem(`levelmanager_${key}`, JSON.stringify(data));
+            return true;
         } catch (error) {
             console.error('Ошибка сохранения данных раундов:', error);
+            return false;
         }
     }
 
@@ -478,7 +492,6 @@ class LevelManager {
         // Только для классической игры проверяем разблокировку следующего уровня
         if (gameMode === 'classic') {
             this.lastUnlockedInfo = this.checkAndUnlockNextLevel(levelId, sublevelId, finalScore);
-            console.log(`[LevelManager] lastUnlockedInfo сохранен:`, this.lastUnlockedInfo);
         }
 
         // Обновляем рейтинг только для классической игры
@@ -511,8 +524,8 @@ class LevelManager {
 
         let nextInfo = null;
 
-        // Если это НЕ последний подуровень уровня — разблокируем следующий подуровень в уровне
-        if (currentSublevelNum < totalSublevels) {
+        // Если это НЕ последний подуровень уровня И score >=80% — разблокируем следующий подуровень в уровне
+        if (currentSublevelNum < totalSublevels && score >= DataManager.getMinPassingScore(levelId, sublevelId)) {
             const nextSublevelNum = currentSublevelNum + 1;
             const nextSublevelId = `${levelNum}-${nextSublevelNum}`;
             if (this.levels[levelId].sublevels[nextSublevelId]) {
@@ -547,7 +560,9 @@ class LevelManager {
             }
         }
 
-        console.log(`[LevelManager] Разблокировка после ${levelId}-${currentSublevelNum}:`, nextInfo);
+        // Сохраняем изменения в unlocked статус
+        this.saveProgress();
+
         return nextInfo;
     }
 
@@ -591,7 +606,6 @@ class LevelManager {
             }
         }
 
-        console.log('[LevelManager] Разблокировка уровней инициализирована на основе полного прохождения уровней.');
     }
 
     // 11. ПОЛУЧИТЬ ОБЩИЙ ПРОГРЕСС ИГРОКА
@@ -783,7 +797,6 @@ class LevelManager {
     saveProgress() {
         try {
             localStorage.setItem('levelManager_levels', JSON.stringify(this.levels));
-            console.log('[LevelManager] Прогресс уровней сохранен');
         } catch (error) {
             console.error('[LevelManager] Ошибка сохранения прогресса уровней:', error);
         }
@@ -854,12 +867,10 @@ class BaseLevelHandler {
 
     createLightbulbs() {
         // Базовый метод, должен быть переопределен в наследниках
-        console.log('BaseLevelHandler: createLightbulbs не реализован');
     }
 
     beginSequence() {
         // Базовый метод, должен быть переопределен в наследниках
-        console.log('BaseLevelHandler: beginSequence не реализован');
     }
 
     cleanup() {
@@ -1095,7 +1106,6 @@ class BaseLevelHandler {
         if (this.core.uiManager && typeof this.core.uiManager.showMessage === 'function') {
             this.core.uiManager.showMessage(text, color);
         } else {
-            console.log(text);
         }
     }
 
@@ -1125,6 +1135,7 @@ class Level1Handler extends BaseLevelHandler {
         this.isRecording = false; // Флаг записи
         this.recordedPattern = []; // Записанный паттерн
         this.correctTotal = 0; // Правильное общее время (для 1-3)
+        this.selectionMade = false; // Флаг выбора карточки (для блокировки интерфейса)
     }
 
     createLightbulbs() {
@@ -1201,7 +1212,6 @@ class Level1Handler extends BaseLevelHandler {
         this.actualDuration = Math.random() * (params.maxDuration - params.minDuration) + params.minDuration;
         this.actualDuration = Math.round(this.actualDuration * 10) / 10;
 
-        console.log(`Правильное время: ${this.actualDuration} сек`);
 
         this.showMessage('Смотрите на лампочку...', 'blue');
 
@@ -1375,10 +1385,10 @@ class Level1Handler extends BaseLevelHandler {
             message = `Попробуйте еще! ${accuracy.toFixed(1)}% точности!`;
         }
 
-        if (timeBonus > 1.0) {
+        /*if (timeBonus > 1.0) {
             const bonusPercent = Math.round((timeBonus - 1.0) * 100);
             message += ` (+${bonusPercent}% за скорость)`;
-        }
+        }*/
 
         this.showResult(message, `Отклонение: ${delta.toFixed(1)} сек`, color);
 
@@ -1408,7 +1418,6 @@ class Level1Handler extends BaseLevelHandler {
         this.actualDuration = Math.random() * (params.maxDuration - params.minDuration) + params.minDuration;
         this.actualDuration = Math.round(this.actualDuration * 10) / 10;
 
-        console.log(`Правильное время: ${this.actualDuration} сек`);
 
         this.showMessage('Смотрите на лампочку...', 'blue');
 
@@ -1433,7 +1442,85 @@ class Level1Handler extends BaseLevelHandler {
 
         // Удаляем предыдущие элементы
         const existingCards = container.querySelector('.time-cards-container');
+        const existingDropZone = container.querySelector('.time-drop-zone');
         if (existingCards) existingCards.remove();
+        if (existingDropZone) existingDropZone.remove();
+
+        // Создаем зону перетаскивания (контейнер куда нужно перетащить карточку)
+        const dropTarget = document.createElement('div');
+        dropTarget.className = 'drop-target';
+        dropTarget.id = 'drop-target';
+        dropTarget.style.position = 'absolute';
+        dropTarget.style.bottom = '120px'; // Увеличиваем расстояние от нижнего края
+        dropTarget.style.left = '50%';
+        dropTarget.style.transform = 'translateX(-50%)';
+        dropTarget.style.width = '250px'; // Увеличиваем ширину
+        dropTarget.style.height = '90px'; // Увеличиваем высоту
+        dropTarget.style.border = '3px dashed #5c885d';
+        dropTarget.style.borderRadius = '12px';
+        dropTarget.style.background = 'rgba(92, 136, 93, 0.15)'; // Увеличиваем прозрачность
+        dropTarget.style.display = 'flex';
+        dropTarget.style.alignItems = 'center';
+        dropTarget.style.justifyContent = 'center';
+        dropTarget.style.fontSize = '16px';
+        dropTarget.style.fontWeight = 'bold';
+        dropTarget.style.color = '#5c885d';
+        dropTarget.style.textAlign = 'center';
+        dropTarget.style.pointerEvents = 'auto';
+        dropTarget.style.transition = 'all 0.3s ease';
+        dropTarget.style.zIndex = '2000'; // Высокий z-index чтобы быть поверх карточек
+        dropTarget.style.boxShadow = '0 4px 15px rgba(92, 136, 93, 0.3)'; // Добавляем тень
+        dropTarget.textContent = 'Перетащите сюда правильное время';
+
+        // Добавляем обработчики для зоны перетаскивания
+        dropTarget.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropTarget.classList.add('drag-over');
+            dropTarget.style.borderColor = '#4a7c4a';
+            dropTarget.style.background = 'rgba(74, 124, 74, 0.3)';
+            dropTarget.style.transform = 'translateX(-50%) scale(1.05)';
+        });
+
+        dropTarget.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Проверяем, действительно ли мышь покинула зону
+            const rect = dropTarget.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                dropTarget.classList.remove('drag-over');
+                dropTarget.style.borderColor = '#5c885d';
+                dropTarget.style.background = 'rgba(92, 136, 93, 0.15)';
+                dropTarget.style.transform = 'translateX(-50%) scale(1)';
+            }
+        });
+
+        dropTarget.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropTarget.classList.remove('drag-over');
+            dropTarget.style.borderColor = '#5c885d';
+            dropTarget.style.background = 'rgba(92, 136, 93, 0.15)';
+            dropTarget.style.transform = 'translateX(-50%) scale(1)';
+
+            // Проверяем, был ли уже сделан выбор
+            if (this.selectionMade) {
+                return; // Игнорируем дополнительные перетаскивания
+            }
+
+            const draggedTime = e.dataTransfer.getData('text/plain');
+
+            // Блокируем интерфейс после выбора
+            this.selectionMade = true;
+            this.lockInterface();
+
+            // Всегда завершаем попытку после перетаскивания (только одна попытка)
+            this.checkSelectedTime(parseFloat(draggedTime));
+        });
+
+        container.appendChild(dropTarget);
 
         // Создаем контейнер для карточек
         const cardsContainer = document.createElement('div');
@@ -1480,38 +1567,142 @@ class Level1Handler extends BaseLevelHandler {
             card.style.background = 'linear-gradient(135deg, #364548 0%, #708F96 100%)';
             card.style.color = 'white';
             card.style.borderRadius = '12px';
-            card.style.cursor = 'pointer';
+            card.style.cursor = 'grab';
             card.style.fontSize = '18px';
             card.style.fontWeight = 'bold';
             card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
             card.style.transition = 'all 0.3s ease';
             card.style.userSelect = 'none';
             card.style.zIndex = '1001';
+            card.draggable = true;
 
-            // Позиционируем карточки вокруг лампочки
-            const angle = (index / options.length) * 2 * Math.PI;
-            const radius = 180;
+            // Интеллектуальное позиционирование карточек без перекрытий
 
-            // Находим лампочку
+            // Определяем зоны исключения
+            const excludedZones = [];
+
+            // 1. Зона лампочки
             const lightbulbContainer = document.querySelector('.lightbulb-container');
-            let centerX = 50;
-            let centerY = 50;
-
             if (lightbulbContainer) {
                 const rect = lightbulbContainer.getBoundingClientRect();
                 const containerRect = container.getBoundingClientRect();
+                const bulbX = ((rect.left + rect.width/2 - containerRect.left) / containerRect.width) * 100;
+                const bulbY = ((rect.top + rect.height/2 - containerRect.top) / containerRect.height) * 100;
+                const bulbRadius = Math.max(rect.width, rect.height) / containerRect.width * 100 * 0.8; // Радиус зоны исключения вокруг лампочки
 
-                centerX = ((rect.left + rect.width/2 - containerRect.left) / containerRect.width) * 100;
-                centerY = ((rect.top + rect.height/2 - containerRect.top) / containerRect.height) * 100;
+                excludedZones.push({
+                    type: 'circle',
+                    x: bulbX,
+                    y: bulbY,
+                    radius: Math.max(bulbRadius, 20) // Минимум 20% радиус
+                });
             }
 
-            // Рассчитываем позицию карточки
-            const x = centerX + Math.cos(angle) * radius;
-            const y = centerY + Math.sin(angle) * radius;
+            // 2. Зона перетаскивания
+            const dropTarget = document.getElementById('drop-target');
+            if (dropTarget) {
+                const rect = dropTarget.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                const dropX = ((rect.left + rect.width/2 - containerRect.left) / containerRect.width) * 100;
+                const dropY = ((rect.top + rect.height/2 - containerRect.top) / containerRect.height) * 100;
+                const dropWidth = (rect.width / containerRect.width) * 100 * 1.5; // Увеличиваем зону на 50%
+                const dropHeight = (rect.height / containerRect.height) * 100 * 1.5;
 
-            // Ограничиваем позицию, чтобы карточки не выходили за пределы экрана
-            const safeX = Math.max(10, Math.min(x, 90));
-            const safeY = Math.max(10, Math.min(y, 90));
+                excludedZones.push({
+                    type: 'rectangle',
+                    x: dropX - dropWidth/2,
+                    y: dropY - dropHeight/2,
+                    width: dropWidth,
+                    height: dropHeight
+                });
+            }
+
+            // Размеры карточки в процентах (примерно)
+            const cardWidth = 15; // ~15% ширины
+            const cardHeight = 10; // ~10% высоты
+
+            // Функция проверки коллизии с зоной исключения
+            const collidesWithZone = (x, y, zone) => {
+                if (zone.type === 'circle') {
+                    const distance = Math.sqrt(Math.pow(x - zone.x, 2) + Math.pow(y - zone.y, 2));
+                    return distance < (zone.radius + Math.max(cardWidth, cardHeight) / 2);
+                } else if (zone.type === 'rectangle') {
+                    return !(x + cardWidth/2 < zone.x ||
+                            x - cardWidth/2 > zone.x + zone.width ||
+                            y + cardHeight/2 < zone.y ||
+                            y - cardHeight/2 > zone.y + zone.height);
+                }
+                return false;
+            };
+
+            // Функция проверки коллизии с другими карточками
+            const collidesWithCards = (x, y, existingCards) => {
+                for (const existingCard of existingCards) {
+                    const distance = Math.sqrt(
+                        Math.pow(x - existingCard.x, 2) +
+                        Math.pow(y - existingCard.y, 2)
+                    );
+                    if (distance < Math.max(cardWidth, cardHeight)) {
+                        return true; // Коллизия обнаружена
+                    }
+                }
+                return false;
+            };
+
+            // Находим свободную позицию
+            let position = null;
+            const placedCards = []; // Массив уже размещенных карточек
+            let attempts = 0;
+            const maxAttempts = 200;
+
+            while (!position && attempts < maxAttempts) {
+                // Генерируем случайную позицию в допустимой области
+                const x = 10 + Math.random() * 80; // 10% to 90%
+                const y = 10 + Math.random() * 55; // 10% to 65% (избегаем зону перетаскивания)
+
+                // Проверяем коллизии
+                let hasCollision = false;
+
+                // Проверяем коллизию с зонами исключения
+                for (const zone of excludedZones) {
+                    if (collidesWithZone(x, y, zone)) {
+                        hasCollision = true;
+                        break;
+                    }
+                }
+
+                // Проверяем коллизию с другими карточками
+                if (!hasCollision && collidesWithCards(x, y, placedCards)) {
+                    hasCollision = true;
+                }
+
+                // Если нет коллизий, позиция подходит
+                if (!hasCollision) {
+                    position = { x, y };
+                    placedCards.push({ x, y });
+                }
+
+                attempts++;
+            }
+
+            // Если не нашли идеальную позицию, используем запасной вариант
+            if (!position) {
+                const fallbackPositions = [
+                    { x: 20, y: 20 }, { x: 70, y: 20 }, { x: 45, y: 40 },
+                    { x: 15, y: 50 }, { x: 75, y: 50 }, { x: 45, y: 15 }
+                ];
+                position = fallbackPositions[index % fallbackPositions.length];
+                // Убеждаемся, что fallback позиция тоже не конфликтует
+                if (placedCards.some(p => Math.sqrt(Math.pow(p.x - position.x, 2) + Math.pow(p.y - position.y, 2)) < cardWidth)) {
+                    // Если конфликтует, добавляем небольшое смещение
+                    position.x += (Math.random() - 0.5) * 10;
+                    position.y += (Math.random() - 0.5) * 10;
+                }
+                placedCards.push(position);
+            }
+
+            const safeX = Math.max(5, Math.min(position.x, 95));
+            const safeY = Math.max(5, Math.min(position.y, 75));
 
             card.style.left = safeX + '%';
             card.style.top = safeY + '%';
@@ -1520,8 +1711,21 @@ class Level1Handler extends BaseLevelHandler {
             const floatDuration = 3 + Math.random() * 4;
             card.style.animation = `float ${floatDuration}s ease-in-out infinite`;
 
-            // Обработчики событий
-            card.addEventListener('click', () => this.checkSelectedTime(time));
+            // Обработчики drag & drop событий
+            card.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', time.toString());
+                card.style.opacity = '0.5';
+                card.style.transform = 'scale(1.05)';
+                card.style.cursor = 'grabbing';
+            });
+
+            card.addEventListener('dragend', (e) => {
+                card.style.opacity = '1';
+                card.style.transform = 'scale(1)';
+                card.style.cursor = 'grab';
+            });
+
+            // Визуальные эффекты при наведении
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'scale(1.1)';
                 card.style.boxShadow = '0 15px 30px rgba(0,0,0,0.3)';
@@ -1543,6 +1747,35 @@ class Level1Handler extends BaseLevelHandler {
         this.addFloatAnimation();
     }
 
+    handleSelectTimeUp() {
+        // Время вышло, игрок не успел выбрать карточку
+        this.stopTimeLimit();
+
+        const accuracy = 0;
+        const calculatedScore = DataManager.calculateScore(
+            'level1',
+            '1-2',
+            accuracy,
+            0
+        );
+
+        this.showResult('Время вышло!', 'Не выбрана карточка', 'red');
+
+        if (this.core.handleAttemptResult) {
+            this.core.handleAttemptResult({
+                delta: this.actualDuration,
+                score: calculatedScore.finalScore,
+                accuracy: accuracy
+            });
+        }
+
+        setTimeout(() => {
+            if (this.core.getState && this.core.getState().attempts > 0) {
+                this.resetForNextAttempt();
+            }
+        }, 3000);
+    }
+
     addFloatAnimation() {
         const style = document.createElement('style');
         style.textContent = `
@@ -1556,38 +1789,7 @@ class Level1Handler extends BaseLevelHandler {
         document.head.appendChild(style);
     }
 
-    handleSelectTimeUp() {
-        // Время вышло, игрок не выбрал карточку
-        const accuracy = 0;
-        const calculatedScore = DataManager.calculateScore(
-            'level1',
-            '1-2',
-            accuracy,
-            0 // timeBonus
-        );
 
-        const message = 'Время вышло!';
-        const color = 'red';
-
-        this.showResult(message, 'Не выбрано', color);
-
-        if (this.core.handleAttemptResult) {
-            this.core.handleAttemptResult({
-                delta: 1,
-                score: calculatedScore.finalScore,
-                accuracy: accuracy
-            });
-        }
-
-        // Сохранение прогресса
-        // Сохранение прогресса происходит через gameCore.js
-
-        setTimeout(() => {
-            if (this.core.getState && this.core.getState().attempts > 0) {
-                this.resetForNextAttempt();
-            }
-        }, 3000);
-    }
 
     checkSelectedTime(selectedTime) {
         // Останавливаем таймер
@@ -1629,11 +1831,6 @@ class Level1Handler extends BaseLevelHandler {
             message = `Попробуйте еще! ${accuracy.toFixed(1)}% точности!`;
         }
 
-        if (timeBonus > 1.0) {
-            const bonusPercent = Math.round((timeBonus - 1.0) * 100);
-            message += ` (+${bonusPercent}% за скорость)`;
-        }
-
         this.showResult(message, `Отклонение: ${delta.toFixed(1)} сек`, color);
 
         if (this.core.handleAttemptResult) {
@@ -1645,7 +1842,6 @@ class Level1Handler extends BaseLevelHandler {
             });
         }
 
-        // Сохранение прогресса
         // Сохранение прогресса происходит через gameCore.js
 
         setTimeout(() => {
@@ -1653,6 +1849,46 @@ class Level1Handler extends BaseLevelHandler {
                 this.resetForNextAttempt();
             }
         }, 3000);
+    }
+
+    lockInterface() {
+        // Блокируем все карточки времени
+        this.timeCards.forEach(card => {
+            card.draggable = false;
+            card.style.cursor = 'not-allowed';
+            card.style.opacity = '0.6';
+            card.classList.add('disabled');
+        });
+
+        // Блокируем контейнер перетаскивания
+        const dropTarget = document.getElementById('drop-target');
+        if (dropTarget) {
+            dropTarget.style.pointerEvents = 'none';
+            dropTarget.style.opacity = '0.7';
+            dropTarget.classList.add('disabled');
+        }
+
+    }
+
+
+    unlockInterface() {
+        // Разблокируем все карточки времени
+        this.timeCards.forEach(card => {
+            card.draggable = true;
+            card.style.cursor = 'grab';
+            card.style.opacity = '1';
+            card.classList.remove('disabled');
+        });
+
+        // Разблокируем контейнер перетаскивания
+        const dropTarget = document.getElementById('drop-target');
+        if (dropTarget) {
+            dropTarget.style.pointerEvents = 'auto';
+            dropTarget.style.opacity = '1';
+            dropTarget.classList.remove('disabled');
+        }
+
+        this.selectionMade = false;
     }
 
     // ========== ПОДУРОВЕНЬ 1-3: ДВА ИНТЕРВАЛА ==========
@@ -1829,7 +2065,6 @@ class Level1Handler extends BaseLevelHandler {
     // ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
     handleLightbulbClick(index) {
         // Обработчик кликов по лампочкам
-        console.log(`Клик по лампочке ${index}`);
     }
 
     resetForNextAttempt() {
@@ -1838,8 +2073,12 @@ class Level1Handler extends BaseLevelHandler {
 
         // Очищаем все созданные элементы
         const container = document.getElementById('gameArea') || document.body;
-        const existingElements = container.querySelectorAll('.input-container, .time-cards-container, .lightbulbs-container, .time-limit-display');
+        const existingElements = container.querySelectorAll('.input-container, .time-cards-container, .lightbulbs-container, .time-limit-display, .drop-target');
         existingElements.forEach(el => el.remove());
+
+        // Сбрасываем состояние drag-and-drop
+        this.selectionMade = false;
+        this.unlockInterface();
 
         // Создаем лампочки заново
         this.createLightbulbs();
@@ -2050,9 +2289,31 @@ class Level2Handler extends BaseLevelHandler {
                 y: rect.top - containerRect.top
             };
 
-            // Запускаем движение
+            // Сразу перемещаем лампочку на новую позицию
+            this.moveBulbToNewPosition(lightbulb);
+
+            // Запускаем непрерывное движение
             this.moveBulb(lightbulb);
         });
+    }
+
+    moveBulbToNewPosition(lightbulb) {
+        const container = lightbulb.container.parentElement;
+        const containerRect = container.getBoundingClientRect();
+
+        // Генерируем новую позицию в пределах контейнера
+        const maxX = containerRect.width - 150;
+        const maxY = containerRect.height - 150;
+
+        if (maxX > 0 && maxY > 0) {
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+
+            lightbulb.container.style.position = 'absolute';
+            lightbulb.container.style.left = newX + 'px';
+            lightbulb.container.style.top = newY + 'px';
+            lightbulb.container.style.zIndex = '10';
+        }
     }
 
     moveBulb(lightbulb) {
@@ -2065,19 +2326,8 @@ class Level2Handler extends BaseLevelHandler {
                 return;
             }
 
-            // Генерируем новую позицию в пределах контейнера
-            const maxX = containerRect.width - 150;
-            const maxY = containerRect.height - 150;
-
-            if (maxX > 0 && maxY > 0) {
-                const newX = Math.random() * maxX;
-                const newY = Math.random() * maxY;
-
-                lightbulb.container.style.position = 'absolute';
-                lightbulb.container.style.left = newX + 'px';
-                lightbulb.container.style.top = newY + 'px';
-                lightbulb.container.style.zIndex = '10';
-            }
+            // Перемещаем лампочку на новую позицию
+            this.moveBulbToNewPosition(lightbulb);
         }, 2000);
 
         this.addTimer(moveInterval);
@@ -2094,6 +2344,9 @@ class Level2Handler extends BaseLevelHandler {
             const duration = Math.random() * (params.maxDuration - params.minDuration) + params.minDuration;
             this.lightDurations.push(Math.round(duration * 10) / 10);
         }
+
+        // Блокируем клики во время демонстрации
+        this.isDemonstrating = true;
 
         this.showMessage('Запоминайте время горения каждой лампочки...', 'blue');
 
@@ -2123,6 +2376,9 @@ class Level2Handler extends BaseLevelHandler {
         });
 
         const shuffleTimer = setTimeout(() => {
+            // Разблокируем клики после демонстрации
+            this.isDemonstrating = false;
+
             this.shuffleLightbulbs(); // Перемешиваем лампочки
             this.showTargetCard(); // Показываем целевую карточку
         }, currentTime + 1000);
@@ -2131,7 +2387,6 @@ class Level2Handler extends BaseLevelHandler {
     }
 
     shuffleLightbulbs() {
-        console.log('Перемешивание лампочек...');
 
         const container = this.lightbulbs[0].container.parentElement;
         const containerRect = container.getBoundingClientRect();
@@ -2153,7 +2408,6 @@ class Level2Handler extends BaseLevelHandler {
             height: containerRect.height - 180
         };
 
-        console.log(`Безопасная область: ${safeArea.width}x${safeArea.height}`);
 
         // Массив для отслеживания занятых позиций
         const occupiedPositions = [];
@@ -2200,7 +2454,6 @@ class Level2Handler extends BaseLevelHandler {
             newX += 40;
             newY += 40;
 
-            console.log(`Лампочка ${lightbulb.index}: позиция (${newX.toFixed(0)}, ${newY.toFixed(0)})`);
 
             // Применяем новую позицию
             lightbulb.container.style.position = 'absolute';
@@ -2456,7 +2709,6 @@ class Level2Handler extends BaseLevelHandler {
         this.interactiveIndex = params.interactiveIndex || 1;
         this.demonstrationIndex = params.demonstrationIndex || 0;
 
-        console.log('Паттерн:', this.pattern);
 
         this.showDemonstrationPattern();
     }
@@ -2492,15 +2744,18 @@ class Level2Handler extends BaseLevelHandler {
     }
 
     setupRecording() {
-        const container = document.getElementById('gameArea') || document.body;
+        // Находим контейнер лампочек
+        const bulbsContainer = document.querySelector('.lightbulbs-container');
 
         // Создаем кнопку для записи
         const buttonContainer = document.createElement('div');
         buttonContainer.style.textAlign = 'center';
-        buttonContainer.style.marginTop = '30px';
+        buttonContainer.style.marginTop = '20px';
+        buttonContainer.style.marginBottom = '10px';
 
         this.recordButton = document.createElement('button');
         this.recordButton.textContent = 'Начать запись паттерна';
+        this.recordButton.style.userSelect = 'none';
         this.recordButton.style.padding = '15px 30px';
         this.recordButton.style.fontSize = '18px';
         this.recordButton.style.background = '#9bd59d';
@@ -2513,7 +2768,7 @@ class Level2Handler extends BaseLevelHandler {
         this.recordButton.addEventListener('click', () => {
             if (!this.isRecording) {
                 this.startRecording();
-                this.recordButton.textContent = 'Запись... (кликайте на лампочку 2)';
+                this.recordButton.textContent = 'Запись... (двойной клик на лампочку 2)';
                 this.recordButton.style.background = '#d19e9a';
             } else {
                 this.stopRecording();
@@ -2522,11 +2777,12 @@ class Level2Handler extends BaseLevelHandler {
         });
 
         buttonContainer.appendChild(this.recordButton);
-        container.appendChild(buttonContainer);
+        bulbsContainer.appendChild(buttonContainer);
 
         // Добавляем подсказку
         const hint = document.createElement('div');
-        hint.textContent = 'Нажимайте и удерживайте на лампочке 2, чтобы записать сегменты паттерна';
+        hint.textContent = 'Двойной клик на лампочке 2, чтобы записать сегменты паттерна';
+        hint.style.userSelect = 'none';
         hint.style.textAlign = 'center';
         hint.style.marginTop = '15px';
         hint.style.color = '#666';
@@ -2543,33 +2799,34 @@ class Level2Handler extends BaseLevelHandler {
         // Устанавливаем обработчики для интерактивной лампочки
         const interactiveBulb = this.lightbulbs[this.interactiveIndex];
         if (interactiveBulb) {
-            let pressStartTime = 0;
-
-            const handleMouseDown = () => {
+            const handleDoubleClick = () => {
                 if (this.isRecording) {
-                    pressStartTime = Date.now();
-                    this.setLightbulbState(this.interactiveIndex, true, 'green');
+                    // Переключаем состояние лампочки
+                    const isCurrentlyOn = interactiveBulb.container.querySelector('svg').classList.contains('on');
+
+                    if (!isCurrentlyOn) {
+                        // Включаем лампочку - начало сегмента
+                        this.setLightbulbState(this.interactiveIndex, true, 'green');
+                        this.segmentStartTime = Date.now();
+                    } else {
+                        // Выключаем лампочку - конец сегмента
+                        if (this.segmentStartTime) {
+                            const duration = (Date.now() - this.segmentStartTime) / 1000;
+                            this.recordedPattern.push(Math.round(duration * 10) / 10);
+                            this.setLightbulbState(this.interactiveIndex, false);
+
+                            // Показываем обратную связь
+                            this.showMessage(`Сегмент ${this.recordedPattern.length}: ${duration.toFixed(1)} сек`, 'green');
+                            this.segmentStartTime = null;
+                        }
+                    }
                 }
             };
 
-            const handleMouseUp = () => {
-                if (this.isRecording && pressStartTime > 0) {
-                    const duration = (Date.now() - pressStartTime) / 1000;
-                    this.recordedPattern.push(Math.round(duration * 10) / 10);
-                    this.setLightbulbState(this.interactiveIndex, false);
-                    pressStartTime = 0;
-
-                    // Показываем обратную связь
-                    console.log(`Записан сегмент: ${duration.toFixed(1)} сек`);
-                    this.showMessage(`Сегмент ${this.recordedPattern.length}: ${duration.toFixed(1)} сек`, 'green');
-                }
-            };
-
-            interactiveBulb.container.addEventListener('mousedown', handleMouseDown);
-            interactiveBulb.container.addEventListener('mouseup', handleMouseUp);
+            interactiveBulb.container.addEventListener('dblclick', handleDoubleClick);
 
             // Сохраняем для удаления
-            this.recordingHandlers = { handleMouseDown, handleMouseUp };
+            this.recordingHandlers = { handleDoubleClick };
         }
     }
 
@@ -2580,15 +2837,18 @@ class Level2Handler extends BaseLevelHandler {
         if (this.recordingHandlers) {
             const interactiveBulb = this.lightbulbs[this.interactiveIndex];
             if (interactiveBulb) {
-                interactiveBulb.container.removeEventListener('mousedown', this.recordingHandlers.handleMouseDown);
-                interactiveBulb.container.removeEventListener('mouseup', this.recordingHandlers.handleMouseUp);
+                if (this.recordingHandlers.handleDoubleClick) {
+                    interactiveBulb.container.removeEventListener('dblclick', this.recordingHandlers.handleDoubleClick);
+                }
             }
         }
+
+        // Выключаем лампочку, если она была включена
+        this.setLightbulbState(this.interactiveIndex, false);
+        this.segmentStartTime = null;
     }
 
     checkPattern() {
-        console.log('Оригинал:', this.pattern);
-        console.log('Записано:', this.recordedPattern);
 
         // Сравниваем паттерны
         let correctSegments = 0;
@@ -2677,23 +2937,95 @@ class Level2Handler extends BaseLevelHandler {
                 }, 500);
             }
         } else if (type === 'find_duration') {
-            if (index === this.targetIndex) {
-                // Правильно! Останавливаем таймеры
-                this.stopTimeLimit();
-                this.stopSelectionTimer();
+            // Блокируем клики во время демонстрации времени горения
+            if (this.isDemonstrating) {
+                this.showMessage('Подождите окончания демонстрации!', 'blue');
+                return;
+            }
+
+            // Останавливаем таймер выбора при любом выборе
+            this.stopSelectionTimer();
+
+            // Подсвечиваем выбранную лампочку красным, если неправильная
+            if (index !== this.targetIndex) {
+                this.setLightbulbState(index, true, '#bf635d');
+            }
+
+            // Всегда подсвечиваем правильную лампочку зеленым
+            setTimeout(() => {
+                this.setLightbulbState(this.targetIndex, true, '#648364');
+
+                // Убираем карточку с заданием
                 if (this.cardContainer) {
                     this.cardContainer.remove();
                 }
-                this.showSuccess();
-            } else {
-                // Неправильно
-                this.setLightbulbState(index, true, '#bf635d');
+
+                // Показываем результат
+                if (index === this.targetIndex) {
+                    this.showMessage('Отлично!', 'green');
+                } else {
+                    this.showMessage('Неправильно. Правильная лампочка выделена зеленым.', '#bf635d');
+                }
+
+                // Завершаем попытку через 2 секунды
                 setTimeout(() => {
-                    this.setLightbulbState(index, false);
-                    this.showMessage('Неверно! Попробуйте еще раз.', '#bf635d');
-                }, 500);
-            }
+                    this.showResultForFindDuration(index === this.targetIndex);
+                }, 2000);
+            }, 500);
         }
+    }
+
+    showResultForFindDuration(isCorrect) {
+        const accuracy = isCorrect ? 100 : 0;
+        const sublevelId = '2-2';
+
+        const timeBonus = this.timeLimit > 0 ? 1.0 + (this.timeLimit * 0.02) : 1.0;
+        const calculatedScore = DataManager.calculateScore(
+            'level2',
+            sublevelId,
+            accuracy,
+            timeBonus
+        );
+
+        const maxScore = DataManager.getMaxScoreForSublevel('level2', sublevelId);
+        const percentage = maxScore > 0 ? Math.round((calculatedScore.finalScore / maxScore) * 100) : 0;
+
+        let message = '';
+        let color = 'var(--text-dark)';
+
+        if (isCorrect) {
+            message = 'Отлично!';
+            color = 'green';
+        } else {
+            message = 'Неправильно. Попробуйте еще раз!';
+            color = '#bf635d';
+        }
+
+        // Убираем размытие со всех лампочек
+        this.lightbulbs.forEach((lightbulb) => {
+            lightbulb.container.style.filter = 'none';
+            lightbulb.container.style.opacity = '1';
+        });
+
+        this.isBlurred = false;
+
+        // Для озвучивания через aria-live оставляем только основное сообщение без дублирующих слов
+        this.showResult(message, '', color);
+
+        if (this.core.handleAttemptResult) {
+            this.core.handleAttemptResult({
+                delta: isCorrect ? 0 : 1,
+                score: calculatedScore.finalScore,
+                accuracy: accuracy,
+                timeBonus: timeBonus
+            });
+        }
+
+        setTimeout(() => {
+            if (this.core.getState && this.core.getState().attempts > 0) {
+                this.resetForNextAttempt();
+            }
+        }, 3000);
     }
 
     showSuccess() {
@@ -2735,10 +3067,10 @@ class Level2Handler extends BaseLevelHandler {
 
         message = 'Отлично!';
 
-        if (timeBonus > 1.0) {
+/*        if (timeBonus > 1.0) {
             const bonusPercent = Math.round((timeBonus - 1.0) * 100);
             message += ` (+${bonusPercent}% за скорость)`;
-        }
+        }*/
 
         // Убираем размытие и подсвечиваем правильную лампочку
         this.lightbulbs.forEach((lightbulb, index) => {
@@ -2754,7 +3086,8 @@ class Level2Handler extends BaseLevelHandler {
 
         this.isBlurred = false;
 
-        this.showResult(message, 'Правильно!', color);
+        // В aria-live оставляем только основное сообщение без дублирующего \"Правильно!\"
+        this.showResult(message, '', color);
 
         if (this.core.handleAttemptResult) {
             this.core.handleAttemptResult({
@@ -2813,6 +3146,7 @@ class Level2Handler extends BaseLevelHandler {
 
         // Сбрасываем состояние
         this.isBlurred = false;
+        this.isDemonstrating = false; // Сбрасываем флаг демонстрации
         this.targetIndex = 0;
         this.targetPattern = [];
         this.lightDurations = [];
@@ -2867,8 +3201,8 @@ class Level3Handler extends BaseLevelHandler {
         bulbsContainer.className = 'lightbulbs-container';
         bulbsContainer.style.display = 'flex';
         bulbsContainer.style.justifyContent = 'center';
-        bulbsContainer.style.gap = '30px';
-        bulbsContainer.style.margin = '40px 0';
+        bulbsContainer.style.gap = '20px';
+        bulbsContainer.style.margin = '20px 0';
         bulbsContainer.style.flexWrap = 'wrap';
 
         this.lightbulbs = [];
@@ -2878,13 +3212,14 @@ class Level3Handler extends BaseLevelHandler {
             bulbContainer.className = 'lightbulb-container bulb-container';
             bulbContainer.dataset.index = i;
             bulbContainer.style.position = 'relative';
+            bulbContainer.style.padding = '10px';
 
             // Определяем цвет для лампочки
             const colors = params.colors || ['#e8aaaa', '#87ae87', '#5e5e91', '#fafac3'];
             const color = colors[i % colors.length];
 
             // Создаем SVG лампочки с цветом
-            const svg = this.createLightbulbSVG('off', 'medium', color);
+            const svg = this.createLightbulbSVG('off', 'small', color);
 
             bulbContainer.appendChild(svg);
 
@@ -2945,7 +3280,6 @@ class Level3Handler extends BaseLevelHandler {
             });
         }
 
-        console.log('Последовательность:', this.sequence);
 
         this.showMessage('Смотрите внимательно! Запоминайте последовательность...', '#4a6fa5');
         this.playSequence();
@@ -3161,8 +3495,6 @@ class Level3Handler extends BaseLevelHandler {
         this.equation.answer = Math.round(this.equation.answer * 10) / 10;
         this.correctAnswer = this.equation.answer;
 
-        console.log('Сгенерировано уравнение:', this.equation);
-        console.log('Времена горения лампочек:', this.lightDurations);
     }
 
     showEquation() {
@@ -3172,20 +3504,21 @@ class Level3Handler extends BaseLevelHandler {
         const equationContainer = document.createElement('div');
         equationContainer.className = 'equation-container';
         equationContainer.style.textAlign = 'center';
-        equationContainer.style.padding = '30px';
+        equationContainer.style.padding = '15px';
         equationContainer.style.background = 'var(--primary-color)';
-        equationContainer.style.borderRadius = '20px';
-        equationContainer.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
-        equationContainer.style.maxWidth = '600px';
+        equationContainer.style.borderRadius = '15px';
+        equationContainer.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+        equationContainer.style.maxWidth = '500px';
+        equationContainer.style.margin = '10px auto';
 
         // Показываем уравнение
         const equationText = document.createElement('div');
         equationText.innerHTML = `
-            <h3 style="color: #648364; margin-bottom: 15px; font-size: 20px;">Математическая задача:</h3>
-            <div style="font-size: 28px; font-weight: bold; color: #333; margin: 20px 0;">
+            <h3 style="color: #648364; margin-bottom: 10px; font-size: 18px;">Математическая задача:</h3>
+            <div style="font-size: 22px; font-weight: bold; color: #333; margin: 10px 0;">
                 ${this.equation.text}
             </div>
-            <div style="font-size: 16px; color: #666; margin-bottom: 25px;">
+            <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
                 Используйте значения времени, которые вы видели на лампочках
             </div>
         `;
@@ -3193,24 +3526,24 @@ class Level3Handler extends BaseLevelHandler {
         // Создаем поле для ввода ответа
         const inputContainer = document.createElement('div');
         inputContainer.className = 'input-container';
-        inputContainer.style.marginTop = '20px';
+        inputContainer.style.marginTop = '10px';
 
         const inputWrapper = document.createElement('div');
         inputWrapper.style.display = 'flex';
         inputWrapper.style.justifyContent = 'center';
         inputWrapper.style.alignItems = 'center';
-        inputWrapper.style.gap = '15px';
+        inputWrapper.style.gap = '10px';
         inputWrapper.style.flexWrap = 'wrap';
 
         const input = document.createElement('input');
         input.type = 'number';
         input.step = '0.1';
         input.min = '0';
-        input.placeholder = 'Введите ответ (секунды)';
-        input.style.padding = '15px 20px';
-        input.style.fontSize = '18px';
-        input.style.borderRadius = '10px';
-        input.style.width = '250px';
+        input.placeholder = 'Введите ответ';
+        input.style.padding = '10px 15px';
+        input.style.fontSize = '16px';
+        input.style.borderRadius = '8px';
+        input.style.width = '180px';
         input.style.textAlign = 'center';
         input.style.outline = 'none';
 
@@ -3225,13 +3558,13 @@ class Level3Handler extends BaseLevelHandler {
         });
 
         const submitBtn = document.createElement('button');
-        submitBtn.textContent = 'Проверить ответ';
-        submitBtn.style.padding = '15px 30px';
-        submitBtn.style.fontSize = '18px';
+        submitBtn.textContent = 'Проверить';
+        submitBtn.style.padding = '10px 20px';
+        submitBtn.style.fontSize = '16px';
         submitBtn.style.background = 'linear-gradient(135deg, #9c27b0, #7b1fa2)';
         submitBtn.style.color = 'white';
         submitBtn.style.border = 'none';
-        submitBtn.style.borderRadius = '10px';
+        submitBtn.style.borderRadius = '8px';
         submitBtn.style.cursor = 'pointer';
         submitBtn.style.transition = 'transform 0.2s, box-shadow 0.2s';
         submitBtn.style.fontWeight = 'bold';
@@ -3411,10 +3744,10 @@ class Level3Handler extends BaseLevelHandler {
         // Добавляем информацию о точности
         message += ` (Точность: ${accuracy.toFixed(1)}%)`;
 
-        if (timeBonus > 1.0) {
+/*        if (timeBonus > 1.0) {
             const bonusPercent = Math.round((timeBonus - 1.0) * 100);
             message += ` +${bonusPercent}% за скорость`;
-        }
+        }*/
 
         this.showResult(message, `Отклонение: ${delta.toFixed(1)} сек`, color);
 
@@ -3707,13 +4040,7 @@ class Level4Handler extends BaseLevelHandler {
             }
         }
 
-        // Генерируем путь
-        this.generatePath();
-
-        console.log(`[Лабиринт] Старт: (${this.playerPosition.x}, ${this.playerPosition.y})`);
-        console.log(`[Лабиринт] Цель: (${this.targetPosition.x}, ${this.targetPosition.y})`);
-        console.log(`[Лабиринт] Длина оптимального пути: ${this.path.length} шагов`);
-        console.log(`[Лабиринт] Путь: ${this.path.map(p => `(${p.x},${p.y})`).join(' → ')}`);
+        // Путь будет сгенерирован в startMazeMemory после установки playerPosition
 
         // Рисуем лабиринт
         const mazeContainer = document.createElement('div');
@@ -3818,9 +4145,13 @@ class Level4Handler extends BaseLevelHandler {
         // Показываем все клетки с небольшой задержкой для анимации
         if (this.mazeCells) {
             this.mazeCells.forEach((cellData, index) => {
-                setTimeout(() => {
-                    cellData.element.style.opacity = '1';
-                }, index * 20); // Постепенное появление
+                if (cellData && cellData.element) {
+                    setTimeout(() => {
+                        if (cellData.element) {
+                            cellData.element.style.opacity = '1';
+                        }
+                    }, index * 20); // Постепенное появление
+                }
             });
         }
     }
@@ -3901,6 +4232,19 @@ class Level4Handler extends BaseLevelHandler {
     startMazeMemory() {
         const params = this.sublevel.params;
         const duration = params.lightbulbDuration || 3.0;
+
+        // Устанавливаем позицию игрока (если еще не установлена)
+        if (!this.playerPosition) {
+            this.playerPosition = {x: 0, y: 0};
+        }
+
+        // Генерируем путь от старта к цели
+        this.generatePath();
+
+        console.log(`[Лабиринт] Старт: (${this.playerPosition.x}, ${this.playerPosition.y})`);
+        console.log(`[Лабиринт] Цель: (${this.targetPosition.x}, ${this.targetPosition.y})`);
+        console.log(`[Лабиринт] Длина оптимального пути: ${this.path.length} шагов`);
+        console.log(`[Лабиринт] Путь: ${this.path.map(p => `(${p.x},${p.y})`).join(' → ')}`);
 
         // Очищаем предыдущие обработчики клавиш
         if (this.keyPressHandler) {
@@ -4151,28 +4495,56 @@ class Level4Handler extends BaseLevelHandler {
 
     // ОБЩИЕ МЕТОДЫ ДЛЯ LEVEL 4
     resetForNextAttempt() {
-        const container = document.getElementById('gameArea') || document.body;
-        container.innerHTML = '';
+        // Очищаем предыдущие обработчики клавиш
+        if (this.keyPressHandler) {
+            document.removeEventListener('keydown', this.keyPressHandler);
+            this.keyPressHandler = null;
+        }
 
-        // Сбрасываем состояние
-        this.maze = [];
+        // Удаляем подсказку управления
+        const hint = document.getElementById('controls-hint');
+        if (hint && hint.parentNode) {
+            hint.parentNode.removeChild(hint);
+        }
+
+        // Сбрасываем состояние игрока (но сохраняем лабиринт)
         this.playerPosition = {x: 0, y: 0};
-        this.targetPosition = {x: 0, y: 0};
-        this.path = [];
         this.playerSteps = 0;
-        this.mazeContainer = null;
-        this.mazeCells = null;
 
         // Очищаем таймеры
         this.clearTimers();
         this.stopTimeLimit();
 
-        // Создаем лабиринт заново
-        this.createLightbulbs();
+        // Сбрасываем визуальное состояние лабиринта
+        this.resetMazeVisualState();
 
         if (this.core.uiManager) {
             this.core.uiManager.setActionButton('СТАРТ', () => this.beginSequence());
             this.core.uiManager.showHint(this.sublevel.description);
+        }
+    }
+
+    resetMazeVisualState() {
+        // Сбрасываем визуальное состояние клеток лабиринта
+        if (this.mazeCells) {
+            this.mazeCells.forEach(cellData => {
+                if (cellData && cellData.element) {
+                    const cell = cellData.element;
+                    // Сбрасываем все клетки к начальному состоянию
+                    cell.textContent = '';
+                    cell.style.background = '#f5f5f5';
+                    cell.style.transform = 'none';
+                    cell.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+                    cell.classList.remove('drag-over', 'disabled');
+                }
+            });
+
+            // Устанавливаем начальную позицию игрока
+            const startCell = this.mazeCells.find(c => c && c.x === 0 && c.y === 0);
+            if (startCell && startCell.element) {
+                startCell.element.textContent = '🚶';
+                startCell.element.style.background = '#85c387';
+            }
         }
     }
 }

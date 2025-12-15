@@ -2,16 +2,18 @@
 .carousel-container {
     position: relative;
     max-width: 800px;
-    margin: 30px auto;
+    margin: 40px;
     overflow: hidden;
     border-radius: 20px;
-    min-height: 500px; /* Увеличиваем высоту */
+    min-height: 500px;
 }
 
 .carousel-track {
     display: flex;
     transition: transform 0.5s ease-in-out;
     height: 100%;
+    will-change: transform;
+    contain: layout style;
 }
 
 .carousel-card {
@@ -27,14 +29,14 @@
     background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 30px; /* Уменьшаем отступы */
+    padding: 30px;
     margin: 0 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     width: 100%;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Полная высота */
-    overflow: hidden; /* Скрываем переполнение */
+    height: 100%;
+    overflow: hidden;
+    contain: layout style;
 }
 
 /* Улучшенные стрелки навигации */
@@ -88,6 +90,7 @@
     position: relative;
     z-index: 3;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    will-change: transform, background, color;
 }
 
 .carousel-arrow:hover {
@@ -99,6 +102,19 @@
 
 .carousel-arrow:active {
     transform: scale(0.95);
+}
+
+.carousel-arrow.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.carousel-arrow.disabled:hover {
+    background: rgba(255,255,255,0.9);
+    color: var(--primary-color);
+    transform: scale(1);
+    box-shadow: none;
 }
 
 /* Обновленные стили карточек */
@@ -148,6 +164,27 @@
     max-height: 280px; /* Ограничиваем высоту */
     padding-right: 8px;
     padding-bottom: 5px;
+    contain: layout;
+}
+
+/* Скелетон для контейнера уровней */
+.compact-selection.loading {
+    position: relative;
+    background: rgba(0,0,0,0.02);
+    border-radius: 10px;
+}
+
+.compact-selection.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    border-radius: 10px;
 }
 
 /* Стили для скроллбара */
@@ -239,6 +276,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    will-change: transform, box-shadow;
 }
 
 .sublevel-btn:hover {
@@ -289,6 +327,32 @@
     max-height: 280px; /* Такая же высота как у compact-selection */
     overflow-y: auto; /* Добавляем прокрутку */
     padding-right: 8px;
+    contain: layout;
+}
+
+/* Скелетон для контейнера тренировки */
+.training-selection.loading {
+    position: relative;
+    background: rgba(0,0,0,0.02);
+    border-radius: 10px;
+}
+
+.training-selection.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+    border-radius: 10px;
+}
+
+.training-selection.loading .selection-group,
+.training-selection.loading .training-preview {
+    visibility: hidden;
 }
 
 .training-selection::-webkit-scrollbar {
@@ -378,12 +442,39 @@
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
     padding: 30px;
-    margin: 20px auto;
     max-width: 800px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    min-height: 500px; /* Увеличиваем высоту */
+    min-height: 715px;
+    height: 715px;
     display: flex;
     flex-direction: column;
+    transform: translateY(-50px);
+    contain: layout style;
+}
+
+/* Скелетон загрузки для панели пользователя */
+.user-panel.loading .user-info,
+.user-panel.loading .stats-grid {
+    opacity: 0;
+}
+
+.user-panel.loading::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+    background-size: 200% 100%;
+    animation: loading-shimmer 2s infinite;
+    border-radius: 16px;
+    z-index: 1;
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
 }
 
 .user-info {
@@ -458,7 +549,7 @@
     display: flex;
     gap: 15px;
     justify-content: center;
-    margin: 30px auto;
+    margin: 10px;
     flex-wrap: wrap;
     max-width: 800px;
 }

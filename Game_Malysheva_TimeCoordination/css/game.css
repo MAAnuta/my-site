@@ -507,3 +507,65 @@
     0%, 100% { transform: translateX(-50%) scale(1); }
     50% { transform: translateX(-50%) scale(1.15); }
 }
+
+/* Стили для drag & drop в подуровне 1-2 */
+.drop-target {
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.drop-target.drag-over {
+    border-color: #4a7c4a !important;
+    background: rgba(74, 124, 74, 0.3) !important;
+    transform: translateX(-50%) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(74, 124, 74, 0.4) !important;
+}
+
+.drop-target.success {
+    border-color: #4caf50 !important;
+    background: rgba(76, 175, 80, 0.3) !important;
+    animation: success-pulse 0.6s ease-out;
+}
+
+.drop-target.error {
+    border-color: #f44336 !important;
+    background: rgba(244, 67, 54, 0.3) !important;
+    animation: error-shake 0.6s ease-out;
+}
+
+.time-card[draggable="true"] {
+    cursor: grab;
+}
+
+.time-card[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.time-card.dragging {
+    opacity: 0.5;
+    transform: scale(1.05);
+    z-index: 1002;
+}
+
+.time-card.disabled {
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
+.drop-target.disabled {
+    pointer-events: none !important;
+    opacity: 0.7 !important;
+}
+
+/* Анимации для зоны перетаскивания */
+@keyframes success-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes error-shake {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    25% { transform: translateX(-50%) translateX(-5px) scale(1); }
+    75% { transform: translateX(-50%) translateX(5px) scale(1); }
+}
