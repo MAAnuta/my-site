@@ -27,7 +27,15 @@ body {
     height: 100vh;
     color: var(--text-dark);
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
 }
 
 .container {
@@ -39,12 +47,28 @@ body {
     height: 700px;
 }
 
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+        height: auto;
+        min-height: 100vh;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+}
+
 /* Главная страница */
 .auth-panel {
     position: relative;
     width: 100%;
     margin: 0 auto 4rem;
-    max-width: 40.625rem; /* 650px */
+    max-width: 40.625rem;
     padding: 3rem 2.5rem;
     border-radius: 1.5rem;
     background: rgba(255, 255, 255, 0.05);
@@ -102,7 +126,7 @@ body {
 /* Кнопки */
 .btn {
     background-color: var(--primary-color);
-    color: var(--text-primary);
+    color: var(--text-dark);
     border: none;
     border-radius: calc(var(--border-radius) / 2);
     padding: 12px 24px;
@@ -130,18 +154,22 @@ body {
 
 .btn.btn-primary {
     background-color: var(--text-dark);
+    color: var(--text-primary);
 }
 
 .btn.btn-secondary {
     background-color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 .btn.btn-tertiary {
     background-color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 .btn.btn-danger {
     background-color: var(--primary-color);
+    color: var(--text-dark);
 }
 
 .btn.btn-small {
@@ -153,7 +181,7 @@ body {
     padding: 16px 32px;
     font-size: 20px;
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--text-primary);
 }
 
 .btn.active {
@@ -294,7 +322,6 @@ body {
     }
 }
 
-/* Контейнер для лампочек уровня 1 */
 .lightbulbs-container {
     display: flex;
     flex-wrap: wrap;
@@ -304,7 +331,6 @@ body {
     max-width: 850px;
 }
 
-/* Отвлекающие элементы для уровня 1 */
 .distraction-lightbulb {
     position: absolute;
     z-index: 5;
@@ -714,14 +740,6 @@ body {
     }
 }
 
-/* Анимация мышки для уровня 1 */
-.mouse-animation {
-    position: absolute;
-    font-size: 40px;
-    z-index: 10;
-    transition: left 0.3s ease-in-out;
-}
-
 .loading-text {
     font-size: 20px;
     font-weight: 600;
@@ -1114,7 +1132,7 @@ body {
     100% { transform: translate(-50%, -50%) scale(0.95) translateY(10px); }
 }
 
-/* Анимации для перемешивания лампочек - четкие */
+/* Анимации для перемешивания лампочек */
 .lightbulb-clone {
     position: absolute;
     z-index: 1000;
@@ -1146,7 +1164,6 @@ body {
     100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-/* В файле style.css добавьте: */
 @keyframes ray-pulse {
     0% {
         opacity: 0.3;
@@ -1204,7 +1221,6 @@ body {
     100% { transform: scale(1); color: var(--warning-color); }
 }
 
-/* Исправляем background с множественными значениями */
 .auth-page {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     min-height: 100vh;
@@ -1215,7 +1231,6 @@ body {
     min-height: 100vh;
 }
 
-/* Исправляем border с множественными значениями */
 .avatar-option {
     border: 3px solid transparent;
 }
@@ -1228,12 +1243,10 @@ body {
     border: 4px solid var(--success-color);
 }
 
-/* Убираем неправильные фильтры */
 .lightbulb-clone {
     filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
 }
 
-/* Исправляем box-shadow с цветами */
 .btn {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -1242,7 +1255,6 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Исправляем неправильные значения трансформации */
 @keyframes float {
     0%, 100% {
         transform: translate(0, 0) scale(1);
@@ -1258,7 +1270,6 @@ body {
     }
 }
 
-/* Убираем неправильные значения opacity в анимациях */
 @keyframes distraction-pulse {
     0%, 100% {
         opacity: 0.5;
@@ -1277,7 +1288,6 @@ body {
     }
 }
 
-/* ===== СТИЛИ ДЛЯ ИГРЫ ЛАМПОЧКИ ===== */
 /* Плавающие карточки с временем */
 .time-cards-container {
     position: relative;
@@ -1424,7 +1434,6 @@ body {
     transform: scale(1.05);
 }
 
-/* Стили для Level 3 */
 /* Уравнения и вопросы */
 .equation-display, .question-display {
     font-size: 24px;
@@ -1482,7 +1491,6 @@ body {
     box-shadow: 0 0 15px rgba(220, 82, 82, 0.8);
 }
 
-/* ===== СТИЛИ ДЛЯ LEVEL 4 ===== */
 /* Лабиринт */
 .maze-container {
     display: inline-grid;
@@ -1539,7 +1547,97 @@ body {
     background: rgba(76, 175, 80, 0.3);
 }
 
-/* Адаптивность для лампочек */
+/* Адаптивность для небольших ноутбуков (1024px - 1366px) */
+@media (max-width: 1366px) and (min-width: 769px) {
+    .game-container {
+        min-height: 100vh;
+    }
+
+    .game-header {
+        padding: 12px 20px;
+    }
+
+    .game-header .header-info {
+        gap: 12px;
+        font-size: 14px;
+    }
+
+    .game-header .header-info span {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .game-area {
+        padding: 20px;
+        min-height: calc(100vh - 180px);
+    }
+
+    .lightbulbs-container {
+        gap: 25px;
+        margin: 25px 0;
+        min-height: 350px;
+    }
+
+    .lightbulb {
+        width: 100px;
+        height: 100px;
+    }
+
+    .lightbulb-svg {
+        width: 100px;
+        height: 100px;
+    }
+
+    .time-cards-container {
+        height: 280px;
+        margin-top: 20px;
+    }
+
+    .time-card {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+
+    .equation-display, .question-display {
+        font-size: 20px;
+        padding: 18px;
+        margin-top: 20px;
+    }
+
+    .answer-options {
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .answer-options button {
+        padding: 12px 18px;
+        font-size: 15px;
+        min-width: 90px;
+    }
+
+    .maze-container {
+        padding: 8px;
+    }
+
+    .maze-cell {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .input-container {
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .input-container input {
+        padding: 8px;
+        font-size: 14px;
+        width: 90px;
+    }
+}
+
+/* Адаптивность для мобильных для неигровых элементов */
 @media (max-width: 768px) {
     .lightbulbs-container {
         gap: 10px;
@@ -1559,41 +1657,4 @@ body {
         padding: 10px 15px;
         font-size: 12px;
     }
-
-    .equation-display, .question-display {
-        font-size: 18px;
-        padding: 15px;
-    }
-
-    .answer-options button {
-        padding: 12px 16px;
-        font-size: 14px;
-        min-width: 80px;
-    }
-
-    .maze-container {
-        grid-template-columns: repeat(auto-fit, 30px);
-        grid-template-rows: repeat(auto-fit, 30px);
-    }
-
-    .maze-cell {
-        width: 30px;
-        height: 30px;
-        font-size: 16px;
-    }
-
-    .maze-player {
-        width: 25px;
-        height: 25px;
-    }
-
-    .maze-controls {
-        gap: 5px;
-    }
-
-    .maze-controls button {
-        padding: 8px 12px;
-        font-size: 16px;
-    }
 }
-

@@ -24,10 +24,7 @@
 
   <!-- Игровая область -->
   <div class="game-area" id="gameArea">
-    <div style="text-align: center; padding: 50px;">
-      <div class="loading-spinner"></div>
-      <p>Загрузка игры...</p>
-    </div>
+    <!-- Игровой контент подуровня будет добавлен скриптами LevelManager -->
   </div>
 
   <!-- Нижняя панель -->
@@ -44,20 +41,16 @@
 <script src="js/gameCore.js"></script>
 
 <script>
-  // Получить параметры из URL
   const urlParams = new URLSearchParams(window.location.search);
   const levelId = urlParams.get('level') || 'level1';
   let sublevelId = urlParams.get('sublevel') || '1-1';
   const gameMode = urlParams.get('mode') || 'classic';
 
-  // Преобразовать sublevelId в правильный формат (level-sublevel)
-  // Если sublevelId не содержит '-', добавляем номер уровня
   if (!sublevelId.includes('-')) {
     const levelNum = levelId.replace('level', '');
     sublevelId = `${levelNum}-${sublevelId}`;
   }
 
-  // Имена уровней для отображения
   const levelNames = {
     'level1': 'Измерение времени',
     'level2': 'Рабочая память',
@@ -65,21 +58,16 @@
     'level4': 'Стратегия и скорость'
   };
 
-  // Инициализация при загрузке страницы
   document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM загружен, начинаем инициализацию игры');
     console.log('Параметры:', { levelId, sublevelId, gameMode });
 
-    // Обновить информацию в заголовке
     const levelName = levelNames[levelId] || `Уровень ${levelId}`;
     const modeText = gameMode === 'training' ? 'Тренировка' : 'Классическая игра';
     document.getElementById('levelInfo').textContent = `${modeText}: ${levelName}`;
 
-    // Проверяем загрузку модулей
     setTimeout(() => {
-      console.log('Проверка загрузки модулей...');
 
-      // Проверяем ключевые модули
       const requiredModules = [
         { name: 'DataManager', module: DataManager },
         { name: 'BaseLevelHandler', module: BaseLevelHandler },
@@ -98,26 +86,23 @@
         return;
       }
 
-      console.log('✅ Все модули успешно загружены');
+      console.log('Все модули успешно загружены');
 
-      // Инициализируем игру
       try {
         const gameCore = new GameCore(gameMode);
         window.gameCore = gameCore;
 
         setTimeout(() => {
-          console.log('Запуск уровня...');
           const success = gameCore.init(levelId, sublevelId);
 
           if (!success) {
             console.error('Не удалось запустить уровень');
 
-            // Показать выбор в режиме тренировки
             if (gameMode === 'training' && gameCore.levelManager) {
               showTrainingLevels(gameCore, levelId);
             }
           } else {
-            console.log('✅ Уровень успешно запущен');
+            console.log('Уровень успешно запущен');
           }
         }, 100);
 
@@ -127,7 +112,6 @@
       }
     }, 500);
 
-    // Кнопка меню
     document.getElementById('menuBtn').addEventListener('click', () => {
       if (confirm('Вернуться в меню? Текущий прогресс будет сохранен.')) {
         if (window.gameCore) {
@@ -137,21 +121,19 @@
       }
     });
 
-    // Обработчик ошибок
     window.addEventListener('error', (event) => {
       console.error('Глобальная ошибка:', event.error);
       showLoadingError('Произошла ошибка', event.error?.message);
     });
   });
 
-  // Функция для показа ошибки
   function showLoadingError(message, details) {
     const gameArea = document.getElementById('gameArea');
     if (!gameArea) return;
 
     gameArea.innerHTML = `
             <div class="error-container">
-                <h2 style="color: #f44336;">⚠️ Ошибка</h2>
+                <h2 style="color: #f44336;">Ошибка</h2>
                 <p style="font-size: 18px; margin: 20px 0;">${message}</p>
                 ${details ? `<div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0;">
                     <pre style="font-size: 12px; color: #666;">${details}</pre>
@@ -170,7 +152,6 @@
         `;
   }
 
-  // Показать выбор уровней для тренировки
   function showTrainingLevels(gameCore, currentLevelId) {
     const gameArea = document.getElementById('gameArea');
     if (!gameArea || !gameCore.levelManager) return;
@@ -200,7 +181,6 @@
         `;
   }
 
-  // Запуск подуровня в режиме тренировки
   function startTrainingSublevel(levelId, sublevelId) {
     if (window.gameCore) {
       window.gameCore.levelManager.stopCurrentLevel();
@@ -208,13 +188,12 @@
     }
   }
 
-  // Обработчик перед закрытием
   window.addEventListener('beforeunload', () => {
     try {
       if (window.gameCore) {
         window.gameCore.cleanup();
       }
-      // Дополнительная очистка таймеров LevelManager
+
       if (window.LevelManager && window.LevelManager.currentInstance) {
         window.LevelManager.currentInstance.clearTimers();
       }

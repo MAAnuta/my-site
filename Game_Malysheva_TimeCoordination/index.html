@@ -65,7 +65,6 @@
 <script src="js/dataManager.js"></script>
 <script src="js/utils.js"></script>
 <script>
-  // Инициализация страницы авторизации
   document.addEventListener('DOMContentLoaded', () => {
     const playerNameInput = document.getElementById('playerName');
     const startGameBtn = document.getElementById('startGameBtn');
@@ -74,7 +73,6 @@
 
     let selectedAvatar = 0;
 
-    // Загрузить сохраненные данные игрока
     const savedPlayer = DataManager.getPlayer();
     if (savedPlayer) {
       if (savedPlayer.name) {
@@ -86,7 +84,6 @@
       }
     }
 
-    // Выбор аватарки
     avatarOptions.forEach(option => {
       option.addEventListener('click', () => {
         selectedAvatar = parseInt(option.dataset.avatar);
@@ -104,7 +101,6 @@
       });
     }
 
-    // Обработчик начала игры
     startGameBtn.addEventListener('click', () => {
       const name = playerNameInput.value.trim();
       if (!name) {
@@ -112,52 +108,41 @@
         return;
       }
 
-      // Проверить, что DataManager загружен
       if (typeof DataManager === 'undefined') {
         alert('Ошибка загрузки системы данных. Попробуйте перезагрузить страницу.');
         return;
       }
 
-      // Сохранить данные игрока
       const result = DataManager.savePlayer(name, selectedAvatar, true);
 
-      // Проверяем результат сохранения
       if (!result || !result.success) {
         const errorMessage = result?.error || 'Не удалось создать профиль. Попробуйте еще раз.';
         alert(errorMessage);
         return;
       }
 
-      // Показать экран загрузки
       loadingScreen.classList.remove('hidden');
 
-      // Имитация загрузки
       setTimeout(() => {
         window.location.href = 'menu.html';
       }, 2000);
     });
 
-    // Enter для начала игры
     playerNameInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         startGameBtn.click();
       }
     });
 
-    // Инициализация выбранной аватарки
     updateAvatarSelection(selectedAvatar);
   });
 
-  // Глобальная очистка таймеров при выходе
   window.addEventListener('beforeunload', function() {
     try {
-      // Очищаем таймеры LevelManager если он существует
       if (window.LevelManager && window.LevelManager.currentInstance) {
         window.LevelManager.currentInstance.clearTimers();
       }
-      // Очищаем все оставшиеся таймеры через глобальную функцию
       if (typeof clearAllTimers === 'function') {
-        // Собираем все возможные таймеры из window
         const allTimers = [];
         for (let key in window) {
           if (key.includes('Timer') || key.includes('timer') || key.includes('Interval') || key.includes('interval')) {

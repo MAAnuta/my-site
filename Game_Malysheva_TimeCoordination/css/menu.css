@@ -39,7 +39,7 @@
     contain: layout style;
 }
 
-/* Улучшенные стрелки навигации */
+/* Cтрелки навигации */
 .carousel-nav {
     display: flex;
     justify-content: center;
@@ -75,7 +75,7 @@
 }
 
 .carousel-arrow {
-    width: 50px; /* Увеличиваем размер */
+    width: 50px;
     height: 50px;
     border-radius: 50%;
     background: rgba(255,255,255,0.9);
@@ -117,7 +117,7 @@
     box-shadow: none;
 }
 
-/* Обновленные стили карточек */
+/* Cтили карточек */
 .mode-header {
     text-align: center;
     margin-bottom: 20px;
@@ -125,7 +125,7 @@
 }
 
 .mode-icon {
-    font-size: 40px; /* Уменьшаем иконку */
+    font-size: 40px;
     margin-bottom: 12px;
     display: flex;
     justify-content: center;
@@ -140,14 +140,14 @@
 }
 
 .mode-title {
-    font-size: 24px; /* Уменьшаем заголовок */
+    font-size: 24px;
     font-weight: 700;
     color: var(--primary-color);
     margin-bottom: 8px;
 }
 
 .mode-description {
-    font-size: 14px; /* Уменьшаем описание */
+    font-size: 14px;
     color: var(--text-muted);
     line-height: 1.4;
     margin-bottom: 15px;
@@ -160,14 +160,14 @@
     gap: 12px;
     margin: 10px 0;
     flex: 1;
-    overflow-y: auto; /* Добавляем прокрутку */
-    max-height: 280px; /* Ограничиваем высоту */
+    overflow-y: auto;
+    max-height: 280px;
     padding-right: 8px;
     padding-bottom: 5px;
     contain: layout;
 }
 
-/* Скелетон для контейнера уровней */
+/* Скелет для контейнера уровней */
 .compact-selection.loading {
     position: relative;
     background: rgba(0,0,0,0.02);
@@ -215,7 +215,7 @@
     border-radius: 10px;
     border: 2px solid rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-    min-height: 60px; /* Уменьшаем высоту */
+    min-height: 60px;
 }
 
 .selection-row:hover {
@@ -286,7 +286,7 @@
 
 .sublevel-btn.available {
     background: var(--primary-color);
-    color: white;
+    color: var(--text-dark);
     border-color: var(--primary-color);
 }
 
@@ -316,7 +316,7 @@
     box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
 }
 
-/* Тренировка - улучшенные стили */
+/* Тренировка */
 .training-selection {
     display: flex;
     flex-direction: column;
@@ -324,13 +324,13 @@
     margin: 15px 0;
     flex: 1;
     justify-content: center;
-    max-height: 280px; /* Такая же высота как у compact-selection */
-    overflow-y: auto; /* Добавляем прокрутку */
+    max-height: 280px;
+    overflow-y: auto;
     padding-right: 8px;
     contain: layout;
 }
 
-/* Скелетон для контейнера тренировки */
+/* Скелет для контейнера тренировки */
 .training-selection.loading {
     position: relative;
     background: rgba(0,0,0,0.02);
@@ -452,7 +452,7 @@
     contain: layout style;
 }
 
-/* Скелетон загрузки для панели пользователя */
+/* Скелет загрузки для панели пользователя */
 .user-panel.loading .user-info,
 .user-panel.loading .stats-grid {
     opacity: 0;
@@ -509,7 +509,7 @@
     background: var(--bg-light);
     border-radius: 20px;
     font-size: 14px;
-    color: var(--text-muted);
+    color: var(--text-dark);
 }
 
 .stats-grid {
@@ -533,13 +533,13 @@
 .stat-number {
     font-size: 28px;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--text-dark);
     margin-bottom: 5px;
 }
 
 .stat-name {
     font-size: 12px;
-    color: var(--text-muted);
+    color: var(--text-dark);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -588,7 +588,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Важно для работы скролла */
+    overflow: hidden;
 }
 
 /* Легенда статусов */
@@ -630,11 +630,87 @@
     background: var(--warning-color);
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
+/* Адаптивность для небольших ноутбуков (1024px - 1366px) */
+@media (max-width: 1366px) and (min-width: 769px) {
+    .container {
+        padding: 15px;
+    }
+
+    .user-panel {
+        min-height: 540px;
+        height: auto;
+        padding: 24px;
+        transform: translateY(-20px);
+        max-width: 900px;
+    }
+
+    .user-info {
+        gap: 16px;
+    }
+
+    .user-avatar-large {
+        width: 70px;
+        height: 70px;
+    }
+
+    .user-name {
+        font-size: 22px;
+    }
+
     .carousel-container {
-        margin: 20px auto;
-        min-height: 450px;
+        margin: 18px auto;
+        min-height: 540px;
+    }
+
+    .mode-card {
+        padding: 22px;
+    }
+
+    .compact-selection,
+    .training-selection {
+        max-height: 280px;
+    }
+
+    .selection-row {
+        padding: 12px;
+    }
+
+    .sublevels-container {
+        gap: 6px;
+    }
+
+    .sublevel-btn {
+        height: 32px;
+        min-width: 46px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+
+    .stat-name {
+        font-size: 11px;
+    }
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .carousel-container {
+        margin: 15px auto;
+        min-height: auto;
+        max-width: 100%;
+        width: 100%;
     }
 
     .mode-card {
@@ -646,11 +722,16 @@
         font-size: 22px;
     }
 
+    .mode-description {
+        font-size: 13px;
+    }
+
     .selection-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
         min-height: auto;
+        padding: 12px;
     }
 
     .level-indicator {
@@ -663,7 +744,8 @@
 
     .sublevels-container {
         width: 100%;
-        justify-content: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .btn-large {
@@ -676,6 +758,7 @@
         flex-direction: column;
         align-items: center;
         gap: 12px;
+        margin: 15px 10px;
     }
 
     .menu-actions .btn {
@@ -690,70 +773,228 @@
     }
 
     .user-panel {
-        min-height: 450px;
-        padding: 25px;
+        min-height: auto;
+        height: auto;
+        padding: 20px;
+        transform: translateY(0);
+        margin-bottom: 15px;
+        max-width: 100%;
+        width: 100%;
     }
 
     .compact-selection,
     .training-selection {
-        max-height: 250px;
+        max-height: 300px;
     }
 
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
-}
 
-@media (max-width: 480px) {
-    .mode-card {
-        padding: 15px;
+    .user-info {
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
-    .level-progress {
+    .user-avatar-large {
+        width: 60px;
+        height: 60px;
+    }
+
+    .user-name {
+        font-size: 20px;
+    }
+}
+
+/* Адаптивность для мобильных телефонов */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+
+    .user-panel {
+        padding: 15px;
+        border-radius: 15px;
+        min-height: auto;
+    }
+
+    .user-info {
         flex-direction: column;
-        gap: 8px;
+        align-items: center;
         text-align: center;
-        padding: 8px;
+        gap: 10px;
+    }
+
+    .user-details {
+        width: 100%;
+    }
+
+    .user-name {
+        font-size: 18px;
+    }
+
+    .user-level {
+        font-size: 12px;
+        padding: 4px 12px;
+    }
+
+    .user-sublevels {
+        font-size: 12px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-number {
+        font-size: 22px;
+    }
+
+    .stat-name {
+        font-size: 10px;
+    }
+
+    .carousel-container {
+        margin: 10px auto;
+        border-radius: 15px;
+    }
+
+    .mode-card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .mode-title {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .mode-description {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .mode-icon {
+        height: 40px;
+        margin-bottom: 8px;
+    }
+
+    .mode-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .compact-selection,
+    .training-selection {
+        max-height: 280px;
+        padding-right: 5px;
+    }
+
+    .selection-row {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .level-indicator {
+        min-width: 60px;
+    }
+
+    .level-number {
+        font-size: 18px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .level-name {
+        font-size: 10px;
+    }
+
+    .sublevels-container {
+        gap: 5px;
     }
 
     .sublevel-btn {
         padding: 5px 8px;
-        font-size: 12px;
-        min-width: 45px;
-        height: 32px;
+        font-size: 11px;
+        min-width: 40px;
+        height: 30px;
+    }
+
+    .status-legend {
+        gap: 8px;
+        font-size: 9px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .status-color {
+        width: 10px;
+        height: 10px;
+    }
+
+    .btn-large {
+        padding: 12px 20px;
+        font-size: 14px;
+        min-width: 180px;
     }
 
     .level-select, .sublevel-select {
         padding: 8px 10px;
-        font-size: 13px;
-        padding-right: 30px;
-        background-position: right 8px center;
+        font-size: 12px;
     }
 
-    .user-panel {
-        min-height: 420px;
-        padding: 20px;
+    .selection-label {
+        font-size: 12px;
+    }
+
+    .training-preview {
+        padding: 8px;
+        font-size: 11px;
+    }
+
+    .preview-header {
+        font-size: 12px;
+    }
+
+    .preview-content {
+        font-size: 11px;
     }
 
     .carousel-arrow {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
     }
 
     .carousel-dot {
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
     }
 
-    .status-legend {
+    .menu-actions {
+        margin: 10px 5px;
         gap: 10px;
-        font-size: 10px;
+    }
+
+    .menu-actions .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+        min-width: auto;
+    }
+
+    .menu-actions .btn svg {
+        width: 18px;
+        height: 18px;
     }
 }
 
-/* ========== ЭКРАН ВЫБОРА ПРОФИЛЯ ========== */
+/* Экран выбора профиля */
 .profile-selection-screen {
     position: fixed;
     top: 0;

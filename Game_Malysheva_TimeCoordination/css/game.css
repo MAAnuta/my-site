@@ -168,7 +168,6 @@
     z-index: 1000;
 }
 
-/* Индивидуальная карта */
 .card {
     position: absolute;
     padding: 20px 30px;
@@ -218,7 +217,6 @@
     font-size: 14px;
 }
 
-/* Целевая карта */
 .target-card {
     position: fixed;
     top: 20px;
@@ -473,7 +471,6 @@
     }
 }
 
-/* Убедимся, что game-area имеет относительное позиционирование */
 #gameArea {
     position: relative;
     min-height: 500px;
@@ -568,4 +565,113 @@
     0%, 100% { transform: translateX(-50%) scale(1); }
     25% { transform: translateX(-50%) translateX(-5px) scale(1); }
     75% { transform: translateX(-50%) translateX(5px) scale(1); }
+}
+
+/* Адаптивность для небольших ноутбуков (1024px - 1366px) */
+@media (max-width: 1366px) and (min-width: 769px) {
+    .game-header {
+        padding: 12px 20px;
+    }
+
+    .header-info {
+        gap: 12px;
+        font-size: 14px;
+    }
+
+    .header-info span {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .game-footer {
+        padding: 15px;
+    }
+
+    #hintText {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    #actionBtn {
+        font-size: 18px;
+        padding: 12px 30px;
+    }
+
+    .game-area {
+        padding: 20px;
+        min-height: calc(100vh - 200px);
+    }
+
+    .bulbs-container,
+    .lightbulbs-container {
+        gap: 30px;
+        margin: 30px 0;
+        min-height: 300px;
+    }
+
+    .lightbulb-container {
+        transform: scale(0.9);
+    }
+
+    .input-container {
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .input-label {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .input-field {
+        padding: 8px 12px;
+        font-size: 14px;
+        width: 100px;
+    }
+
+    .time-cards-container {
+        height: 250px;
+        margin-top: 20px;
+    }
+
+    .time-card {
+        padding: 12px 18px;
+        font-size: 15px;
+    }
+
+    .game-timer {
+        top: 70px;
+        padding: 12px 20px;
+        font-size: 16px;
+        min-width: 160px;
+    }
+
+    .target-card {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+    .cards-container {
+        height: 100%;
+    }
+
+    .card {
+        padding: 15px 25px;
+        font-size: 16px;
+    }
+
+    .record-btn {
+        padding: 12px 25px;
+        font-size: 16px;
+    }
+
+    .maze-container {
+        padding: 8px;
+    }
+
+    .maze-cell {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
 }

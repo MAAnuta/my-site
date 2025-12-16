@@ -19,7 +19,6 @@ class GameCore {
         this.levelManager = null;
         this.initUIManager();
 
-        // Инициализируем UI элементы для отображения режима
         this.initGameModeUI();
     }
 
@@ -67,7 +66,6 @@ class GameCore {
             },
 
             showMessage: (text, color) => {
-                // Используем showHint для показа сообщений
                 this.uiManager.showHint(`<span style="color:${color || '#333'}">${text}</span>`);
             },
 
@@ -115,22 +113,18 @@ class GameCore {
                 throw new Error(`Подуровень ${sublevelId} не найден`);
             }
 
-            // Для классической игры проверяем доступность уровней
             if (this.gameMode === 'classic') {
                 if (!this.levelManager.isLevelUnlocked(levelId)) {
-                    // Тихо перенаправляем в меню без уведомлений
                     window.location.href = 'menu.html';
                     return false;
                 }
 
                 if (!this.levelManager.isSublevelAvailable(levelId, sublevelId)) {
-                    // Тихо перенаправляем в меню без уведомлений
                     window.location.href = 'menu.html';
                     return false;
                 }
             }
 
-            // Для тренировки не проверяем доступность, но показываем предупреждение
             if (this.gameMode === 'training') {
                 this.uiManager.showMessage('Режим тренировки: результат не сохраняется в рейтинг', '#83af9d');
             }
@@ -143,11 +137,9 @@ class GameCore {
 
             this.uiManager.showHint(sublevelInfo.description);
 
-            // Обновляем отображение текущего уровня
             this.state.currentLevel = levelId;
             this.state.currentSublevel = sublevelId;
 
-            // Показываем максимальный счет для этого подуровня
             const maxScore = DataManager.getMaxScoreForSublevel(levelId, sublevelId);
             this.uiManager.updateScoreDisplay(0, maxScore, 0);
 
@@ -161,7 +153,6 @@ class GameCore {
         }
     }
 
-    // Получить ID предыдущего подуровня
     getPrevSublevelId(levelId, sublevelId) {
         const sublevelNum = DataManager.getSublevelNumber(sublevelId);
         if (sublevelNum <= 1) return null;
@@ -174,8 +165,6 @@ class GameCore {
         return (sublevelNum - 1).toString();
     }
 
-    // Рассчитать очки за уровень с учетом всех модификаторов
-
     calculateScore(levelId, sublevelId, accuracy, timeBonus = 1.0, roundNumber = null) {
         return DataManager.calculateScore(levelId, sublevelId, accuracy, timeBonus, roundNumber);
     }
@@ -184,21 +173,17 @@ class GameCore {
 
         if (!result) return;
 
-        // Рассчитываем точность для этой попытки
         const attemptAccuracy = result.accuracy || 0;
 
-        // Обновляем общую точность
         if (this.state.totalAttempts > 0) {
             this.state.accuracy = ((this.state.accuracy * this.state.totalAttempts) + attemptAccuracy) / (this.state.totalAttempts + 1);
         } else {
             this.state.accuracy = attemptAccuracy;
         }
 
-        // Рассчитываем номер раунда (3 попытки всего)
         const rawRoundNumber = 3 - this.state.attempts;
         const roundNumber = Math.min(3, Math.max(1, rawRoundNumber));
 
-        // Рассчитываем очки по новой формуле с учетом раунда
         const scoreResult = this.calculateScore(
             this.state.currentLevel,
             this.state.currentSublevel,
@@ -210,45 +195,36 @@ class GameCore {
 
         console.log(`Раунд ${roundNumber}: ${calculatedScore} очков (${scoreResult.breakdown?.roundPercentage || 33}% от максимума)`);
 
-        // Обновляем статистику попыток
         this.state.totalAttempts++;
 
-        if (attemptAccuracy >= 80) { // Минимальный порог прохождения
+        if (attemptAccuracy >= 80) {
             this.state.successfulAttempts++;
         }
 
-        // Обновляем счет
         this.state.totalScore += calculatedScore;
         this.state.attempts--;
 
-        // Получаем максимальный счет для отображения
         const maxScore = DataManager.getMaxScoreForSublevel(
             this.state.currentLevel,
             this.state.currentSublevel
         );
 
-        // Рассчитываем прогресс на основе общего счета (с ограничением максимума)
         const currentTotalScore = Math.min(this.state.totalScore, maxScore);
         const progressPercentage = Math.min(100, Math.round((currentTotalScore / maxScore) * 100));
 
-        // Обновляем отображение через uiManager
         this.uiManager.updateScoreDisplay(
             currentTotalScore,
             maxScore,
             progressPercentage
         );
 
-        // Обновляем попытки (если есть такой метод в uiManager)
-        // Используем существующий элемент attemptsInfo
         const attemptsElement = document.getElementById('attemptsInfo');
         if (attemptsElement) {
             attemptsElement.textContent = `Попытки: ${this.state.attempts}`;
         }
 
-        // Обновляем точность - создаем элемент если его нет
         const accuracyElement = document.getElementById('accuracyInfo');
         if (!accuracyElement) {
-            // Создаем элемент для точности
             const headerInfo = document.querySelector('.header-info');
             if (headerInfo) {
                 const newAccuracyElement = document.createElement('span');
@@ -261,7 +237,6 @@ class GameCore {
             }
         }
 
-        // Обновляем значение точности
         const updatedAccuracyElement = document.getElementById('accuracyInfo');
         if (updatedAccuracyElement) {
             updatedAccuracyElement.textContent = `Точность: ${attemptAccuracy.toFixed(1)}%`;
@@ -269,11 +244,9 @@ class GameCore {
 
         console.log('Новое состояние:', this.state);
 
-        // Сохраняем прогресс для этой попытки
         const isCompleted = result.isCompleted || (this.state.attempts <= 0);
         this.saveAttemptProgress(calculatedScore, attemptAccuracy, isCompleted);
 
-        // Для подуровня 1-2 или при завершении всех попыток сразу показываем результаты
         if (result.isCompleted || this.state.attempts <= 0) {
             setTimeout(() => {
                 this.showGameOver();
@@ -281,22 +254,19 @@ class GameCore {
         }
     }
 
-    // Сохранить прогресс попытки
     saveAttemptProgress(score, accuracy, isCompleted = false) {
         try {
-            // Рассчитываем номер раунда
-            const roundNumber = 4 - this.state.attempts; // attempts уменьшается после, так что это правильный round
+            const roundNumber = 4 - this.state.attempts;
 
-            // Сохраняем прогресс через LevelManager (он вызовет DataManager с правильным режимом)
             if (this.levelManager) {
                 this.levelManager.saveSublevelProgress(
                     this.state.currentLevel,
                     this.state.currentSublevel,
                     score,
                     accuracy,
-                    this.gameMode, // mode
-                    roundNumber, // roundNumber
-                    isCompleted // isCompleted
+                    this.gameMode,
+                    roundNumber,
+                    isCompleted
                 );
             }
 
@@ -306,17 +276,14 @@ class GameCore {
         }
     }
 
-    // Рассчитать бонус за время (опционально, если требуется)
     static calculateTimeBonus(timeSpent) {
-        // Пример: если прошел быстрее эталонного времени, даем бонус
-        const referenceTime = 60; // 60 секунд эталон
+        const referenceTime = 60;
         if (timeSpent <= referenceTime) {
-            return 1.0 + (referenceTime - timeSpent) / referenceTime * 0.2; // До +20% бонуса
+            return 1.0 + (referenceTime - timeSpent) / referenceTime * 0.2;
         }
         return 1.0;
     }
 
-    // Проверить, является ли результат новым рекордом
     static checkIfNewRecord(levelId, sublevelId, score, mode) {
         if (mode === 'training') {
             const trainingProgress = JSON.parse(localStorage.getItem('timeCoordinationTrainingProgress') || '{}');
@@ -329,25 +296,18 @@ class GameCore {
         }
     }
 
-
-    // Завершить игру и сохранить результаты
     static endGame(levelId, sublevelId, accuracy, timeSpent, mode = 'classic') {
-        // Рассчитываем бонус за время
         const timeBonus = this.calculateTimeBonus(timeSpent);
 
-        // Рассчитываем очки
         const scoreResult = this.calculateScore(levelId, sublevelId, accuracy, timeBonus);
         const finalScore = scoreResult.finalScore;
 
-        // Сохраняем прогресс
         DataManager.saveProgress(levelId, sublevelId, finalScore, accuracy, mode);
 
-        // Обновляем статистику игрока и рейтинг только для классического режима
         if (mode === 'classic') {
             DataManager.updatePlayerStatsAfterGame(finalScore, mode);
             DataManager.updateRatingAfterGame(levelId, sublevelId, finalScore, accuracy);
         } else if (mode === 'training') {
-            // Для тренировки только сохраняем прогресс в отдельное хранилище
             console.log('Тренировка завершена - результат не влияет на рейтинг');
         }
 
@@ -363,9 +323,8 @@ class GameCore {
     calculateAccuracy() {
         if (this.state.totalAttempts === 0) return 0;
 
-        // Используем state.accuracy, который уже обновлялся при каждой попытке
         const accuracy = this.state.accuracy || 0;
-        return Math.round(accuracy * 10) / 10; // Округление до 1 знака после запятой
+        return Math.round(accuracy * 10) / 10;
     }
 
     saveGameResult(isCompleted = false) {
@@ -373,19 +332,15 @@ class GameCore {
             const player = DataManager.getPlayer();
             if (!player) return false;
 
-            // Получаем максимальный счет для этого подуровня и ограничиваем итоговый счет
             const maxScore = DataManager.getMaxScoreForSublevel(
                 this.state.currentLevel,
                 this.state.currentSublevel
             );
             const finalScore = Math.min(this.state.totalScore, maxScore);
 
-            // Рассчитываем точность
             const accuracy = this.calculateAccuracy();
 
-            // Сохраняем финальный прогресс через LevelManager
             if (this.levelManager) {
-                // Для финального сохранения создаем правильные данные раундов
                 const roundsData = {
                     round1: {
                         score: finalScore,
@@ -402,9 +357,7 @@ class GameCore {
                 );
             }
 
-            // Только для классической игры сохраняем в рейтинг и обновляем статистику
             if (this.gameMode === 'classic') {
-                // Сохраняем в рейтинг
                 const saved = DataManager.saveRatingEntry(
                     player.name,
                     finalScore,
@@ -417,15 +370,12 @@ class GameCore {
                     console.error('Не удалось сохранить результат в рейтинг');
                 }
 
-                // Обновляем статистику игрока
                 DataManager.updatePlayerStatsAfterGame(finalScore, this.gameMode);
 
-                // Сохраняем прогресс в сессии для обновления в меню
                 const sessionGames = parseInt(sessionStorage.getItem('games_played_in_session') || 0);
                 sessionStorage.setItem('games_played_in_session', sessionGames + 1);
             }
 
-            // Для тренировки только логируем
             if (this.gameMode === 'training') {
                 console.log('Тренировка завершена:', {
                     score: this.state.totalScore,
@@ -452,41 +402,32 @@ class GameCore {
         const gameArea = document.getElementById('gameArea');
         if (!gameArea) return;
 
-        // Получаем максимальный счет для этого подуровня
         const maxScore = DataManager.getMaxScoreForSublevel(
             this.state.currentLevel,
             this.state.currentSublevel
         );
 
-        // Сохраняем оригинальный счет для проверки автоматического перехода
         const originalScore = this.state.totalScore;
 
-        // Ограничиваем итоговый счет максимумом для подуровня
         this.state.totalScore = Math.min(this.state.totalScore, maxScore);
 
-        // Сохраняем результат игры как завершенный
-        this.saveGameResult(true); // true = подуровень завершен
+        this.saveGameResult(true);
 
-        // Получаем информацию о разблокированном следующем уровне/подуровне
         let nextLevelInfo = null;
         if (this.gameMode === 'classic' && this.levelManager) {
             nextLevelInfo = this.levelManager.lastUnlockedInfo;
         }
 
-        // Рассчитываем точность для отображения
         const accuracy = this.calculateAccuracy();
 
         const progressPercentage = Math.min(100, Math.round((this.state.totalScore / maxScore) * 100));
 
-        // Проверяем, достигнут ли порог для автоматического перехода (80% от максимального счета)
-        // Используем оригинальный счет без ограничения максимумом, но с учетом штрафов за точность
         const finalScoreForCheck = Math.min(originalScore, maxScore);
         const shouldAutoAdvance = (finalScoreForCheck / maxScore) >= 0.8;
 
-        // Определяем цвет в зависимости от процента прохождения
-        let progressColor = '#915853'; // красный
-        if (progressPercentage >= 80) progressColor = '#648364'; // зеленый
-        else if (progressPercentage >= 50) progressColor = '#c69d60'; // оранжевый
+        let progressColor = '#915853';
+        if (progressPercentage >= 80) progressColor = '#648364';
+        else if (progressPercentage >= 50) progressColor = '#c69d60';
 
         const modeText = this.gameMode === 'classic' ? 'Классическая игра' : 'Тренировка';
         const modeColor = this.gameMode === 'classic' ? '#648364' : '#83af9d';
@@ -567,11 +508,10 @@ class GameCore {
             window.location.href = 'menu.html?refresh=1&t=' + Date.now();
         });
 
-        // Автоматический переход к следующему подуровню в классическом режиме
         if (this.gameMode === 'classic' && nextLevelInfo && nextLevelInfo.type === 'sublevel' && progressPercentage >= 80) {
             setTimeout(() => {
                 window.location.href = `game.html?mode=classic&level=${nextLevelInfo.levelId}&sublevel=${nextLevelInfo.sublevelId}&t=${Date.now()}`;
-            }, 3000); // Переход через 3 секунды
+            }, 3000);
         }
     }
 
@@ -617,12 +557,10 @@ class GameCore {
         return { ...this.state };
     }
 
-    // Получить режим игры
     getGameMode() {
         return this.gameMode;
     }
 
-    // Сменить режим игры (если нужно динамически)
     setGameMode(mode) {
         this.gameMode = mode;
         this.state.gameMode = mode;
@@ -630,13 +568,11 @@ class GameCore {
         console.log('Режим игры изменен на:', mode);
     }
 
-    // Вспомогательный метод для сохранения результата (для совместимости)
     saveResult(score, accuracy) {
         try {
             const player = DataManager.getPlayer();
             if (!player) return false;
 
-            // Сохраняем в рейтинг только для классической игры
             if (this.gameMode === 'classic') {
                 DataManager.saveRatingEntry(
                     player.name,
@@ -646,7 +582,6 @@ class GameCore {
                     this.gameMode
                 );
 
-                // Обновляем статистику игрока
                 DataManager.updatePlayerStatsAfterClassicGame(score);
             } else {
                 console.log('Тренировка: результат не сохраняется в рейтинг');

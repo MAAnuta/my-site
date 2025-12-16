@@ -12,7 +12,7 @@ class LevelManager {
         LevelManager.currentInstance = this;
     }
 
-    // СТРУКТУРА ВСЕХ УРОВНЕЙ
+    // Структура всех уровней
     createLevelsStructure() {
         return {
             // ========== УРОВЕНЬ 1: ИЗМЕРЕНИЕ ВРЕМЕНИ ==========
@@ -35,7 +35,7 @@ class LevelManager {
                             minDuration: 1.0,
                             maxDuration: 3.0,
                             inputMethod: 'both',
-                            inputTimeLimit: 10 // Добавляем ограничение по времени на ввод
+                            inputTimeLimit: 10 // Ограничение по времени на ввод
                         }
                     },
                     '1-2': {
@@ -123,11 +123,11 @@ class LevelManager {
                     }
                 }
             },
-            // ========== УРОВЕНЬ 3: ЛОГИКА И ПРОГНОЗИРОВАНИЕ ==========
+            // ========== УРОВЕНЬ 3: ЛОГИКА И СМЕКАЛКА ==========
             'level3': {
                 id: 'level3',
-                name: 'Логика и прогнозирование',
-                description: 'Формирование логического мышления и навыков прогнозирования',
+                name: 'Логика и смекалка',
+                description: 'Развитие логического мышления и памяти',
                 color: 'var(--text-dark)',
                 unlocked: false, // Будет разблокирован после прохождения уровня 2
                 sublevels: {
@@ -164,11 +164,11 @@ class LevelManager {
                 }
             },
 
-            // ========== УРОВЕНЬ 4: СТРАТЕГИЯ И СКОРОСТЬ ==========
+            // ========== УРОВЕНЬ 4: ЛАБИРИНТ ==========
             'level4': {
                 id: 'level4',
                 name: 'Стратегия и скорость',
-                description: 'Комплексное развитие скорости реакции и стратегического мышления',
+                description: 'Поиск кратчайшего пути в условиях ограниченного времени и тренировка памяти',
                 color: 'var(--text-dark)',
                 unlocked: false, // Будет разблокирован после прохождения уровня 3
                 sublevels: {
@@ -192,46 +192,37 @@ class LevelManager {
         };
     }
 
-    // 2. ЗАПУСК УРОВНЯ (с улучшенной проверкой доступности)
+    // Запуск уровня
     startLevel(levelId, sublevelId) {
 
-        this.stopLevel(); // Останавливаем текущий уровень
-        this.clearTimers(); // Очищаем таймеры
+        this.stopLevel();
+        this.clearTimers();
 
         const levelData = this.levels[levelId];
         if (!levelData) {
-            // Тихо возвращаем false без уведомлений
             return false;
         }
 
-        // Для тренировки все уровни доступны
         if (this.core.getGameMode() !== 'training') {
             if (!levelData.unlocked) {
-                // Тихо возвращаем false без уведомлений
                 return false;
             }
 
-            // Проверяем доступность подуровня по новой системе
             if (!this.isSublevelAvailable(levelId, sublevelId)) {
-                // Тихо возвращаем false без уведомлений
                 return false;
             }
         }
 
-        // Получаем данные подуровня
         let sublevelData;
         const searchKey = sublevelId.toString();
 
         if (Array.isArray(levelData.sublevels)) {
-            // sublevels - массив (для других уровней)
             sublevelData = levelData.sublevels.find(s => s.id.toString() === searchKey);
         } else {
-            // sublevels - объект (для level1)
             sublevelData = levelData.sublevels[searchKey];
         }
 
         if (!sublevelData) {
-            // Тихо возвращаем false без уведомлений
             return false;
         }
 
@@ -239,7 +230,6 @@ class LevelManager {
         this.currentSublevelId = sublevelId;
 
         try {
-            // Выбираем обработчик в зависимости от уровня
             switch (levelId) {
                 case 'level1':
                     this.currentLevelHandler = new Level1Handler(this.core, sublevelData);
@@ -269,9 +259,8 @@ class LevelManager {
         return false;
     }
 
-    // 3. СТАНДАРТНЫЕ МЕТОДЫ
+    // Стандартные методы
     stopLevel() {
-        // Останавливаем все таймеры
         this.clearTimers();
 
         if (this.currentLevelHandler && typeof this.currentLevelHandler.cleanup === 'function') {
@@ -298,7 +287,7 @@ class LevelManager {
         }
     }
 
-    // 4. МЕТОДЫ ДЛЯ UI
+    // Методы для UI
     getLevelInfo(levelId) {
         return this.levels[levelId];
     }
@@ -307,24 +296,19 @@ class LevelManager {
         const level = this.levels[levelId];
         if (!level || !level.sublevels) return null;
 
-        // sublevelId может приходить как строка или число, приводим к строке
         const sublevelIdStr = sublevelId.toString();
 
-        // Определяем ключ для поиска
         let searchKey = sublevelIdStr;
 
-        // Если sublevelId не содержит дефис, добавляем префикс уровня
         if (!sublevelIdStr.includes('-')) {
             const levelNum = levelId.replace('level', '');
             searchKey = `${levelNum}-${sublevelIdStr}`;
         }
 
-        // В текущей структуре sublevels может быть массивом или объектом
         if (Array.isArray(level.sublevels)) {
-            // sublevels - массив, ищем по id
+
             return level.sublevels.find(s => s.id.toString() === searchKey) || null;
         } else {
-            // sublevels - объект с ключами в формате 'level-sublevel'
             return level.sublevels[searchKey] || null;
         }
     }
@@ -341,80 +325,63 @@ class LevelManager {
         return this.currentSublevelId;
     }
 
-    // 5. ПРОВЕРКА РАЗБЛОКИРОВКИ УРОВНЯ
+    // Проверка разблокировки уровня
     isLevelUnlocked(levelId) {
         const level = this.levels[levelId];
         return level ? level.unlocked : false;
     }
 
-    // 6. ПРОВЕРКА ПРОХОЖДЕНИЯ УРОВНЯ
+    // Проверка прохождения уровня
     checkLevelCompletion(levelId) {
         const level = this.levels[levelId];
         if (!level) return false;
 
-        // Проверяем, доступен ли DataManager
         if (typeof DataManager === 'undefined') {
             return false;
         }
 
-        // Используем новую функцию проверки завершения уровня на 80%
         return DataManager.isLevelCompleted(levelId, 0.8);
     }
 
-    // 7. СОХРАНИТЬ ПРОГРЕСС ПРОХОЖДЕНИЯ ПОДУРОВНЯ
+    // Сохранить прогресс прохождения подуровня
     saveSublevelProgress(levelId, sublevelId, score, accuracy, mode = 'classic', roundNumber = null, isCompleted = false) {
-        // Проверяем, доступен ли DataManager
         if (typeof DataManager === 'undefined') {
             return;
         }
 
-        // Получаем режим игры из GameCore
         const gameMode = mode || (this.core && this.core.getGameMode ? this.core.getGameMode() : 'classic');
 
-        // Определяем номер раунда
         let currentRound = roundNumber;
         if (currentRound === null) {
-            // Пока используем фиксированный раунд для обратной совместимости
             currentRound = 1;
         }
 
-        // Всегда используем логику накопления раундов
         this.saveRoundProgress(levelId, sublevelId, score, accuracy, currentRound, gameMode, isCompleted);
 
     };
 
-    /**
-     * Сохраняет прогресс раунда и накапливает до полного подуровня
-     */
+    // Сохраняет прогресс раунда и накапливает до полного подуровня
     saveRoundProgress(levelId, sublevelId, score, accuracy, roundNumber, gameMode, isFinal = false) {
         const progressKey = `${levelId}_${sublevelId}_rounds`;
 
-        // Получаем текущие данные раундов
         let roundsData = this.getRoundsData(progressKey);
 
-        // Добавляем/обновляем данные текущего раунда
         roundsData[`round${roundNumber}`] = {
             score: score,
             accuracy: accuracy,
             timestamp: Date.now()
         };
 
-        // Сохраняем данные раундов
         this.saveRoundsData(progressKey, roundsData);
 
-
-        // Если это финальный раунд (3-й) или isFinal=true, рассчитываем итоговый результат
         if (roundNumber === 3 || isFinal) {
             this.finalizeSublevelProgress(levelId, sublevelId, roundsData, gameMode);
         }
     }
 
-    /**
-     * Получает данные раундов из sessionStorage
-     */
+    // Получает данные раундов из sessionStorage
     getRoundsData(key) {
         try {
-            // Проверяем доступность sessionStorage
             if (typeof sessionStorage === 'undefined') {
                 console.warn('sessionStorage недоступен');
                 return {};
@@ -424,7 +391,6 @@ class LevelManager {
             return data ? JSON.parse(data) : {};
         } catch (error) {
             console.error('Ошибка загрузки данных раундов:', error);
-            // При ошибке парсинга удаляем поврежденные данные
             try {
                 sessionStorage.removeItem(`levelmanager_${key}`);
             } catch (removeError) {
@@ -434,12 +400,9 @@ class LevelManager {
         }
     }
 
-    /**
-     * Сохраняет данные раундов в sessionStorage
-     */
+    // Сохраняет данные раундов в sessionStorage
     saveRoundsData(key, data) {
         try {
-            // Проверяем доступность sessionStorage
             if (typeof sessionStorage === 'undefined') {
                 console.warn('sessionStorage недоступен, данные не сохранены');
                 return false;
@@ -453,55 +416,43 @@ class LevelManager {
         }
     }
 
-    /**
-     * Финализирует прогресс подуровня после 3 раундов
-     */
+    // Финализирует прогресс подуровня после 3 раундов
     finalizeSublevelProgress(levelId, sublevelId, roundsData, gameMode) {
-        // Рассчитываем итоговые показатели
         const rounds = Object.values(roundsData);
         if (rounds.length === 0) return;
 
-        // Сумма очков за все раунды
         const totalSublevelScore = rounds.reduce((sum, round) => sum + round.score, 0);
 
-        // Средняя точность
         const totalAccuracy = rounds.reduce((sum, round) => sum + round.accuracy, 0);
-        const averageAccuracy = Math.round(totalAccuracy / rounds.length * 10) / 10; // до 1 знака
+        const averageAccuracy = Math.round(totalAccuracy / rounds.length * 10) / 10;
 
-        // Штраф за низкую среднюю точность (< 80%)
         let finalScore = totalSublevelScore;
         if (averageAccuracy < 80) {
-            finalScore = Math.round(finalScore * 0.9); // -10%
+            finalScore = Math.round(finalScore * 0.9);
         }
 
-        // Кап по максимуму подуровня
         const maxSublevelScore = DataManager.getMaxScoreForSublevel(levelId, sublevelId);
         finalScore = Math.min(finalScore, maxSublevelScore);
 
-        // Сохраняем финальный прогресс
         DataManager.saveProgress(levelId, sublevelId, finalScore, averageAccuracy, gameMode);
 
-        // Сохраняем количество завершенных раундов
         const progressKey = `${levelId}_${sublevelId}_roundsCompleted`;
         this.saveRoundsData(progressKey, { count: rounds.length });
 
-        // Очищаем временные данные раундов
         const roundsKey = `${levelId}_${sublevelId}_rounds`;
         sessionStorage.removeItem(`levelmanager_${roundsKey}`);
 
-        // Только для классической игры проверяем разблокировку следующего уровня
         if (gameMode === 'classic') {
             this.lastUnlockedInfo = this.checkAndUnlockNextLevel(levelId, sublevelId, finalScore);
         }
 
-        // Обновляем рейтинг только для классической игры
         if (gameMode === 'classic') {
             DataManager.updateRatingAfterGame(levelId, sublevelId, finalScore, averageAccuracy);
         }
     }
 
 
-    // 8. РАЗБЛОКИРОВКА СЛЕДУЮЩИХ УРОВНЕЙ/ПОДУРОВНЕЙ
+    // Разблокировка следующих уровней/подуровней
     checkAndUnlockNextLevel(levelId, sublevelId, score) {
         const levelOrder = ['level1', 'level2', 'level3', 'level4'];
         const currentLevelIndex = levelOrder.indexOf(levelId);
@@ -524,7 +475,6 @@ class LevelManager {
 
         let nextInfo = null;
 
-        // Если это НЕ последний подуровень уровня И score >=80% — разблокируем следующий подуровень в уровне
         if (currentSublevelNum < totalSublevels && score >= DataManager.getMinPassingScore(levelId, sublevelId)) {
             const nextSublevelNum = currentSublevelNum + 1;
             const nextSublevelId = `${levelNum}-${nextSublevelNum}`;
@@ -538,7 +488,7 @@ class LevelManager {
                 };
             }
         }
-        // Если это ПОСЛЕДНИЙ подуровень уровня И score >=80% — разблокируем следующий УРОВЕНЬ
+
         else if (score >= DataManager.getMinPassingScore(levelId, sublevelId)) {
             const nextLevelIndex = currentLevelIndex + 1;
             if (nextLevelIndex < levelOrder.length) {
@@ -560,36 +510,29 @@ class LevelManager {
             }
         }
 
-        // Сохраняем изменения в unlocked статус
         this.saveProgress();
 
         return nextInfo;
     }
 
-    // 9. ИНИЦИАЛИЗАЦИЯ РАЗБЛОКИРОВКИ УРОВНЕЙ ПРИ ЗАГРУЗКЕ
+    // Инициализация разблокировки уровней при загрузке
     initializeLevelUnlock() {
-        // Загружаем сохраненный прогресс уровней
         this.loadProgress();
 
-        // Проверяем, доступен ли DataManager
         if (typeof DataManager === 'undefined') {
             console.warn('[LevelManager] DataManager не загружен. Инициализация без прогресса.');
-            // level1 всегда разблокирован
             this.levels['level1'].unlocked = true;
             return;
         }
 
-        // level1 всегда разблокирован
         this.levels['level1'].unlocked = true;
 
         const levelOrder = ['level1', 'level2', 'level3', 'level4'];
 
-        // Проверяем прогресс и разблокируем следующие уровни ТОЛЬКО после ПОЛНОГО прохождения предыдущего
         for (let i = 0; i < levelOrder.length - 1; i++) {
             const currentLevelId = levelOrder[i];
             const nextLevelId = levelOrder[i + 1];
 
-            // Проверяем, пройден ли ПОСЛЕДНИЙ подуровень текущего уровня >=80%
             const currentLevelNum = parseInt(currentLevelId.replace('level', ''));
             const totalSubsCurrent = DataManager.getTotalSublevelsForLevel(currentLevelId);
             const lastSubIdCurrent = `${currentLevelNum}-${totalSubsCurrent}`;
@@ -597,7 +540,6 @@ class LevelManager {
             if (DataManager.isSublevelCompleted(currentLevelId, lastSubIdCurrent, 0.8)) {
                 this.levels[nextLevelId].unlocked = true;
 
-                // Разблокируем первый подуровень следующего уровня
                 const nextLevelNum = parseInt(nextLevelId.replace('level', ''));
                 const firstSubIdNext = `${nextLevelNum}-1`;
                 if (this.levels[nextLevelId].sublevels[firstSubIdNext]) {
@@ -608,7 +550,7 @@ class LevelManager {
 
     }
 
-    // 11. ПОЛУЧИТЬ ОБЩИЙ ПРОГРЕСС ИГРОКА
+    // Получить общий прогресс игрока
     getLevelProgress(levelId) {
         const level = this.levels[levelId];
         if (!level) return null;
@@ -617,7 +559,6 @@ class LevelManager {
         const trainingProgress = DataManager.getTrainingProgress();
         const levelProgress = {};
 
-        // Собираем прогресс по подуровням
         level.sublevels.forEach(sublevel => {
             const classicScore = progress[levelId]?.[sublevel.id] || 0;
             const trainingScore = trainingProgress[levelId]?.[sublevel.id] || 0;
@@ -626,7 +567,6 @@ class LevelManager {
             const maxScore = DataManager.getMaxScoreForSublevel(levelId, sublevel.id);
             const percentage = maxScore > 0 ? Math.round((bestScore / maxScore) * 100) : 0;
 
-            // Проверяем доступность для классической игры
             const isAvailable = this.isSublevelAvailable(levelId, sublevel.id);
             const isClassicCompleted = classicScore >= maxScore * 0.8;
             const isTrainingCompleted = trainingScore > 0;
@@ -646,7 +586,6 @@ class LevelManager {
             };
         });
 
-        // Общий прогресс уровня
         const completedSublevels = Object.values(levelProgress).filter(s => s.isClassicCompleted).length;
         const totalSublevels = level.sublevels.length;
 
@@ -662,32 +601,6 @@ class LevelManager {
         };
     }
 
-    // 12. ПРОВЕРИТЬ, ДОСТУПЕН ЛИ ПОДУРОВЕНЬ
-    getSublevelStatus(levelId, sublevelId, score, maxScore, isAvailable) {
-        if (!isAvailable) return 'locked';
-
-        const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
-
-        if (percentage >= 80) return 'completed';
-        if (percentage > 0) return 'started';
-        return 'available';
-    }
-
-    // 13. ПРОВЕРИТЬ, ДОСТУПЕН ЛИ ПОДУРОВЕНЬ (ОБНОВЛЕННЫЙ)
-    isSublevelAvailable(levelId, sublevelId) {
-        const level = this.levels[levelId];
-        if (!level) return false;
-
-        // Для тренировки все подуровни доступны
-        if (this.core && this.core.getGameMode && this.core.getGameMode() === 'training') {
-            return true;
-        }
-
-        // Используем новую систему проверки доступности из DataManager
-        return DataManager.isSublevelAvailable(levelId, sublevelId);
-    }
-
-    // 14. ПОЛУЧИТЬ ОБЩИЙ ПРОГРЕСС ИГРОКА (обновленный)
     getPlayerOverallProgress() {
         const progress = DataManager.getProgress();
         const trainingProgress = DataManager.getTrainingProgress();
@@ -774,12 +687,33 @@ class LevelManager {
         };
     }
 
-    // 15. ПОЛУЧИТЬ ПРОГРЕСС ДЛЯ ОТОБРАЖЕНИЯ В МЕНЮ
+    // Проверить доступен ли подуровень
+    getSublevelStatus(levelId, sublevelId, score, maxScore, isAvailable) {
+        if (!isAvailable) return 'locked';
+
+        const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
+
+        if (percentage >= 80) return 'completed';
+        if (percentage > 0) return 'started';
+        return 'available';
+    }
+
+    isSublevelAvailable(levelId, sublevelId) {
+        const level = this.levels[levelId];
+        if (!level) return false;
+
+        if (this.core && this.core.getGameMode && this.core.getGameMode() === 'training') {
+            return true;
+        }
+
+        return DataManager.isSublevelAvailable(levelId, sublevelId);
+    }
+
+    // Получить прогресс для отоброжения в меню
     getMenuProgressData() {
         const overallProgress = this.getPlayerOverallProgress();
         const levelsData = {};
 
-        // Собираем данные по каждому уровню
         Object.keys(this.levels).forEach(levelId => {
             const levelProgress = this.getLevelProgress(levelId);
             if (levelProgress) {
@@ -793,7 +727,7 @@ class LevelManager {
         };
     }
 
-    // 16. СОХРАНИТЬ ПРОГРЕСС УРОВНЕЙ
+    // Сохранить прогресс уровней
     saveProgress() {
         try {
             localStorage.setItem('levelManager_levels', JSON.stringify(this.levels));
@@ -802,22 +736,19 @@ class LevelManager {
         }
     }
 
-    // 17. ЗАГРУЗИТЬ ПРОГРЕСС УРОВНЕЙ
+    // Загрузить прогресс уровней
     loadProgress() {
         try {
             const savedLevels = localStorage.getItem('levelManager_levels');
             if (savedLevels) {
                 const parsedLevels = JSON.parse(savedLevels);
-                // Обновляем существующие уровни, сохраняя структуру
                 Object.keys(parsedLevels).forEach(levelId => {
                     if (this.levels[levelId]) {
-                        // Обновляем статус уровня
                         this.levels[levelId].unlocked = parsedLevels[levelId].unlocked;
 
-                        // Обновляем подуровни, если они существуют в сохраненных данных
                         if (parsedLevels[levelId].sublevels) {
                             Object.keys(parsedLevels[levelId].sublevels).forEach(sublevelId => {
-                                // Для level1 sublevels - объект, обновляем только unlocked/completed поля
+
                                 if (!Array.isArray(this.levels[levelId].sublevels) && this.levels[levelId].sublevels[sublevelId]) {
                                     this.levels[levelId].sublevels[sublevelId] = {
                                         ...this.levels[levelId].sublevels[sublevelId],
@@ -827,7 +758,6 @@ class LevelManager {
                                         bestAccuracy: parsedLevels[levelId].sublevels[sublevelId].bestAccuracy || 0
                                     };
                                 }
-                                // Для других уровней (массивы) - пока не обновляем, так как структура создается динамически
                             });
                         }
                     }
@@ -838,13 +768,10 @@ class LevelManager {
             console.error('[LevelManager] Ошибка загрузки прогресса уровней:', error);
         }
     }
-
-    // 18. ПОЛУЧИТЬ КОНФИГУРАЦИЮ УРОВНЕЙ
-    // 17. ОСТАНОВИТЬ ТЕКУЩИЙ УРОВЕНЬ
 }
 
 
-// БАЗОВЫЙ КЛАСС ДЛЯ ВСЕХ УРОВНЕЙ
+// Базовый класс для всех уровней
 class BaseLevelHandler {
     constructor(core, sublevel) {
         this.core = core;
@@ -852,8 +779,8 @@ class BaseLevelHandler {
         this.timers = [];
         this.lightbulbs = [];
         this.isActive = false;
-        this.timeLimit = 0; // Оставшееся время
-        this.timeLimitTimer = null; // Таймер ограничения времени
+        this.timeLimit = 0;
+        this.timeLimitTimer = null;
     }
 
     start() {
@@ -862,7 +789,7 @@ class BaseLevelHandler {
             this.core.uiManager.showHint(this.sublevel.description);
             this.core.uiManager.setActionButton('СТАРТ', () => this.beginSequence());
         }
-        this.createLightbulbs(); // Создаем лампочки для уровня
+        this.createLightbulbs();
     }
 
     createLightbulbs() {
@@ -878,19 +805,16 @@ class BaseLevelHandler {
         this.clearTimers();
         this.stopTimeLimit();
 
-        // Удаляем обработчик клавиш для лабиринта
         if (this.keyPressHandler) {
             document.removeEventListener('keydown', this.keyPressHandler);
             this.keyPressHandler = null;
         }
 
-        // Удаляем подсказку управления
         const hint = document.getElementById('controls-hint');
         if (hint && hint.parentNode) {
             hint.parentNode.removeChild(hint);
         }
 
-        // Удаляем все лампочки из DOM
         this.lightbulbs.forEach(lightbulb => {
             if (lightbulb.container && lightbulb.container.parentNode) {
                 lightbulb.container.parentNode.removeChild(lightbulb.container);
@@ -913,15 +837,13 @@ class BaseLevelHandler {
         this.timers.push(timer);
     }
 
-    // МЕТОДЫ ДЛЯ ТАЙМЕРОВ
+    // Методы для таймеров
     createTimeLimitDisplay(initialTime, onTimeUp) {
         const container = document.getElementById('gameArea') || document.body;
 
-        // Удаляем старый таймер, если есть
         const oldTimer = container.querySelector('.time-limit-display');
         if (oldTimer) oldTimer.remove();
 
-        // Создаем новый дисплей таймера
         const timerDisplay = document.createElement('div');
         timerDisplay.className = 'time-limit-display';
         timerDisplay.className = 'game-timer';
@@ -931,14 +853,12 @@ class BaseLevelHandler {
 
         container.appendChild(timerDisplay);
 
-        // Запускаем таймер
         this.timeLimitTimer = setInterval(() => {
             this.timeLimit -= 0.1;
 
             if (timerDisplay) {
                 timerDisplay.textContent = `Время: ${this.timeLimit.toFixed(1)} сек`;
 
-                // Меняем цвет при малом остатке времени
                 if (this.timeLimit < 5) {
                     timerDisplay.classList.add('error');
                 }
@@ -950,7 +870,6 @@ class BaseLevelHandler {
                     onTimeUp();
                 }
 
-                // Удаляем дисплей
                 if (timerDisplay && timerDisplay.parentNode) {
                     timerDisplay.parentNode.removeChild(timerDisplay);
                 }
@@ -967,7 +886,6 @@ class BaseLevelHandler {
             this.timeLimitTimer = null;
         }
 
-        // Удаляем дисплей
         const container = document.getElementById('gameArea') || document.body;
         const timerDisplay = container.querySelector('.time-limit-display');
         if (timerDisplay && timerDisplay.parentNode) {
@@ -983,12 +901,10 @@ class BaseLevelHandler {
 
         if (!svg) return;
 
-        // Находим элементы лампочки в SVG
         const bulb = svg.querySelector('path');
         const rays = svg.querySelector('.rays');
 
         if (isOn) {
-            // Включаем лампочку
             if (bulb) {
                 if (color === 'yellow') {
                     bulb.setAttribute('fill', '#ecde97');
@@ -1019,7 +935,6 @@ class BaseLevelHandler {
             svg.classList.remove('off');
             svg.style.filter = 'drop-shadow(0 0 15px currentColor)';
         } else {
-            // Выключаем лампочку
             if (bulb) {
                 bulb.setAttribute('fill', '#666666');
                 bulb.setAttribute('stroke', '#333333');
@@ -1058,7 +973,6 @@ class BaseLevelHandler {
         const pathData = 'm5.868 15.583a8.938 8.938 0 0 1 -2.793-7.761 9 9 0 1 1 14.857 7.941 5.741 5.741 0 0 0 -1.594 2.237h-3.338v-7.184a3 3 0 0 0 2-2.816 1 1 0 0 0 -2 0 1 1 0 0 1 -2 0 1 1 0 0 0 -2 0 3 3 0 0 0 2 2.816v7.184h-3.437a6.839 6.839 0 0 0 -1.695-2.417zm2.132 4.417v.31a3.694 3.694 0 0 0 3.69 3.69h.62a3.694 3.694 0 0 0 3.69-3.69v-.31z';
 
         if (state === 'on') {
-            // Создаем лучики для включенной лампочки
             const raysGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             raysGroup.setAttribute('class', 'rays');
 
@@ -1083,7 +997,6 @@ class BaseLevelHandler {
 
             svg.appendChild(raysGroup);
 
-            // Создаем саму лампочку
             const bulb = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             bulb.setAttribute('d', pathData);
             bulb.setAttribute('fill', color);
@@ -1142,10 +1055,8 @@ class Level1Handler extends BaseLevelHandler {
         const count = this.sublevel.params.lightbulbs || 1;
         const container = document.getElementById('gameArea') || document.body;
 
-        // Очищаем контейнер
         container.innerHTML = '';
 
-        // Создаем контейнер для лампочек
         const bulbsContainer = document.createElement('div');
         bulbsContainer.className = 'lightbulbs-container bulbs-container';
 
@@ -1155,19 +1066,15 @@ class Level1Handler extends BaseLevelHandler {
             const bulbContainer = document.createElement('div');
             bulbContainer.className = 'lightbulb-container bulb-container';
             bulbContainer.dataset.index = i;
-            // Стили применяются через CSS класс .bulb-container
 
-            // Создаем SVG лампочки
             const svg = this.createLightbulbSVG('off', count > 1 ? 'small' : 'normal');
 
-            // Добавляем номер под лампочкой
             const label = document.createElement('div');
             label.className = 'bulb-label';
 
             bulbContainer.appendChild(svg);
             bulbContainer.appendChild(label);
 
-            // Обработчик клика
             bulbContainer.addEventListener('click', () => this.handleLightbulbClick(i));
 
             bulbsContainer.appendChild(bulbContainer);
@@ -1185,7 +1092,7 @@ class Level1Handler extends BaseLevelHandler {
 
     beginSequence() {
         if (this.core.uiManager) {
-            this.core.uiManager.setActionButton('СТАРТ', null, true); // Делаем кнопку неактивной
+            this.core.uiManager.setActionButton('СТАРТ', null, true);
         }
 
         const type = this.sublevel.type;
@@ -1208,22 +1115,17 @@ class Level1Handler extends BaseLevelHandler {
     startInputTime() {
         const params = this.sublevel.params;
 
-        // Генерируем случайное время
         this.actualDuration = Math.random() * (params.maxDuration - params.minDuration) + params.minDuration;
         this.actualDuration = Math.round(this.actualDuration * 10) / 10;
 
-
         this.showMessage('Смотрите на лампочку...', 'blue');
 
-        // Показываем лампочку
         this.setLightbulbState(0, true, 'yellow');
 
-        // Гасим через нужное время
         const timer = setTimeout(() => {
             this.setLightbulbState(0, false);
-            this.createInputField(); // Создаем поле для ввода
+            this.createInputField();
 
-            // Запускаем таймер для ввода
             const inputTimeLimit = params.inputTimeLimit || 10;
             this.createTimeLimitDisplay(inputTimeLimit, () => this.handleInputTimeUp());
         }, this.actualDuration * 1000);
@@ -1281,7 +1183,6 @@ class Level1Handler extends BaseLevelHandler {
         submitBtn.style.cursor = 'pointer';
         submitBtn.addEventListener('click', () => this.checkInputTime());
 
-        // Также проверка по Enter
         this.inputElement.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.checkInputTime();
@@ -1300,12 +1201,10 @@ class Level1Handler extends BaseLevelHandler {
     }
 
     handleInputTimeUp() {
-        // Время вышло, проверяем ответ
         if (this.inputElement && this.inputElement.value) {
             this.checkInputTime();
         } else {
-            // Игрок не ввел ответ
-            const delta = this.actualDuration; // Максимальное отклонение
+            const delta = this.actualDuration;
             const accuracy = 0;
             const calculatedScore = DataManager.calculateScore(
                 'level1',
@@ -1327,8 +1226,6 @@ class Level1Handler extends BaseLevelHandler {
                 });
             }
 
-            // Сохранение прогресса происходит через gameCore.js
-
             setTimeout(() => {
                 if (this.core.getState && this.core.getState().attempts > 0) {
                     this.resetForNextAttempt();
@@ -1338,7 +1235,6 @@ class Level1Handler extends BaseLevelHandler {
     }
 
     checkInputTime() {
-        // Останавливаем таймер
         this.stopTimeLimit();
 
         if (!this.inputElement) return;
@@ -1351,10 +1247,8 @@ class Level1Handler extends BaseLevelHandler {
 
         const delta = Math.abs(userInput - this.actualDuration);
 
-        // РАСЧЕТ ПО НОВОЙ СИСТЕМЕ
         const accuracy = Math.max(0, 100 - (delta / this.actualDuration) * 100);
 
-        // Бонус за скорость (если осталось время)
         const timeBonus = this.timeLimit > 0 ? 1.0 + (this.timeLimit * 0.02) : 1.0;
 
         const calculatedScore = DataManager.calculateScore(
@@ -1370,7 +1264,6 @@ class Level1Handler extends BaseLevelHandler {
         let message = '';
         let color = 'red';
 
-        // Определяем цвет по проценту
         if (percentage >= 80) {
             color = 'green';
             message = `Идеально! ${accuracy.toFixed(1)}% точности!`;
@@ -1385,14 +1278,8 @@ class Level1Handler extends BaseLevelHandler {
             message = `Попробуйте еще! ${accuracy.toFixed(1)}% точности!`;
         }
 
-        /*if (timeBonus > 1.0) {
-            const bonusPercent = Math.round((timeBonus - 1.0) * 100);
-            message += ` (+${bonusPercent}% за скорость)`;
-        }*/
-
         this.showResult(message, `Отклонение: ${delta.toFixed(1)} сек`, color);
 
-        // Передаем результат в ядро игры с ПРАВИЛЬНЫМИ очками
         if (this.core.handleAttemptResult) {
             this.core.handleAttemptResult({
                 delta: delta,
@@ -1401,8 +1288,6 @@ class Level1Handler extends BaseLevelHandler {
                 timeBonus: timeBonus
             });
         }
-
-        // Сохранение прогресса происходит через gameCore.js
 
         setTimeout(() => {
             if (this.core.getState && this.core.getState().attempts > 0) {
@@ -1421,14 +1306,12 @@ class Level1Handler extends BaseLevelHandler {
 
         this.showMessage('Смотрите на лампочку...', 'blue');
 
-        // Показываем лампочку
         this.setLightbulbState(0, true, 'yellow');
 
         const timer = setTimeout(() => {
             this.setLightbulbState(0, false);
-            this.createTimeCards(); // Создаем летающие карточки
+            this.createTimeCards();
 
-            // Запускаем таймер для выбора
             const timeLimit = this.sublevel.timeLimit || 15;
             this.createTimeLimitDisplay(timeLimit, () => this.handleSelectTimeUp());
         }, this.actualDuration * 1000);
@@ -1440,25 +1323,23 @@ class Level1Handler extends BaseLevelHandler {
         const params = this.sublevel.params;
         const container = document.getElementById('gameArea') || document.body;
 
-        // Удаляем предыдущие элементы
         const existingCards = container.querySelector('.time-cards-container');
         const existingDropZone = container.querySelector('.time-drop-zone');
         if (existingCards) existingCards.remove();
         if (existingDropZone) existingDropZone.remove();
 
-        // Создаем зону перетаскивания (контейнер куда нужно перетащить карточку)
         const dropTarget = document.createElement('div');
         dropTarget.className = 'drop-target';
         dropTarget.id = 'drop-target';
         dropTarget.style.position = 'absolute';
-        dropTarget.style.bottom = '120px'; // Увеличиваем расстояние от нижнего края
+        dropTarget.style.bottom = '120px';
         dropTarget.style.left = '50%';
         dropTarget.style.transform = 'translateX(-50%)';
-        dropTarget.style.width = '250px'; // Увеличиваем ширину
-        dropTarget.style.height = '90px'; // Увеличиваем высоту
+        dropTarget.style.width = '250px';
+        dropTarget.style.height = '90px';
         dropTarget.style.border = '3px dashed #5c885d';
         dropTarget.style.borderRadius = '12px';
-        dropTarget.style.background = 'rgba(92, 136, 93, 0.15)'; // Увеличиваем прозрачность
+        dropTarget.style.background = 'rgba(92, 136, 93, 0.15)';
         dropTarget.style.display = 'flex';
         dropTarget.style.alignItems = 'center';
         dropTarget.style.justifyContent = 'center';
@@ -1468,11 +1349,10 @@ class Level1Handler extends BaseLevelHandler {
         dropTarget.style.textAlign = 'center';
         dropTarget.style.pointerEvents = 'auto';
         dropTarget.style.transition = 'all 0.3s ease';
-        dropTarget.style.zIndex = '2000'; // Высокий z-index чтобы быть поверх карточек
-        dropTarget.style.boxShadow = '0 4px 15px rgba(92, 136, 93, 0.3)'; // Добавляем тень
+        dropTarget.style.zIndex = '2000';
+        dropTarget.style.boxShadow = '0 4px 15px rgba(92, 136, 93, 0.3)';
         dropTarget.textContent = 'Перетащите сюда правильное время';
 
-        // Добавляем обработчики для зоны перетаскивания
         dropTarget.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -1485,7 +1365,6 @@ class Level1Handler extends BaseLevelHandler {
         dropTarget.addEventListener('dragleave', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            // Проверяем, действительно ли мышь покинула зону
             const rect = dropTarget.getBoundingClientRect();
             const x = e.clientX;
             const y = e.clientY;
@@ -1505,24 +1384,20 @@ class Level1Handler extends BaseLevelHandler {
             dropTarget.style.background = 'rgba(92, 136, 93, 0.15)';
             dropTarget.style.transform = 'translateX(-50%) scale(1)';
 
-            // Проверяем, был ли уже сделан выбор
             if (this.selectionMade) {
-                return; // Игнорируем дополнительные перетаскивания
+                return;
             }
 
             const draggedTime = e.dataTransfer.getData('text/plain');
 
-            // Блокируем интерфейс после выбора
             this.selectionMade = true;
             this.lockInterface();
 
-            // Всегда завершаем попытку после перетаскивания (только одна попытка)
             this.checkSelectedTime(parseFloat(draggedTime));
         });
 
         container.appendChild(dropTarget);
 
-        // Создаем контейнер для карточек
         const cardsContainer = document.createElement('div');
         cardsContainer.className = 'time-cards-container';
         cardsContainer.style.position = 'absolute';
@@ -1535,14 +1410,12 @@ class Level1Handler extends BaseLevelHandler {
         cardsContainer.style.pointerEvents = 'auto';
         cardsContainer.style.zIndex = '1000';
 
-        // Убедимся, что game-area имеет относительное позиционирование
         if (container.style.position !== 'relative' &&
             container.style.position !== 'absolute' &&
             container.style.position !== 'fixed') {
             container.style.position = 'relative';
         }
 
-        // Генерируем варианты времени
         const options = [this.actualDuration];
         while (options.length < params.cardsCount) {
             const randomTime = Math.random() * (params.maxDuration - params.minDuration) + params.minDuration;
@@ -1576,36 +1449,31 @@ class Level1Handler extends BaseLevelHandler {
             card.style.zIndex = '1001';
             card.draggable = true;
 
-            // Интеллектуальное позиционирование карточек без перекрытий
-
-            // Определяем зоны исключения
             const excludedZones = [];
 
-            // 1. Зона лампочки
             const lightbulbContainer = document.querySelector('.lightbulb-container');
             if (lightbulbContainer) {
                 const rect = lightbulbContainer.getBoundingClientRect();
                 const containerRect = container.getBoundingClientRect();
                 const bulbX = ((rect.left + rect.width/2 - containerRect.left) / containerRect.width) * 100;
                 const bulbY = ((rect.top + rect.height/2 - containerRect.top) / containerRect.height) * 100;
-                const bulbRadius = Math.max(rect.width, rect.height) / containerRect.width * 100 * 0.8; // Радиус зоны исключения вокруг лампочки
+                const bulbRadius = Math.max(rect.width, rect.height) / containerRect.width * 100 * 0.8;
 
                 excludedZones.push({
                     type: 'circle',
                     x: bulbX,
                     y: bulbY,
-                    radius: Math.max(bulbRadius, 20) // Минимум 20% радиус
+                    radius: Math.max(bulbRadius, 20)
                 });
             }
 
-            // 2. Зона перетаскивания
             const dropTarget = document.getElementById('drop-target');
             if (dropTarget) {
                 const rect = dropTarget.getBoundingClientRect();
                 const containerRect = container.getBoundingClientRect();
                 const dropX = ((rect.left + rect.width/2 - containerRect.left) / containerRect.width) * 100;
                 const dropY = ((rect.top + rect.height/2 - containerRect.top) / containerRect.height) * 100;
-                const dropWidth = (rect.width / containerRect.width) * 100 * 1.5; // Увеличиваем зону на 50%
+                const dropWidth = (rect.width / containerRect.width) * 100 * 1.5;
                 const dropHeight = (rect.height / containerRect.height) * 100 * 1.5;
 
                 excludedZones.push({
@@ -1617,25 +1485,22 @@ class Level1Handler extends BaseLevelHandler {
                 });
             }
 
-            // Размеры карточки в процентах (примерно)
-            const cardWidth = 15; // ~15% ширины
-            const cardHeight = 10; // ~10% высоты
+            const cardWidth = 15;
+            const cardHeight = 10;
 
-            // Функция проверки коллизии с зоной исключения
             const collidesWithZone = (x, y, zone) => {
                 if (zone.type === 'circle') {
                     const distance = Math.sqrt(Math.pow(x - zone.x, 2) + Math.pow(y - zone.y, 2));
                     return distance < (zone.radius + Math.max(cardWidth, cardHeight) / 2);
                 } else if (zone.type === 'rectangle') {
                     return !(x + cardWidth/2 < zone.x ||
-                            x - cardWidth/2 > zone.x + zone.width ||
-                            y + cardHeight/2 < zone.y ||
-                            y - cardHeight/2 > zone.y + zone.height);
+                        x - cardWidth/2 > zone.x + zone.width ||
+                        y + cardHeight/2 < zone.y ||
+                        y - cardHeight/2 > zone.y + zone.height);
                 }
                 return false;
             };
 
-            // Функция проверки коллизии с другими карточками
             const collidesWithCards = (x, y, existingCards) => {
                 for (const existingCard of existingCards) {
                     const distance = Math.sqrt(
@@ -1643,27 +1508,23 @@ class Level1Handler extends BaseLevelHandler {
                         Math.pow(y - existingCard.y, 2)
                     );
                     if (distance < Math.max(cardWidth, cardHeight)) {
-                        return true; // Коллизия обнаружена
+                        return true;
                     }
                 }
                 return false;
             };
 
-            // Находим свободную позицию
             let position = null;
-            const placedCards = []; // Массив уже размещенных карточек
+            const placedCards = [];
             let attempts = 0;
             const maxAttempts = 200;
 
             while (!position && attempts < maxAttempts) {
-                // Генерируем случайную позицию в допустимой области
-                const x = 10 + Math.random() * 80; // 10% to 90%
-                const y = 10 + Math.random() * 55; // 10% to 65% (избегаем зону перетаскивания)
+                const x = 10 + Math.random() * 80;
+                const y = 10 + Math.random() * 55;
 
-                // Проверяем коллизии
                 let hasCollision = false;
 
-                // Проверяем коллизию с зонами исключения
                 for (const zone of excludedZones) {
                     if (collidesWithZone(x, y, zone)) {
                         hasCollision = true;
@@ -1671,12 +1532,10 @@ class Level1Handler extends BaseLevelHandler {
                     }
                 }
 
-                // Проверяем коллизию с другими карточками
                 if (!hasCollision && collidesWithCards(x, y, placedCards)) {
                     hasCollision = true;
                 }
 
-                // Если нет коллизий, позиция подходит
                 if (!hasCollision) {
                     position = { x, y };
                     placedCards.push({ x, y });
@@ -1685,16 +1544,13 @@ class Level1Handler extends BaseLevelHandler {
                 attempts++;
             }
 
-            // Если не нашли идеальную позицию, используем запасной вариант
             if (!position) {
                 const fallbackPositions = [
                     { x: 20, y: 20 }, { x: 70, y: 20 }, { x: 45, y: 40 },
                     { x: 15, y: 50 }, { x: 75, y: 50 }, { x: 45, y: 15 }
                 ];
                 position = fallbackPositions[index % fallbackPositions.length];
-                // Убеждаемся, что fallback позиция тоже не конфликтует
                 if (placedCards.some(p => Math.sqrt(Math.pow(p.x - position.x, 2) + Math.pow(p.y - position.y, 2)) < cardWidth)) {
-                    // Если конфликтует, добавляем небольшое смещение
                     position.x += (Math.random() - 0.5) * 10;
                     position.y += (Math.random() - 0.5) * 10;
                 }
@@ -1707,11 +1563,9 @@ class Level1Handler extends BaseLevelHandler {
             card.style.left = safeX + '%';
             card.style.top = safeY + '%';
 
-            // Анимация плавания
             const floatDuration = 3 + Math.random() * 4;
             card.style.animation = `float ${floatDuration}s ease-in-out infinite`;
 
-            // Обработчики drag & drop событий
             card.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', time.toString());
                 card.style.opacity = '0.5';
@@ -1725,7 +1579,6 @@ class Level1Handler extends BaseLevelHandler {
                 card.style.cursor = 'grab';
             });
 
-            // Визуальные эффекты при наведении
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'scale(1.1)';
                 card.style.boxShadow = '0 15px 30px rgba(0,0,0,0.3)';
@@ -1743,12 +1596,10 @@ class Level1Handler extends BaseLevelHandler {
 
         container.appendChild(cardsContainer);
 
-        // Добавляем стили для анимации
         this.addFloatAnimation();
     }
 
     handleSelectTimeUp() {
-        // Время вышло, игрок не успел выбрать карточку
         this.stopTimeLimit();
 
         const accuracy = 0;
@@ -1790,19 +1641,12 @@ class Level1Handler extends BaseLevelHandler {
     }
 
 
-
     checkSelectedTime(selectedTime) {
-        // Останавливаем таймер
         this.stopTimeLimit();
 
         const delta = Math.abs(selectedTime - this.actualDuration);
-
-        // РАСЧЕТ ПО НОВОЙ СИСТЕМЕ
         const accuracy = Math.max(0, 100 - (delta / this.actualDuration) * 100);
-
-        // Бонус за скорость (если осталось время)
         const timeBonus = this.timeLimit > 0 ? 1.0 + (this.timeLimit * 0.02) : 1.0;
-
         const calculatedScore = DataManager.calculateScore(
             'level1',
             '1-2',
@@ -1816,7 +1660,6 @@ class Level1Handler extends BaseLevelHandler {
         let message = '';
         let color = 'red';
 
-        // Определяем цвет по проценту
         if (percentage >= 80) {
             color = 'green';
             message = `Отлично! ${accuracy.toFixed(1)}% точности!`;
@@ -1842,8 +1685,6 @@ class Level1Handler extends BaseLevelHandler {
             });
         }
 
-        // Сохранение прогресса происходит через gameCore.js
-
         setTimeout(() => {
             if (this.core.getState && this.core.getState().attempts > 0) {
                 this.resetForNextAttempt();
@@ -1852,7 +1693,6 @@ class Level1Handler extends BaseLevelHandler {
     }
 
     lockInterface() {
-        // Блокируем все карточки времени
         this.timeCards.forEach(card => {
             card.draggable = false;
             card.style.cursor = 'not-allowed';
@@ -1860,7 +1700,6 @@ class Level1Handler extends BaseLevelHandler {
             card.classList.add('disabled');
         });
 
-        // Блокируем контейнер перетаскивания
         const dropTarget = document.getElementById('drop-target');
         if (dropTarget) {
             dropTarget.style.pointerEvents = 'none';
@@ -1872,7 +1711,6 @@ class Level1Handler extends BaseLevelHandler {
 
 
     unlockInterface() {
-        // Разблокируем все карточки времени
         this.timeCards.forEach(card => {
             card.draggable = true;
             card.style.cursor = 'grab';
@@ -1880,7 +1718,6 @@ class Level1Handler extends BaseLevelHandler {
             card.classList.remove('disabled');
         });
 
-        // Разблокируем контейнер перетаскивания
         const dropTarget = document.getElementById('drop-target');
         if (dropTarget) {
             dropTarget.style.pointerEvents = 'auto';
@@ -1895,10 +1732,8 @@ class Level1Handler extends BaseLevelHandler {
     startTwoIntervals() {
         const params = this.sublevel.params;
 
-        // Генерируем случайные интервалы для каждого раунда
-        // Диапазон: 0.5-2.0 сек для первого интервала, 1.0-3.0 сек для второго
-        const firstInterval = 0.5 + Math.random() * 1.5; // 0.5-2.0
-        const secondInterval = 1.0 + Math.random() * 2.0; // 1.0-3.0
+        const firstInterval = 0.5 + Math.random() * 1.5;
+        const secondInterval = 1.0 + Math.random() * 2.0;
         const intervals = [firstInterval, secondInterval];
 
         this.correctTotal = intervals[0] + intervals[1];
@@ -1907,7 +1742,6 @@ class Level1Handler extends BaseLevelHandler {
 
         let currentTime = 0;
 
-        // Первый интервал
         const firstOnTimer = setTimeout(() => {
             this.setLightbulbState(0, true, 'yellow');
         }, currentTime);
@@ -1916,9 +1750,8 @@ class Level1Handler extends BaseLevelHandler {
             this.setLightbulbState(0, false);
         }, currentTime + intervals[0] * 1000);
 
-        currentTime += intervals[0] * 1000 + 1000; // Пауза 1 сек
+        currentTime += intervals[0] * 1000 + 1000;
 
-        // Второй интервал
         const secondOnTimer = setTimeout(() => {
             this.setLightbulbState(0, true, 'yellow');
         }, currentTime);
@@ -2012,7 +1845,6 @@ class Level1Handler extends BaseLevelHandler {
 
         const delta = Math.abs(userInput - this.correctTotal);
 
-        // РАСЧЕТ ПО НОВОЙ СИСТЕМЕ
         const accuracy = Math.max(0, 100 - (delta / this.correctTotal) * 100);
 
         const calculatedScore = DataManager.calculateScore(
@@ -2028,7 +1860,6 @@ class Level1Handler extends BaseLevelHandler {
         let message = '';
         let color = 'red';
 
-        // Определяем цвет по проценту
         if (percentage >= 80) {
             color = 'green';
             message = `Идеально! ${accuracy.toFixed(1)}% точности!`;
@@ -2053,8 +1884,6 @@ class Level1Handler extends BaseLevelHandler {
             });
         }
 
-        // Сохранение прогресса происходит через gameCore.js
-
         setTimeout(() => {
             if (this.core.getState && this.core.getState().attempts > 0) {
                 this.resetForNextAttempt();
@@ -2062,28 +1891,22 @@ class Level1Handler extends BaseLevelHandler {
         }, 3000);
     }
 
-    // ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
     handleLightbulbClick(index) {
         // Обработчик кликов по лампочкам
     }
 
     resetForNextAttempt() {
-        // Останавливаем таймер
         this.stopTimeLimit();
 
-        // Очищаем все созданные элементы
         const container = document.getElementById('gameArea') || document.body;
         const existingElements = container.querySelectorAll('.input-container, .time-cards-container, .lightbulbs-container, .time-limit-display, .drop-target');
         existingElements.forEach(el => el.remove());
 
-        // Сбрасываем состояние drag-and-drop
         this.selectionMade = false;
         this.unlockInterface();
 
-        // Создаем лампочки заново
         this.createLightbulbs();
 
-        // Сбрасываем кнопку
         if (this.core.uiManager) {
             this.core.uiManager.setActionButton('СТАРТ', () => this.beginSequence());
             this.core.uiManager.showHint(this.sublevel.description);
@@ -2151,7 +1974,6 @@ class Level2Handler extends BaseLevelHandler {
 
             bulbContainer.appendChild(svg);
 
-            // Обработчик клика
             bulbContainer.addEventListener('click', () => this.handleLightbulbClick(i));
 
             bulbsContainer.appendChild(bulbContainer);
@@ -2168,7 +1990,6 @@ class Level2Handler extends BaseLevelHandler {
 
         container.appendChild(bulbsContainer);
 
-        // Сохраняем начальные позиции после рендеринга
         setTimeout(() => this.saveInitialPositions(), 50);
     }
 
@@ -2238,29 +2059,25 @@ class Level2Handler extends BaseLevelHandler {
         });
 
         const blurTimer = setTimeout(() => {
-            this.applyBlur(); // Применяем размытие и движение
+            this.applyBlur();
         }, currentTime + 500);
 
         this.addTimer(blurTimer);
     }
 
     applyBlur() {
-        this.isBlurred = true; // Устанавливаем флаг для разрешения кликов
+        this.isBlurred = true;
         this.showMessage('Найдите лампочку с паттерном! У вас 5 секунд.', 'blue');
 
-        // Размываем все лампочки
         this.lightbulbs.forEach(lightbulb => {
             lightbulb.container.style.filter = 'blur(3px)';
             lightbulb.container.style.opacity = '0.7';
         });
 
-        // Запускаем движение
         this.startMovement();
 
-        // ЗАПУСКАЕМ ТАЙМЕР ВЫБОРА НА 5 СЕКУНД
         this.startSelectionTimer();
 
-        // Запускаем мигание отвлекающих лампочек
         const params = this.sublevel.params;
         if (params.distractionBlink) {
             this.lightbulbs.forEach((lightbulb, index) => {
@@ -2282,17 +2099,14 @@ class Level2Handler extends BaseLevelHandler {
         const containerRect = container.getBoundingClientRect();
 
         this.lightbulbs.forEach(lightbulb => {
-            // Сохраняем оригинальную позицию
             const rect = lightbulb.container.getBoundingClientRect();
             lightbulb.originalPosition = {
                 x: rect.left - containerRect.left,
                 y: rect.top - containerRect.top
             };
 
-            // Сразу перемещаем лампочку на новую позицию
             this.moveBulbToNewPosition(lightbulb);
 
-            // Запускаем непрерывное движение
             this.moveBulb(lightbulb);
         });
     }
@@ -2301,7 +2115,6 @@ class Level2Handler extends BaseLevelHandler {
         const container = lightbulb.container.parentElement;
         const containerRect = container.getBoundingClientRect();
 
-        // Генерируем новую позицию в пределах контейнера
         const maxX = containerRect.width - 150;
         const maxY = containerRect.height - 150;
 
@@ -2326,7 +2139,6 @@ class Level2Handler extends BaseLevelHandler {
                 return;
             }
 
-            // Перемещаем лампочку на новую позицию
             this.moveBulbToNewPosition(lightbulb);
         }, 2000);
 
@@ -2338,21 +2150,19 @@ class Level2Handler extends BaseLevelHandler {
         const params = this.sublevel.params;
         const count = params.lightbulbs || 3;
 
-        // Генерируем случайные длительности для каждой лампочки
         this.lightDurations = [];
         for (let i = 0; i < count; i++) {
             const duration = Math.random() * (params.maxDuration - params.minDuration) + params.minDuration;
             this.lightDurations.push(Math.round(duration * 10) / 10);
         }
 
-        // Блокируем клики во время демонстрации
         this.isDemonstrating = true;
 
         this.showMessage('Запоминайте время горения каждой лампочки...', 'blue');
 
         let currentTime = 0;
         this.lightbulbs.forEach((lightbulb, index) => {
-            // Применяем оттенок
+
             if (params.shades && params.shades[index]) {
                 const shade = params.shades[index];
                 let brightness = 1.0;
@@ -2376,11 +2186,10 @@ class Level2Handler extends BaseLevelHandler {
         });
 
         const shuffleTimer = setTimeout(() => {
-            // Разблокируем клики после демонстрации
             this.isDemonstrating = false;
 
-            this.shuffleLightbulbs(); // Перемешиваем лампочки
-            this.showTargetCard(); // Показываем целевую карточку
+            this.shuffleLightbulbs();
+            this.showTargetCard();
         }, currentTime + 1000);
 
         this.addTimer(shuffleTimer);
@@ -2391,25 +2200,20 @@ class Level2Handler extends BaseLevelHandler {
         const container = this.lightbulbs[0].container.parentElement;
         const containerRect = container.getBoundingClientRect();
 
-        // Сбрасываем стили контейнера для правильного позиционирования
         container.style.position = 'relative';
         container.style.overflow = 'visible';
         container.style.minHeight = '350px';
         container.style.height = 'auto';
 
-        // Убедимся, что лампочки имеют начальные позиции
         if (!this.lightbulbs[0].originalPosition) {
             this.saveInitialPositions();
         }
 
-        // Рассчитываем безопасную область для перемещения
         const safeArea = {
-            width: containerRect.width - 180, // Оставляем отступы
+            width: containerRect.width - 180,
             height: containerRect.height - 180
         };
 
-
-        // Массив для отслеживания занятых позиций
         const occupiedPositions = [];
 
         this.lightbulbs.forEach(lightbulb => {
@@ -2420,18 +2224,16 @@ class Level2Handler extends BaseLevelHandler {
             let newX, newY;
             let positionFound = false;
 
-            // Пытаемся найти свободную позицию
             while (attempts < 50 && !positionFound) {
                 newX = Math.random() * Math.max(50, safeArea.width - bulbWidth);
                 newY = Math.random() * Math.max(50, safeArea.height - bulbHeight);
 
-                // Проверяем, не перекрывает ли эта позиция другие лампочки
                 let overlaps = false;
                 for (const pos of occupiedPositions) {
                     const distance = Math.sqrt(
                         Math.pow(newX - pos.x, 2) + Math.pow(newY - pos.y, 2)
                     );
-                    if (distance < 150) { // Минимальное расстояние между лампочками
+                    if (distance < 150) {
                         overlaps = true;
                         break;
                     }
@@ -2444,18 +2246,14 @@ class Level2Handler extends BaseLevelHandler {
                 attempts++;
             }
 
-            // Если не нашли свободную позицию, используем случайную
             if (!positionFound) {
                 newX = Math.random() * Math.max(50, safeArea.width - bulbWidth);
                 newY = Math.random() * Math.max(50, safeArea.height - bulbHeight);
             }
 
-            // Добавляем отступ от краев
             newX += 40;
             newY += 40;
 
-
-            // Применяем новую позицию
             lightbulb.container.style.position = 'absolute';
             lightbulb.container.style.left = `${newX}px`;
             lightbulb.container.style.top = `${newY}px`;
@@ -2463,7 +2261,6 @@ class Level2Handler extends BaseLevelHandler {
             lightbulb.container.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
             lightbulb.container.style.transform = 'none';
 
-            // Добавляем небольшую анимацию для визуального эффекта
             setTimeout(() => {
                 lightbulb.container.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
             }, 100);
@@ -2471,7 +2268,6 @@ class Level2Handler extends BaseLevelHandler {
             lightbulb.isShuffled = true;
         });
 
-        // Добавляем инструкцию для пользователя
         const instruction = document.createElement('div');
         instruction.className = 'shuffle-instruction';
         instruction.textContent = 'Лампочки перемешаны! Теперь найдите нужную.';
@@ -2514,32 +2310,24 @@ class Level2Handler extends BaseLevelHandler {
         });
     }
 
-    /**
-     * Запускает таймер для выбора лампочки (5 секунд)
-     */
+    // Запускает таймер для выбора лампочки
     startSelectionTimer() {
-        // Очищаем старый таймер если есть
         this.stopSelectionTimer();
 
-        // Создаем отображение таймера
         this.createSelectionTimerDisplay();
 
-        // Устанавливаем начальное время
         let timeLeft = this.selectionTimeLimit;
 
-        // Обновляем отображение
         if (this.selectionTimerDisplay) {
             this.selectionTimerDisplay.textContent = `Время на выбор: ${timeLeft} сек`;
         }
 
-        // Запускаем таймер
         this.selectionTimer = setInterval(() => {
             timeLeft -= 0.1;
 
             if (this.selectionTimerDisplay) {
                 this.selectionTimerDisplay.textContent = `Время на выбор: ${timeLeft.toFixed(1)} сек`;
 
-                // Меняем цвет при малом остатке времени
                 if (timeLeft < 3) {
                     this.selectionTimerDisplay.classList.add('warning');
                 }
@@ -2548,7 +2336,6 @@ class Level2Handler extends BaseLevelHandler {
                 }
             }
 
-            // Проверяем истекло ли время
             if (timeLeft <= 0) {
                 this.handleSelectionTimeUp();
             }
@@ -2557,18 +2344,15 @@ class Level2Handler extends BaseLevelHandler {
         this.addTimer(this.selectionTimer);
     }
 
-    // Создает отображение таймера выбора
     createSelectionTimerDisplay() {
-        // Удаляем старый таймер если есть
         if (this.selectionTimerDisplay && this.selectionTimerDisplay.parentNode) {
             this.selectionTimerDisplay.parentNode.removeChild(this.selectionTimerDisplay);
         }
 
-        // Создаем новый элемент таймера
         this.selectionTimerDisplay = document.createElement('div');
         this.selectionTimerDisplay.className = 'selection-timer-display';
         this.selectionTimerDisplay.style.position = 'fixed';
-        this.selectionTimerDisplay.style.top = '70px'; // Под основным таймером
+        this.selectionTimerDisplay.style.top = '70px';
         this.selectionTimerDisplay.style.left = '50%';
         this.selectionTimerDisplay.style.transform = 'translateX(-50%)';
         this.selectionTimerDisplay.style.zIndex = '1000';
@@ -2581,20 +2365,15 @@ class Level2Handler extends BaseLevelHandler {
         this.selectionTimerDisplay.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
         this.selectionTimerDisplay.style.transition = 'all 0.3s ease';
 
-        // Добавляем в DOM
         const container = document.getElementById('gameArea') || document.body;
         container.appendChild(this.selectionTimerDisplay);
     }
 
-    // Обработчик истечения времени на выбор
     handleSelectionTimeUp() {
-        // Останавливаем таймер
         this.stopSelectionTimer();
 
-        // Останавливаем движение лампочек если есть
         this.isBlurred = false;
 
-        // Показываем сообщение о проигрыше
         const accuracy = 0;
         let sublevelId = '';
 
@@ -2617,14 +2396,12 @@ class Level2Handler extends BaseLevelHandler {
         const message = 'Время вышло! Вы не успели выбрать лампочку.';
         const color = '#b65048';
 
-        // Убираем размытие
         this.lightbulbs.forEach(lightbulb => {
             lightbulb.container.style.filter = 'none';
             lightbulb.container.style.opacity = '1';
             lightbulb.container.style.transform = 'scale(1)';
         });
 
-        // Подсвечиваем правильную лампочку красным
         this.setLightbulbState(this.targetIndex, true, '#b65048');
 
         this.showResult(message, 'Время истекло!', color);
@@ -2637,7 +2414,6 @@ class Level2Handler extends BaseLevelHandler {
             });
         }
 
-        // Через 3 секунды начинаем новую попытку
         setTimeout(() => {
             if (this.core.getState && this.core.getState().attempts > 0) {
                 this.resetForNextAttempt();
@@ -2645,14 +2421,12 @@ class Level2Handler extends BaseLevelHandler {
         }, 3000);
     }
 
-    // Останавливает таймер выбора
     stopSelectionTimer() {
         if (this.selectionTimer) {
             clearInterval(this.selectionTimer);
             this.selectionTimer = null;
         }
 
-        // Удаляем отображение таймера
         if (this.selectionTimerDisplay && this.selectionTimerDisplay.parentNode) {
             this.selectionTimerDisplay.parentNode.removeChild(this.selectionTimerDisplay);
             this.selectionTimerDisplay = null;
@@ -2660,11 +2434,9 @@ class Level2Handler extends BaseLevelHandler {
     }
 
     showTargetCard() {
-        // Выбираем случайную лампочку как цель
         this.targetIndex = Math.floor(Math.random() * this.lightbulbs.length);
         const targetDuration = this.lightDurations[this.targetIndex];
 
-        // Создаем карточку с временем
         const container = document.getElementById('gameArea') || document.body;
 
         const card = document.createElement('div');
@@ -2691,7 +2463,6 @@ class Level2Handler extends BaseLevelHandler {
         container.appendChild(card);
         this.cardContainer = card;
 
-        // ЗАПУСКАЕМ ТАЙМЕР ВЫБОРА НА 5 СЕКУНД
         this.startSelectionTimer();
     }
 
@@ -2699,7 +2470,6 @@ class Level2Handler extends BaseLevelHandler {
     startRepeatPattern() {
         const params = this.sublevel.params;
 
-        // Генерируем случайный паттерн
         this.pattern = [];
         for (let i = 0; i < params.patternLength; i++) {
             const duration = Math.random() * (params.segmentMax - params.segmentMin) + params.segmentMin;
@@ -2718,12 +2488,10 @@ class Level2Handler extends BaseLevelHandler {
 
         let currentTime = 0;
         this.pattern.forEach((duration, index) => {
-            // Включаем лампочку
             const onTimer = setTimeout(() => {
                 this.setLightbulbState(this.demonstrationIndex, true, 'yellow');
             }, currentTime);
 
-            // Выключаем
             const offTimer = setTimeout(() => {
                 this.setLightbulbState(this.demonstrationIndex, false);
             }, currentTime + duration * 1000);
@@ -2731,10 +2499,9 @@ class Level2Handler extends BaseLevelHandler {
             this.addTimer(onTimer);
             this.addTimer(offTimer);
 
-            currentTime += duration * 1000 + 300; // Пауза 300мс
+            currentTime += duration * 1000 + 300;
         });
 
-        // После демонстрации
         const switchTimer = setTimeout(() => {
             this.showMessage('Теперь повторите паттерн на второй лампочке!', 'blue');
             this.setupRecording();
@@ -2744,10 +2511,8 @@ class Level2Handler extends BaseLevelHandler {
     }
 
     setupRecording() {
-        // Находим контейнер лампочек
         const bulbsContainer = document.querySelector('.lightbulbs-container');
 
-        // Создаем кнопку для записи
         const buttonContainer = document.createElement('div');
         buttonContainer.style.textAlign = 'center';
         buttonContainer.style.marginTop = '20px';
@@ -2779,7 +2544,6 @@ class Level2Handler extends BaseLevelHandler {
         buttonContainer.appendChild(this.recordButton);
         bulbsContainer.appendChild(buttonContainer);
 
-        // Добавляем подсказку
         const hint = document.createElement('div');
         hint.textContent = 'Двойной клик на лампочке 2, чтобы записать сегменты паттерна';
         hint.style.userSelect = 'none';
@@ -2796,26 +2560,21 @@ class Level2Handler extends BaseLevelHandler {
         this.recordedPattern = [];
         this.recordingStartTime = Date.now();
 
-        // Устанавливаем обработчики для интерактивной лампочки
         const interactiveBulb = this.lightbulbs[this.interactiveIndex];
         if (interactiveBulb) {
             const handleDoubleClick = () => {
                 if (this.isRecording) {
-                    // Переключаем состояние лампочки
                     const isCurrentlyOn = interactiveBulb.container.querySelector('svg').classList.contains('on');
 
                     if (!isCurrentlyOn) {
-                        // Включаем лампочку - начало сегмента
                         this.setLightbulbState(this.interactiveIndex, true, 'green');
                         this.segmentStartTime = Date.now();
                     } else {
-                        // Выключаем лампочку - конец сегмента
                         if (this.segmentStartTime) {
                             const duration = (Date.now() - this.segmentStartTime) / 1000;
                             this.recordedPattern.push(Math.round(duration * 10) / 10);
                             this.setLightbulbState(this.interactiveIndex, false);
 
-                            // Показываем обратную связь
                             this.showMessage(`Сегмент ${this.recordedPattern.length}: ${duration.toFixed(1)} сек`, 'green');
                             this.segmentStartTime = null;
                         }
@@ -2825,7 +2584,6 @@ class Level2Handler extends BaseLevelHandler {
 
             interactiveBulb.container.addEventListener('dblclick', handleDoubleClick);
 
-            // Сохраняем для удаления
             this.recordingHandlers = { handleDoubleClick };
         }
     }
@@ -2833,7 +2591,6 @@ class Level2Handler extends BaseLevelHandler {
     stopRecording() {
         this.isRecording = false;
 
-        // Удаляем обработчики
         if (this.recordingHandlers) {
             const interactiveBulb = this.lightbulbs[this.interactiveIndex];
             if (interactiveBulb) {
@@ -2843,14 +2600,12 @@ class Level2Handler extends BaseLevelHandler {
             }
         }
 
-        // Выключаем лампочку, если она была включена
         this.setLightbulbState(this.interactiveIndex, false);
         this.segmentStartTime = null;
     }
 
     checkPattern() {
 
-        // Сравниваем паттерны
         let correctSegments = 0;
         const minLength = Math.min(this.pattern.length, this.recordedPattern.length);
 
@@ -2862,12 +2617,11 @@ class Level2Handler extends BaseLevelHandler {
 
         const accuracy = (correctSegments / this.pattern.length) * 100;
 
-        // РАСЧЕТ ПО НОВОЙ СИСТЕМЕ
         const calculatedScore = DataManager.calculateScore(
             'level2',
             '2-3',
             accuracy,
-            1.0 // timeBonus (для этого уровня можно добавить бонус за скорость)
+            1.0 // timeBonus
         );
 
         const maxScore = DataManager.getMaxScoreForSublevel('level2', '2-3');
@@ -2876,7 +2630,6 @@ class Level2Handler extends BaseLevelHandler {
         let message = '';
         let color = 'red';
 
-        // Определяем цвет по проценту
         if (percentage >= 80) {
             color = 'green';
             message = `Отлично! ${accuracy.toFixed(1)}% точности!`;
@@ -2901,8 +2654,6 @@ class Level2Handler extends BaseLevelHandler {
             });
         }
 
-        // Сохранение прогресса происходит через gameCore.js
-
         setTimeout(() => {
             if (this.core.getState && this.core.getState().attempts > 0) {
                 this.resetForNextAttempt();
@@ -2921,15 +2672,12 @@ class Level2Handler extends BaseLevelHandler {
                 return;
             }
 
-            // ОСТАНАВЛИВАЕМ ДВИЖЕНИЕ
             this.isBlurred = false;
 
             if (index === this.targetIndex) {
-                // Правильно! Останавливаем таймер
                 this.stopSelectionTimer();
                 this.showSuccess();
             } else {
-                // Неправильно - показываем красный цвет
                 this.setLightbulbState(index, true, '#bf635d');
                 setTimeout(() => {
                     this.setLightbulbState(index, false);
@@ -2937,37 +2685,30 @@ class Level2Handler extends BaseLevelHandler {
                 }, 500);
             }
         } else if (type === 'find_duration') {
-            // Блокируем клики во время демонстрации времени горения
             if (this.isDemonstrating) {
                 this.showMessage('Подождите окончания демонстрации!', 'blue');
                 return;
             }
 
-            // Останавливаем таймер выбора при любом выборе
             this.stopSelectionTimer();
 
-            // Подсвечиваем выбранную лампочку красным, если неправильная
             if (index !== this.targetIndex) {
                 this.setLightbulbState(index, true, '#bf635d');
             }
 
-            // Всегда подсвечиваем правильную лампочку зеленым
             setTimeout(() => {
                 this.setLightbulbState(this.targetIndex, true, '#648364');
 
-                // Убираем карточку с заданием
                 if (this.cardContainer) {
                     this.cardContainer.remove();
                 }
 
-                // Показываем результат
                 if (index === this.targetIndex) {
                     this.showMessage('Отлично!', 'green');
                 } else {
                     this.showMessage('Неправильно. Правильная лампочка выделена зеленым.', '#bf635d');
                 }
 
-                // Завершаем попытку через 2 секунды
                 setTimeout(() => {
                     this.showResultForFindDuration(index === this.targetIndex);
                 }, 2000);
@@ -3001,7 +2742,6 @@ class Level2Handler extends BaseLevelHandler {
             color = '#bf635d';
         }
 
-        // Убираем размытие со всех лампочек
         this.lightbulbs.forEach((lightbulb) => {
             lightbulb.container.style.filter = 'none';
             lightbulb.container.style.opacity = '1';
@@ -3009,7 +2749,6 @@ class Level2Handler extends BaseLevelHandler {
 
         this.isBlurred = false;
 
-        // Для озвучивания через aria-live оставляем только основное сообщение без дублирующих слов
         this.showResult(message, '', color);
 
         if (this.core.handleAttemptResult) {
@@ -3029,7 +2768,6 @@ class Level2Handler extends BaseLevelHandler {
     }
 
     showSuccess() {
-        // ОСТАНАВЛИВАЕМ ТАЙМЕР ВЫБОРА
         this.stopSelectionTimer();
 
         const accuracy = 100;
@@ -3067,12 +2805,6 @@ class Level2Handler extends BaseLevelHandler {
 
         message = 'Отлично!';
 
-/*        if (timeBonus > 1.0) {
-            const bonusPercent = Math.round((timeBonus - 1.0) * 100);
-            message += ` (+${bonusPercent}% за скорость)`;
-        }*/
-
-        // Убираем размытие и подсвечиваем правильную лампочку
         this.lightbulbs.forEach((lightbulb, index) => {
             lightbulb.container.style.filter = 'none';
             lightbulb.container.style.opacity = '1';
@@ -3086,7 +2818,6 @@ class Level2Handler extends BaseLevelHandler {
 
         this.isBlurred = false;
 
-        // В aria-live оставляем только основное сообщение без дублирующего \"Правильно!\"
         this.showResult(message, '', color);
 
         if (this.core.handleAttemptResult) {
@@ -3144,9 +2875,8 @@ class Level2Handler extends BaseLevelHandler {
             }
         });
 
-        // Сбрасываем состояние
         this.isBlurred = false;
-        this.isDemonstrating = false; // Сбрасываем флаг демонстрации
+        this.isDemonstrating = false;
         this.targetIndex = 0;
         this.targetPattern = [];
         this.lightDurations = [];
@@ -3154,15 +2884,12 @@ class Level2Handler extends BaseLevelHandler {
         this.isRecording = false;
         this.currentRecordingIndex = null;
 
-        // Очищаем таймеры
         this.clearTimers();
         this.stopTimeLimit();
         this.stopSelectionTimer();
 
-        // Сбрасываем позиции лампочек
         this.resetBulbPositions();
 
-        // Создаем лампочки заново
         this.createLightbulbs();
 
         if (this.core.uiManager) {
@@ -3214,16 +2941,13 @@ class Level3Handler extends BaseLevelHandler {
             bulbContainer.style.position = 'relative';
             bulbContainer.style.padding = '10px';
 
-            // Определяем цвет для лампочки
             const colors = params.colors || ['#e8aaaa', '#87ae87', '#5e5e91', '#fafac3'];
             const color = colors[i % colors.length];
 
-            // Создаем SVG лампочки с цветом
             const svg = this.createLightbulbSVG('off', 'small', color);
 
             bulbContainer.appendChild(svg);
 
-            // Обработчик клика только для 3-1
             if (this.sublevel.type === 'simon_pattern') {
                 bulbContainer.addEventListener('click', () => this.handleLightbulbClick(i));
             }
@@ -3269,7 +2993,6 @@ class Level3Handler extends BaseLevelHandler {
         this.isPlayingSequence = false;
         this.isInputEnabled = false;
 
-        // Генерируем случайную последовательность
         const sequenceLength = params.sequenceLength || 4;
         for (let i = 0; i < sequenceLength; i++) {
             const bulbIndex = Math.floor(Math.random() * params.lightbulbs);
@@ -3279,7 +3002,6 @@ class Level3Handler extends BaseLevelHandler {
                 duration: Math.round(duration * 10) / 10
             });
         }
-
 
         this.showMessage('Смотрите внимательно! Запоминайте последовательность...', '#4a6fa5');
         this.playSequence();
@@ -3292,13 +3014,11 @@ class Level3Handler extends BaseLevelHandler {
         let currentTime = 0;
 
         this.sequence.forEach((step, index) => {
-            // Включаем лампочку
             const onTimer = setTimeout(() => {
                 const color = this.lightbulbs[step.index].color;
                 this.setLightbulbState(step.index, true, color);
             }, currentTime);
 
-            // Выключаем лампочку через нужное время
             const offTimer = setTimeout(() => {
                 this.setLightbulbState(step.index, false);
             }, currentTime + step.duration * 1000);
@@ -3306,10 +3026,9 @@ class Level3Handler extends BaseLevelHandler {
             this.addTimer(onTimer);
             this.addTimer(offTimer);
 
-            currentTime += step.duration * 1000 + 500; // Пауза между шагами
+            currentTime += step.duration * 1000 + 500;
         });
 
-        // После воспроизведения включаем ввод
         const finishTimer = setTimeout(() => {
             this.isPlayingSequence = false;
             this.isInputEnabled = true;
@@ -3326,36 +3045,29 @@ class Level3Handler extends BaseLevelHandler {
         const params = this.sublevel.params;
         this.userAnswer = null;
 
-        // Очищаем предыдущие элементы
         const container = document.getElementById('gameArea') || document.body;
         const existingElements = container.querySelectorAll('.equation-container, .input-container');
         existingElements.forEach(el => el.remove());
 
-        // Генерируем случайное время для каждой лампочки (от 1 до 5 секунд)
         this.lightDurations = [];
         for (let i = 0; i < params.lightbulbs; i++) {
-            const duration = Math.random() * 4 + 1; // от 1 до 5 секунд
-            this.lightDurations.push(Math.round(duration * 10) / 10); // округляем до 0.1
+            const duration = Math.random() * 4 + 1;
+            this.lightDurations.push(Math.round(duration * 10) / 10);
         }
 
         this.showMessage('Внимательно смотрите! Каждая лампочка покажет время своего горения...', '#4a6fa5');
 
-        // Показываем время горения каждой лампочки
         let currentTime = 0;
 
         this.lightbulbs.forEach((lightbulb, index) => {
-            // Добавляем небольшой разброс для визуального интереса
-            const delay = index * 100; // небольшая задержка между включениями
+            const delay = index * 100;
 
-            // Включаем лампочку
             const onTimer = setTimeout(() => {
                 this.setLightbulbState(index, true, lightbulb.color);
 
-                // Показываем время горения над лампочкой
                 this.showDurationOverlay(index, this.lightDurations[index]);
             }, currentTime + delay);
 
-            // Выключаем лампочку через нужное время
             const offTimer = setTimeout(() => {
                 this.setLightbulbState(index, false);
                 this.hideDurationOverlay(index);
@@ -3364,10 +3076,9 @@ class Level3Handler extends BaseLevelHandler {
             this.addTimer(onTimer);
             this.addTimer(offTimer);
 
-            currentTime += this.lightDurations[index] * 1000 + 800; // Пауза между лампочками
+            currentTime += this.lightDurations[index] * 1000 + 800;
         });
 
-        // Генерируем уравнение после показа всех лампочек
         const equationTimer = setTimeout(() => {
             this.generateEquation();
             this.showEquation();
@@ -3379,11 +3090,9 @@ class Level3Handler extends BaseLevelHandler {
     showDurationOverlay(index, duration) {
         const bulbContainer = this.lightbulbs[index].container;
 
-        // Удаляем предыдущий оверлей если есть
         const existingOverlay = bulbContainer.querySelector('.duration-overlay');
         if (existingOverlay) existingOverlay.remove();
 
-        // Создаем оверлей с временем
         const overlay = document.createElement('div');
         overlay.className = 'duration-overlay';
         overlay.textContent = `${duration.toFixed(1)}с`;
@@ -3414,11 +3123,9 @@ class Level3Handler extends BaseLevelHandler {
     generateEquation() {
         const params = this.sublevel.params;
 
-        // Выбираем тип уравнения случайным образом
         const equationTypes = params.equationTypes || ['addition', 'subtraction', 'multiplication'];
         const equationType = equationTypes[Math.floor(Math.random() * equationTypes.length)];
 
-        // Выбираем случайные индексы лампочек
         let a, b;
 
         switch(equationType) {
@@ -3440,7 +3147,6 @@ class Level3Handler extends BaseLevelHandler {
                 b = Math.floor(Math.random() * this.lightDurations.length);
                 while (b === a) b = Math.floor(Math.random() * this.lightDurations.length);
 
-                // Убедимся, что результат положительный
                 const timeA = this.lightDurations[a];
                 const timeB = this.lightDurations[b];
 
@@ -3463,7 +3169,7 @@ class Level3Handler extends BaseLevelHandler {
 
             case 'multiplication':
                 a = Math.floor(Math.random() * this.lightDurations.length);
-                const multiplier = Math.floor(Math.random() * 3) + 2; // 2, 3 или 4
+                const multiplier = Math.floor(Math.random() * 3) + 2;
 
                 this.equation = {
                     type: 'multiplication',
@@ -3474,7 +3180,6 @@ class Level3Handler extends BaseLevelHandler {
                 break;
 
             case 'average':
-                // Среднее значение двух лампочек
                 const indices = [];
                 while (indices.length < 2) {
                     const idx = Math.floor(Math.random() * this.lightDurations.length);
@@ -3491,7 +3196,6 @@ class Level3Handler extends BaseLevelHandler {
                 break;
         }
 
-        // Округляем ответ до 1 знака после запятой
         this.equation.answer = Math.round(this.equation.answer * 10) / 10;
         this.correctAnswer = this.equation.answer;
 
@@ -3500,7 +3204,6 @@ class Level3Handler extends BaseLevelHandler {
     showEquation() {
         const container = document.getElementById('gameArea') || document.body;
 
-        // Создаем контейнер для уравнения
         const equationContainer = document.createElement('div');
         equationContainer.className = 'equation-container';
         equationContainer.style.textAlign = 'center';
@@ -3511,7 +3214,6 @@ class Level3Handler extends BaseLevelHandler {
         equationContainer.style.maxWidth = '500px';
         equationContainer.style.margin = '10px auto';
 
-        // Показываем уравнение
         const equationText = document.createElement('div');
         equationText.innerHTML = `
             <h3 style="color: #648364; margin-bottom: 10px; font-size: 18px;">Математическая задача:</h3>
@@ -3523,7 +3225,6 @@ class Level3Handler extends BaseLevelHandler {
             </div>
         `;
 
-        // Создаем поле для ввода ответа
         const inputContainer = document.createElement('div');
         inputContainer.className = 'input-container';
         inputContainer.style.marginTop = '10px';
@@ -3548,8 +3249,7 @@ class Level3Handler extends BaseLevelHandler {
         input.style.outline = 'none';
 
         input.addEventListener('focus', () => {
-            input.style.borderColor = '#648364';
-            input.style.boxShadow = '0 0 0 3px rgba(156, 39, 176, 0.2)';
+            input.style.borderColor = '#708F96';
         });
 
         input.addEventListener('blur', () => {
@@ -3561,7 +3261,7 @@ class Level3Handler extends BaseLevelHandler {
         submitBtn.textContent = 'Проверить';
         submitBtn.style.padding = '10px 20px';
         submitBtn.style.fontSize = '16px';
-        submitBtn.style.background = 'linear-gradient(135deg, #9c27b0, #7b1fa2)';
+        submitBtn.style.background = '#708F96';
         submitBtn.style.color = 'white';
         submitBtn.style.border = 'none';
         submitBtn.style.borderRadius = '8px';
@@ -3571,7 +3271,6 @@ class Level3Handler extends BaseLevelHandler {
 
         submitBtn.addEventListener('mouseover', () => {
             submitBtn.style.transform = 'translateY(-2px)';
-            submitBtn.style.boxShadow = '0 5px 15px rgba(156, 39, 176, 0.4)';
         });
 
         submitBtn.addEventListener('mouseout', () => {
@@ -3583,7 +3282,6 @@ class Level3Handler extends BaseLevelHandler {
             this.checkAnswer(input.value);
         });
 
-        // Также проверяем по нажатию Enter
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.checkAnswer(input.value);
@@ -3598,29 +3296,23 @@ class Level3Handler extends BaseLevelHandler {
         equationContainer.appendChild(inputContainer);
         container.appendChild(equationContainer);
 
-        // Фокусируемся на поле ввода
         setTimeout(() => input.focus(), 100);
 
-        // Запускаем таймер
         this.startTimeLimit();
     }
 
-    // ========== МЕТОДЫ ДЛЯ РАБОТЫ С ТАЙМЕРОМ ==========
     startTimeLimit() {
-        const timeLimit = this.sublevel.timeLimit || 30; // 30 секунд по умолчанию
+        const timeLimit = this.sublevel.timeLimit || 30;
 
-        // Используем стандартный таймер из базового класса (game-timer)
         super.createTimeLimitDisplay(timeLimit, () => this.timeUp());
     }
 
     stopTimeLimit() {
-        // Используем метод остановки таймера из базового класса
         if (this.timeLimitTimer) {
             clearInterval(this.timeLimitTimer);
             this.timeLimitTimer = null;
         }
 
-        // Удаляем дисплей таймера
         const timerDisplay = document.querySelector('.game-timer');
         if (timerDisplay && timerDisplay.parentNode) {
             timerDisplay.parentNode.removeChild(timerDisplay);
@@ -3628,7 +3320,6 @@ class Level3Handler extends BaseLevelHandler {
     }
 
     createTimeLimitDisplay(timeLimit, onTimeUp) {
-        // Удаляем старый таймер если есть
         const oldDisplay = document.getElementById('timeLimitDisplay');
         if (oldDisplay) oldDisplay.remove();
 
@@ -3675,10 +3366,8 @@ class Level3Handler extends BaseLevelHandler {
         timeDisplay.appendChild(timeText);
         timeDisplay.appendChild(progressBarContainer);
 
-        // Вставляем таймер в начало контейнера
         container.insertBefore(timeDisplay, container.firstChild);
 
-        // Сохраняем callback
         this.onTimeUp = onTimeUp;
     }
 
@@ -3694,23 +3383,18 @@ class Level3Handler extends BaseLevelHandler {
             return;
         }
 
-        // Рассчитываем отклонение и точность
         const delta = Math.abs(userAnswer - this.correctAnswer);
         let accuracy = 100;
 
         if (delta > 0) {
-            // Рассчитываем процент точности (чем больше отклонение, тем меньше точность)
-            const maxAllowedError = this.correctAnswer * 0.2; // Максимально допустимая ошибка 20%
+            const maxAllowedError = this.correctAnswer * 0.2;
             accuracy = Math.max(0, 100 - (delta / maxAllowedError) * 100);
         }
 
-        // Ограничиваем точность от 0 до 100
         accuracy = Math.min(100, Math.max(0, accuracy));
 
-        // Бонус за скорость (если осталось время)
         const timeBonus = this.timeLeft ? 1.0 + (this.timeLeft / 30) * 0.1 : 1.0;
 
-        // Рассчитываем очки
         const calculatedScore = DataManager.calculateScore(
             'level3',
             '3-2',
@@ -3718,7 +3402,6 @@ class Level3Handler extends BaseLevelHandler {
             timeBonus
         );
 
-        // Определяем результат
         let message = '';
         let color = '#333';
         let resultType = '';
@@ -3741,20 +3424,12 @@ class Level3Handler extends BaseLevelHandler {
             resultType = 'bad';
         }
 
-        // Добавляем информацию о точности
         message += ` (Точность: ${accuracy.toFixed(1)}%)`;
-
-/*        if (timeBonus > 1.0) {
-            const bonusPercent = Math.round((timeBonus - 1.0) * 100);
-            message += ` +${bonusPercent}% за скорость`;
-        }*/
 
         this.showResult(message, `Отклонение: ${delta.toFixed(1)} сек`, color);
 
-        // Останавливаем таймер
         this.stopTimeLimit();
 
-        // Передаем результат в ядро игры
         if (this.core.handleAttemptResult) {
             this.core.handleAttemptResult({
                 delta: delta,
@@ -3766,7 +3441,6 @@ class Level3Handler extends BaseLevelHandler {
             });
         }
 
-        // Перезапускаем через 3 секунды для следующей попытки
         setTimeout(() => {
             if (this.core.getState && this.core.getState().attempts > 0) {
                 this.resetForNextAttempt();
@@ -3776,7 +3450,6 @@ class Level3Handler extends BaseLevelHandler {
 
     // ========== ОБЩИЕ МЕТОДЫ ДЛЯ LEVEL 3 ==========
     handleLightbulbClick(index) {
-        // Для 3-2 клики по лампочкам не обрабатываются
         if (this.sublevel.type !== 'simon_pattern') {
             return;
         }
@@ -3785,7 +3458,6 @@ class Level3Handler extends BaseLevelHandler {
             return;
         }
 
-        // Запоминаем клик игрока
         const color = this.lightbulbs[index].color;
         this.setLightbulbState(index, true, color);
 
@@ -3796,9 +3468,7 @@ class Level3Handler extends BaseLevelHandler {
         this.userSequence.push(index);
         this.currentStep++;
 
-        // Проверяем правильность
         if (this.userSequence[this.currentStep - 1] !== this.sequence[this.currentStep - 1].index) {
-            // Неправильно
             const accuracy = (this.currentStep - 1) / this.sequence.length * 100;
             const calculatedScore = DataManager.calculateScore(
                 'level3',
@@ -3823,9 +3493,7 @@ class Level3Handler extends BaseLevelHandler {
             return;
         }
 
-        // Проверяем, закончена ли последовательность
         if (this.currentStep === this.sequence.length) {
-            // Правильно!
             this.showSimonSuccess();
         }
     }
@@ -3860,7 +3528,6 @@ class Level3Handler extends BaseLevelHandler {
     }
 
     timeUp() {
-        // Если время вышло до ввода ответа
         const accuracy = 0;
         const calculatedScore = DataManager.calculateScore(
             'level3',
@@ -3887,14 +3554,12 @@ class Level3Handler extends BaseLevelHandler {
     }
 
     resetForNextAttempt() {
-        // Останавливаем таймер
         this.stopTimeLimit();
 
         const container = document.getElementById('gameArea') || document.body;
         const existingElements = container.querySelectorAll('.equation-container, .input-container, .lightbulbs-container, .time-limit-display, .duration-overlay');
         existingElements.forEach(el => el.remove());
 
-        // Очищаем состояние
         this.sequence = [];
         this.userSequence = [];
         this.equation = null;
@@ -3906,10 +3571,8 @@ class Level3Handler extends BaseLevelHandler {
         this.isInputEnabled = false;
         this.timeLeft = 0;
 
-        // Очищаем таймеры
         this.clearTimers();
 
-        // Создаем лампочки заново
         this.createLightbulbs();
 
         if (this.core.uiManager) {
@@ -3932,10 +3595,7 @@ class Level4Handler extends BaseLevelHandler {
 
     createLightbulbs() {
         const container = document.getElementById('gameArea') || document.body;
-
         container.innerHTML = '';
-
-        // лабиринт для подуровня 4-1
         this.createMaze();
     }
 
@@ -3946,7 +3606,6 @@ class Level4Handler extends BaseLevelHandler {
 
         container.innerHTML = '';
 
-        // Создаем простой лабиринт (сетка)
         this.maze = [];
         for (let y = 0; y < size; y++) {
             this.maze[y] = [];
@@ -3954,34 +3613,29 @@ class Level4Handler extends BaseLevelHandler {
                 this.maze[y][x] = {
                     x: x,
                     y: y,
-                    isWall: Math.random() < 0.2, // 20% стен
+                    isWall: Math.random() < 0.2,
                     isTarget: false
                 };
             }
         }
 
-        // Клетка (0,0) - стартовая позиция игрока - НЕ может быть стеной
         this.maze[0][0].isWall = false;
 
-        // Клетки (0,1) и (1,0) не могут быть стенами одновременно
         const rightBlocked = this.maze[0][1].isWall;
         const downBlocked = this.maze[1][0].isWall;
 
         if (rightBlocked && downBlocked) {
-            // Если обе потенциальные выходные клетки - стены, делаем одну из них проходимой
-            // Случайно выбираем какую освободить
             if (Math.random() > 0.5) {
-                this.maze[0][1].isWall = false; // Освобождаем правую клетку
+                this.maze[0][1].isWall = false;
             } else {
-                this.maze[1][0].isWall = false; // Освобождаем нижнюю клетку
+                this.maze[1][0].isWall = false;
             }
         }
 
-        // Есть хотя бы один выход из стартовой зоны
         const startNeighbors = [
-            {x: 1, y: 0},  // справа
-            {x: 0, y: 1},  // снизу
-            {x: 1, y: 1}   // по диагонали (не используется для движения, но влияет на обход)
+            {x: 1, y: 0},
+            {x: 0, y: 1},
+            {x: 1, y: 1}
         ];
 
         let passableNeighbors = 0;
@@ -3991,18 +3645,14 @@ class Level4Handler extends BaseLevelHandler {
             }
         });
 
-        // Если все соседние клетки - стены, создаем хотя бы один проход
         if (passableNeighbors === 0) {
-            // Делаем клетку справа проходимой
             if (1 < size) {
                 this.maze[0][1].isWall = false;
             }
         }
 
-        // Убедимся, что есть проход от старта к финишу
         this.playerPosition = {x: 0, y: 0};
 
-        // Выбираем позицию для цели
         let attempts = 0;
         let targetFound = false;
 
@@ -4012,11 +3662,9 @@ class Level4Handler extends BaseLevelHandler {
                 y: Math.floor(Math.random() * (size - 2)) + 1
             };
 
-            // Цель не должна быть в стартовой позиции и не должна быть стеной
             if ((this.targetPosition.x !== 0 || this.targetPosition.y !== 0) &&
                 !this.maze[this.targetPosition.y][this.targetPosition.x].isWall) {
 
-                // Проверяем, достижима ли цель из старта
                 if (this.isPathPossible()) {
                     this.maze[this.targetPosition.y][this.targetPosition.x].isTarget = true;
                     targetFound = true;
@@ -4025,7 +3673,6 @@ class Level4Handler extends BaseLevelHandler {
             attempts++;
         }
 
-        // Если не нашли подходящую цель, помещаем ее в первую доступную клетку
         if (!targetFound) {
             for (let y = 0; y < size; y++) {
                 for (let x = 0; x < size; x++) {
@@ -4040,9 +3687,6 @@ class Level4Handler extends BaseLevelHandler {
             }
         }
 
-        // Путь будет сгенерирован в startMazeMemory после установки playerPosition
-
-        // Рисуем лабиринт
         const mazeContainer = document.createElement('div');
         mazeContainer.className = 'maze-container';
         mazeContainer.style.display = 'grid';
@@ -4054,8 +3698,7 @@ class Level4Handler extends BaseLevelHandler {
         mazeContainer.style.visibility = 'hidden';
         mazeContainer.style.transition = 'opacity 0.5s ease';
 
-        // Создаем клетки лабиринта
-        this.mazeCells = []; // Сохраняем ссылки на клетки для быстрого доступа
+        this.mazeCells = [];
 
         for (let y = 0; y < size; y++) {
             for (let x = 0; x < size; x++) {
@@ -4082,7 +3725,6 @@ class Level4Handler extends BaseLevelHandler {
                     cell.textContent = '🚶';
                     cell.style.background = '#85c387';
                 } else if (x === this.targetPosition.x && y === this.targetPosition.y) {
-                    // Не показываем лампочку пока не начали игру
                     cell.style.background = '#f5f5f5';
                 } else {
                     cell.style.background = '#f5f5f5';
@@ -4095,7 +3737,7 @@ class Level4Handler extends BaseLevelHandler {
         }
 
         container.appendChild(mazeContainer);
-        this.mazeContainer = mazeContainer; // Сохраняем ссылку на контейнер
+        this.mazeContainer = mazeContainer;
     }
 
     isPathPossible() {
@@ -4105,26 +3747,23 @@ class Level4Handler extends BaseLevelHandler {
         visited[0][0] = true;
 
         const directions = [
-            {dx: 1, dy: 0},  // вправо
-            {dx: 0, dy: 1},  // вниз
-            {dx: -1, dy: 0}, // влево
-            {dx: 0, dy: -1}  // вверх
+            {dx: 1, dy: 0},
+            {dx: 0, dy: 1},
+            {dx: -1, dy: 0},
+            {dx: 0, dy: -1}
         ];
 
         while (queue.length > 0) {
             const current = queue.shift();
 
-            // Если достигли цели
             if (current.x === this.targetPosition.x && current.y === this.targetPosition.y) {
                 return true;
             }
 
-            // Проверяем соседние клетки
             for (const dir of directions) {
                 const nx = current.x + dir.dx;
                 const ny = current.y + dir.dy;
 
-                // Проверяем границы и проходимость
                 if (nx >= 0 && nx < size && ny >= 0 && ny < size &&
                     !this.maze[ny][nx].isWall && !visited[ny][nx]) {
                     visited[ny][nx] = true;
@@ -4133,7 +3772,7 @@ class Level4Handler extends BaseLevelHandler {
             }
         }
 
-        return false; // Путь не найден
+        return false;
     }
 
     showMaze() {
@@ -4142,7 +3781,6 @@ class Level4Handler extends BaseLevelHandler {
         this.mazeContainer.style.opacity = '1';
         this.mazeContainer.style.visibility = 'visible';
 
-        // Показываем все клетки с небольшой задержкой для анимации
         if (this.mazeCells) {
             this.mazeCells.forEach((cellData, index) => {
                 if (cellData && cellData.element) {
@@ -4150,14 +3788,13 @@ class Level4Handler extends BaseLevelHandler {
                         if (cellData.element) {
                             cellData.element.style.opacity = '1';
                         }
-                    }, index * 20); // Постепенное появление
+                    }, index * 20);
                 }
             });
         }
     }
 
     generatePath() {
-        // Используем алгоритм BFS для поиска кратчайшего пути
         const size = this.maze.length;
         const visited = Array(size).fill().map(() => Array(size).fill(false));
         const parent = Array(size).fill().map(() => Array(size).fill(null));
@@ -4165,10 +3802,10 @@ class Level4Handler extends BaseLevelHandler {
         visited[this.playerPosition.y][this.playerPosition.x] = true;
 
         const directions = [
-            {dx: 1, dy: 0},  // вправо
-            {dx: 0, dy: 1},  // вниз
-            {dx: -1, dy: 0}, // влево
-            {dx: 0, dy: -1}  // вверх
+            {dx: 1, dy: 0},
+            {dx: 0, dy: 1},
+            {dx: -1, dy: 0},
+            {dx: 0, dy: -1}
         ];
 
         let found = false;
@@ -4176,11 +3813,9 @@ class Level4Handler extends BaseLevelHandler {
         while (queue.length > 0 && !found) {
             const current = queue.shift();
 
-            // Если достигли цели
             if (current.x === this.targetPosition.x && current.y === this.targetPosition.y) {
                 found = true;
 
-                // Восстанавливаем путь
                 this.path = [];
                 let step = current;
 
@@ -4191,12 +3826,10 @@ class Level4Handler extends BaseLevelHandler {
                 break;
             }
 
-            // Проверяем соседние клетки
             for (const dir of directions) {
                 const nx = current.x + dir.dx;
                 const ny = current.y + dir.dy;
 
-                // Проверяем границы и проходимость
                 if (nx >= 0 && nx < size && ny >= 0 && ny < size &&
                     !this.maze[ny][nx].isWall && !visited[ny][nx]) {
                     visited[ny][nx] = true;
@@ -4206,7 +3839,6 @@ class Level4Handler extends BaseLevelHandler {
             }
         }
 
-        // Если путь не найден, создаем пустой путь
         if (!found) {
             this.path = [];
             console.warn('[Лабиринт] Путь от старта к цели не найден!');
@@ -4233,12 +3865,10 @@ class Level4Handler extends BaseLevelHandler {
         const params = this.sublevel.params;
         const duration = params.lightbulbDuration || 3.0;
 
-        // Устанавливаем позицию игрока (если еще не установлена)
         if (!this.playerPosition) {
             this.playerPosition = {x: 0, y: 0};
         }
 
-        // Генерируем путь от старта к цели
         this.generatePath();
 
         console.log(`[Лабиринт] Старт: (${this.playerPosition.x}, ${this.playerPosition.y})`);
@@ -4246,7 +3876,6 @@ class Level4Handler extends BaseLevelHandler {
         console.log(`[Лабиринт] Длина оптимального пути: ${this.path.length} шагов`);
         console.log(`[Лабиринт] Путь: ${this.path.map(p => `(${p.x},${p.y})`).join(' → ')}`);
 
-        // Очищаем предыдущие обработчики клавиш
         if (this.keyPressHandler) {
             document.removeEventListener('keydown', this.keyPressHandler);
             this.keyPressHandler = null;
@@ -4256,12 +3885,10 @@ class Level4Handler extends BaseLevelHandler {
             oldHint.parentNode.removeChild(oldHint);
         }
 
-        // ПОКАЗЫВАЕМ ЛАБИРИНТ ПЕРЕД НАЧАЛОМ ИГРЫ
         this.showMaze();
 
         this.showMessage(`Запомните путь к лампочке! У вас ${duration} секунд...`, 'blue');
 
-        // Показываем лампочку в центре лабиринта
         const targetCell = document.querySelector(`.maze-cell[data-x="${this.targetPosition.x}"][data-y="${this.targetPosition.y}"]`);
         if (targetCell) {
             targetCell.textContent = '💡';
@@ -4269,9 +3896,7 @@ class Level4Handler extends BaseLevelHandler {
             targetCell.style.color = '#333';
         }
 
-        // Таймер просмотра
         const timer = setTimeout(() => {
-            // Скрываем лампочку
             if (targetCell) {
                 targetCell.textContent = '';
                 targetCell.style.background = '#f5f5f5';
@@ -4285,11 +3910,8 @@ class Level4Handler extends BaseLevelHandler {
     }
 
     setupKeyboardControls() {
-        // Добавляем обработчик клавиш стрелок
         this.keyPressHandler = (event) => this.handleKeyPress(event);
         document.addEventListener('keydown', this.keyPressHandler);
-
-        // Добавляем визуальные подсказки о управлении
         this.showControlsHint();
     }
 
@@ -4334,7 +3956,6 @@ class Level4Handler extends BaseLevelHandler {
 
         container.appendChild(hint);
 
-        // Анимируем появление подсказки
         hint.style.opacity = '0';
         hint.style.transform = 'translateY(10px)';
         hint.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -4346,13 +3967,11 @@ class Level4Handler extends BaseLevelHandler {
     }
 
     handleKeyPress(event) {
-        // Игнорируем, если игра не активна
         if (!this.maze || !this.playerPosition) return;
 
         let newX = this.playerPosition.x;
         let newY = this.playerPosition.y;
 
-        // Определяем направление движения по клавише
         switch (event.code) {
             case 'ArrowUp':
                 newY = this.playerPosition.y - 1;
@@ -4371,20 +3990,18 @@ class Level4Handler extends BaseLevelHandler {
                 event.preventDefault();
                 break;
             default:
-                return; // Игнорируем другие клавиши
+                return;
         }
 
         this.movePlayer(newX, newY);
     }
 
     movePlayer(x, y) {
-        // Проверяем границы лабиринта
         if (x < 0 || x >= this.maze[0].length || y < 0 || y >= this.maze.length) {
             this.showMessage('Выход за пределы лабиринта!', 'red');
             return;
         }
 
-        // Проверяем, является ли движение на соседнюю клетку
         const isAdjacent = (
             (Math.abs(x - this.playerPosition.x) === 1 && y === this.playerPosition.y) ||
             (Math.abs(y - this.playerPosition.y) === 1 && x === this.playerPosition.x)
@@ -4395,13 +4012,11 @@ class Level4Handler extends BaseLevelHandler {
             return;
         }
 
-        // Проверяем, не стена ли
         if (this.maze[y][x].isWall) {
             this.showMessage('Это стена! Выберите другое направление.', 'red');
             return;
         }
 
-        // Обновляем позицию игрока
         const oldCell = document.querySelector(`.maze-cell[data-x="${this.playerPosition.x}"][data-y="${this.playerPosition.y}"]`);
         if (oldCell) {
             oldCell.textContent = '';
@@ -4414,7 +4029,6 @@ class Level4Handler extends BaseLevelHandler {
         if (newCell) {
             newCell.textContent = '🚶';
             newCell.style.background = '#8cbf8e';
-            // Добавляем небольшую анимацию движения
             newCell.style.transform = 'scale(1.1)';
             newCell.style.transition = 'transform 0.2s ease';
             setTimeout(() => {
@@ -4424,10 +4038,8 @@ class Level4Handler extends BaseLevelHandler {
             }, 200);
         }
 
-        // Проверяем, достиг ли игрок цели
         if (x === this.targetPosition.x && y === this.targetPosition.y) {
             this.showMazeSuccess();
-            // Удаляем обработчик клавиш и подсказку при завершении
             if (this.keyPressHandler) {
                 document.removeEventListener('keydown', this.keyPressHandler);
                 this.keyPressHandler = null;
@@ -4440,7 +4052,6 @@ class Level4Handler extends BaseLevelHandler {
     }
 
     showMazeSuccess() {
-        // Рассчитываем точность пути
         const optimalLength = this.path.length;
         const playerPathLength = this.playerSteps;
 
@@ -4465,7 +4076,6 @@ class Level4Handler extends BaseLevelHandler {
         let message = '';
         let color = 'var(--text-dark)';
 
-        // Определяем сообщение
         if (accuracy === 100) {
             message = 'Идеально! Лампочка найдена оптимальным путем!';
         } else if (accuracy >= 80) {
@@ -4495,28 +4105,32 @@ class Level4Handler extends BaseLevelHandler {
 
     // ОБЩИЕ МЕТОДЫ ДЛЯ LEVEL 4
     resetForNextAttempt() {
-        // Очищаем предыдущие обработчики клавиш
         if (this.keyPressHandler) {
             document.removeEventListener('keydown', this.keyPressHandler);
             this.keyPressHandler = null;
         }
 
-        // Удаляем подсказку управления
         const hint = document.getElementById('controls-hint');
         if (hint && hint.parentNode) {
             hint.parentNode.removeChild(hint);
         }
 
-        // Сбрасываем состояние игрока (но сохраняем лабиринт)
-        this.playerPosition = {x: 0, y: 0};
-        this.playerSteps = 0;
-
-        // Очищаем таймеры
         this.clearTimers();
         this.stopTimeLimit();
 
-        // Сбрасываем визуальное состояние лабиринта
-        this.resetMazeVisualState();
+        const container = document.getElementById('gameArea') || document.body;
+        if (container) {
+            container.innerHTML = '';
+        }
+
+        this.maze = [];
+        this.mazeCells = [];
+        this.path = [];
+        this.playerPosition = {x: 0, y: 0};
+        this.targetPosition = {x: 0, y: 0};
+        this.playerSteps = 0;
+
+        this.createLightbulbs();
 
         if (this.core.uiManager) {
             this.core.uiManager.setActionButton('СТАРТ', () => this.beginSequence());
@@ -4525,12 +4139,11 @@ class Level4Handler extends BaseLevelHandler {
     }
 
     resetMazeVisualState() {
-        // Сбрасываем визуальное состояние клеток лабиринта
+
         if (this.mazeCells) {
             this.mazeCells.forEach(cellData => {
                 if (cellData && cellData.element) {
                     const cell = cellData.element;
-                    // Сбрасываем все клетки к начальному состоянию
                     cell.textContent = '';
                     cell.style.background = '#f5f5f5';
                     cell.style.transform = 'none';
@@ -4539,7 +4152,6 @@ class Level4Handler extends BaseLevelHandler {
                 }
             });
 
-            // Устанавливаем начальную позицию игрока
             const startCell = this.mazeCells.find(c => c && c.x === 0 && c.y === 0);
             if (startCell && startCell.element) {
                 startCell.element.textContent = '🚶';
@@ -4549,7 +4161,6 @@ class Level4Handler extends BaseLevelHandler {
     }
 }
 
-// Экспорт классов
 if (typeof window !== 'undefined') {
     window.LevelManager = LevelManager;
     window.BaseLevelHandler = BaseLevelHandler;
@@ -4557,7 +4168,5 @@ if (typeof window !== 'undefined') {
     window.Level2Handler = Level2Handler;
     window.Level3Handler = Level3Handler;
     window.Level4Handler = Level4Handler;
-    // Ссылка на текущий экземпляр для глобальной очистки
     LevelManager.currentInstance = null;
-    console.log('LevelManager инициализирован с новой системой статистики');
 }

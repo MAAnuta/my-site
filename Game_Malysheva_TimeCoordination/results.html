@@ -41,7 +41,6 @@
 <script src="js/dataManager.js"></script>
 <script src="js/utils.js"></script>
 <script>
-  // Инициализация страницы рейтинга
   document.addEventListener('DOMContentLoaded', () => {
     const ratingTableBody = document.getElementById('ratingTableBody');
     const emptyRating = document.getElementById('emptyRating');
@@ -63,30 +62,25 @@
 
       emptyRating.classList.add('hidden');
 
-      // Сортировка по общему счету
       const sorted = [...rating].sort((a, b) => b.score - a.score);
 
-      // Показываем топ-10
       const top10 = sorted.slice(0, 10);
 
       ratingTableBody.innerHTML = top10.map((entry, index) => `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${entry.name}</td>
-                        <td>${entry.score.toLocaleString()}</td> <!-- Форматируем число -->
+                        <td>${entry.score.toLocaleString()}</td>
                         <td>${entry.accuracy.toFixed(1)}%</td>
                         <td>${formatDate(entry.date)}</td>
                     </tr>
                 `).join('');
     }
 
-    // Назад в меню
     backBtn.addEventListener('click', () => {
       window.location.href = 'menu.html';
     });
 
-
-    // Первоначальная загрузка
     renderRating();
   });
 </script>
