@@ -1,0 +1,145 @@
+:root{
+  --card-bg: rgba(255,255,255,.06);
+  --card-border: rgba(255,255,255,.12);
+}
+
+.office-container{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 95px 16px 25px;
+}
+
+.office-card{
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 18px;
+  backdrop-filter: blur(8px);
+}
+
+.office-title{
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: .2px;
+}
+
+.office-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.office-field label{
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.office-field input[type="text"],
+.office-field input[type="date"],
+.office-field select{
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.15);
+  color: inherit;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.office-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+.office-table th,
+.office-table td{
+  padding: 12px;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.office-table tr:last-child td{ border-bottom: none; }
+.office-table th{
+  font-weight: 700;
+  background: rgba(0,0,0,.22);
+}
+
+.options{
+  display: grid;
+  gap: 8px;
+}
+
+.option{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.option input{ transform: translateY(1px); }
+
+.qty-grid{
+  display: grid;
+  gap: 10px;
+}
+.qty-row{
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 10px;
+  align-items: center;
+}
+.qty-row input[type="number"]{
+  width: 120px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.15);
+  color: inherit;
+  padding: 10px 12px;
+  outline: none;
+}
+.qty-row input[disabled]{ opacity: .5; }
+
+.office-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 14px;
+}
+.btn{
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,.22);
+  color: inherit;
+  font-weight: 700;
+}
+.btn.primary{
+  background: rgba(255,255,255,.12);
+}
+.btn[disabled]{ opacity: .6; cursor: not-allowed; }
+
+.result{
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255,255,255,.22);
+}
+.result h3{ margin: 0 0 10px; }
+.result .links a{
+  display: inline-block;
+  margin-right: 12px;
+}
+
+.error{
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 72, 72, .12);
+  border: 1px solid rgba(255, 72, 72, .3);
+}
+

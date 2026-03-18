@@ -1,0 +1,8 @@
+/vendor/
+/composer.phar
+/Malysheva_office_variant/generated/*.xlsx
+/Malysheva_office_variant/generated/*.odt
+/Malysheva_office_variant/generated/*.pdf
+/Malysheva_office_variant/generated/*.png
+/.idea/
+/.vscode/
