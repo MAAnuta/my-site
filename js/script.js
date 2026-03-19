@@ -18,91 +18,93 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroSection = document.querySelector('.hero');
     const reveals = document.querySelectorAll('.reveal');
 
-    let currentX = -80;
-    let targetX  = 0;
-    let inertiaX = 0;
-    let animating = false;
-    let lastScrollY = 0;
+    // Логика занавесов работает только на страницах, где есть .hero и занавесы
+    if (curtainLeft && curtainRight && heroSection) {
+        let currentX = -80;
+        let targetX  = 0;
+        let inertiaX = 0;
+        let animating = false;
+        let lastScrollY = 0;
 
-    const animateCurtains = () => {
-        if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
-            currentX = targetX;
-            inertiaX = targetX;
-            animating = false;
-            return;
-        }
-
-        inertiaX += (targetX - inertiaX) * 0.08;
-        currentX += (inertiaX - currentX) * 0.08;
-
-        curtainLeft.style.transform  = `translateX(${currentX}%)`;
-        curtainRight.style.transform = `translateX(${-currentX}%)`;
-
-        requestAnimationFrame(animateCurtains);
-    };
-
-    const setTargetX = value => {
-        if (Math.abs(targetX - value) > 0.1) {
-            targetX = value;
-            if (!animating) {
-                animating = true;
-                requestAnimationFrame(animateCurtains);
+        const animateCurtains = () => {
+            if (Math.abs(targetX - currentX) < 0.1 && Math.abs(inertiaX - currentX) < 0.1) {
+                currentX = targetX;
+                inertiaX = targetX;
+                animating = false;
+                return;
             }
-        }
-    };
 
-    const initCurtains = () => {
-        currentX = -80;
-        targetX = 0;
-        inertiaX = 0;
-        curtainLeft.style.transform  = 'translateX(-80%)';
-        curtainRight.style.transform = 'translateX(80%)';
-    };
-    setTimeout(initCurtains, 100);
+            inertiaX += (targetX - inertiaX) * 0.08;
+            currentX += (inertiaX - currentX) * 0.08;
 
-    let ticking = false;
+            curtainLeft.style.transform  = `translateX(${currentX}%)`;
+            curtainRight.style.transform = `translateX(${-currentX}%)`;
 
-    const updateCurtains = () => {
-        // позиция и размеры hero-секции относительно видимой области
-        const rect = heroSection.getBoundingClientRect();
-        const winH = window.innerHeight; // высота видимой области браузера
-        const winW = window.innerWidth; // ширина видимой области браузера
-        // расчет области, в которой будет проходить анимация закрытия занавеса
-        const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
+            requestAnimationFrame(animateCurtains);
+        };
 
-        if (rect.top > -150 && rect.top < winH * 0.4) {
-            setTargetX(-80);
+        const setTargetX = value => {
+            if (Math.abs(targetX - value) > 0.1) {
+                targetX = value;
+                if (!animating) {
+                    animating = true;
+                    requestAnimationFrame(animateCurtains);
+                }
+            }
+        };
+
+        const initCurtains = () => {
+            currentX = -80;
+            targetX = 0;
+            inertiaX = 0;
+            curtainLeft.style.transform  = 'translateX(-80%)';
+            curtainRight.style.transform = 'translateX(80%)';
+        };
+        setTimeout(initCurtains, 100);
+
+        let ticking = false;
+
+        const updateCurtains = () => {
+            // позиция и размеры hero-секции относительно видимой области
+            const rect = heroSection.getBoundingClientRect();
+            const winH = window.innerHeight; // высота видимой области браузера
+            const winW = window.innerWidth; // ширина видимой области браузера
+            // расчет области, в которой будет проходить анимация закрытия занавеса
+            const buffer = winW <= 768 ? winH * 0.8 : winH * 1.5;
+
+            if (rect.top > -150 && rect.top < winH * 0.4) {
+                setTargetX(-80);
+                ticking = false;
+                return;
+            }
+
+            if (rect.bottom > 0 && rect.top < buffer) {
+                const progress = Math.max(0, Math.min(1,
+                    (winH - rect.top) / (winH + rect.height)
+                ));
+                const newTarget = -80 + 80 * progress;
+                setTargetX(newTarget);
+            }
+
+            else if (rect.bottom <= 0) {
+                setTargetX(0);
+            }
+
             ticking = false;
-            return;
-        }
+        };
 
-        if (rect.bottom > 0 && rect.top < buffer) {
-            const progress = Math.max(0, Math.min(1,
-                (winH - rect.top) / (winH + rect.height)
-            ));
-            const newTarget = -80 + 80 * progress;
-            setTargetX(newTarget);
-        }
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(updateCurtains);
+                ticking = true;
+            }
+        };
 
-        else if (rect.bottom <= 0) {
-            setTargetX(0);
-        }
-
-        ticking = false;
-    };
-
-    const handleScroll = () => {
-        if (!ticking) {
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', () => {
             requestAnimationFrame(updateCurtains);
-            ticking = true;
-        }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', () => {
-        lastScrollY = window.scrollY;
-        requestAnimationFrame(updateCurtains);
-    });
+        });
+    }
 
     // для плавного появления блоков сайта
     const observer = new IntersectionObserver(entries => {
@@ -131,13 +133,17 @@ document.querySelectorAll('.buy-ticket').forEach(btn => {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
         e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (target) {
-            window.scrollTo({
-                top: target.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
+        const href = anchor.getAttribute('href');
+        // пропускаем ссылки вида "#" без конкретного якоря
+        if (!href || href === '#') return;
+
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+        });
     });
 });
 

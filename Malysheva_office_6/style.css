@@ -1,0 +1,286 @@
+:root{
+  --card-bg: rgba(255,255,255,.06);
+  --card-border: rgba(255,255,255,.12);
+}
+
+.office-container{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 95px 16px 25px;
+}
+
+.office-card{
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 10px;
+  backdrop-filter: blur(8px);
+}
+
+.office-title{
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: .2px;
+}
+
+.office-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.office-field label{
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.office-field input[type="text"],
+.office-field input[type="date"],
+.office-field select{
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,.65);
+  background: rgba(0,0,0,.15);
+  color: #ffeaa7;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.office-field input[type="file"]{
+  cursor: pointer;
+  color: #ffeaa7;
+  font-size: 14px;
+  min-width: 280px;
+}
+
+.office-field input[type="file"]::file-selector-button{
+  cursor: pointer;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.22);
+  color: inherit;
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  font-size: 14px;
+  padding: 0 18px;
+  font-weight: 700;
+  margin-right: 10px;
+  height: 40px;
+}
+
+.office-field input[type="file"]::-webkit-file-upload-button{
+  cursor: pointer;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.22);
+  color: inherit;
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  font-size: 14px;
+  padding: 0 18px;
+  font-weight: 700;
+  margin-right: 10px;
+  height: 40px;
+}
+
+.office-field input[type="file"]::file-selector-button:hover,
+.office-field input[type="file"]::-webkit-file-upload-button:hover{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.3);
+}
+
+.office-field select option{
+  background: rgba(0,0,0,.85);
+  color: #ffeaa7;
+}
+
+.office-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+.office-table th,
+.office-table td{
+  padding: 12px;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.office-table tr:last-child td{ border-bottom: none; }
+.office-table th{
+  font-weight: 700;
+  background: rgba(0,0,0,.22);
+}
+
+.options{
+  display: grid;
+  gap: 8px;
+}
+
+.option{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.option input{ transform: translateY(1px); }
+
+.qty-grid{
+  display: grid;
+  gap: 10px;
+}
+.qty-row{
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 10px;
+  align-items: center;
+}
+.qty-row input[type="number"]{
+  width: 120px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.15);
+  color: inherit;
+  padding: 10px 12px;
+  outline: none;
+}
+.qty-row input[disabled]{ opacity: .5; }
+
+.office-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 14px;
+}
+.office-actions .office-field{
+  margin: 0;
+  flex: 0 0 auto;
+}
+.office-actions .office-field label{
+  margin-bottom: 4px;
+}
+.btn{
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  padding: 10px 18px;
+  background: rgba(0,0,0,.22);
+  color: #ffeaa7;
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 20px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover,
+.btn.primary:hover{
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.3);
+}
+.btn[disabled]{ opacity: .6; cursor: not-allowed; }
+
+.result{
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255,255,255,.22);
+}
+.result h3{ margin: 0 0 10px; }
+.result .links a{
+  display: inline-block;
+  margin-right: 12px;
+}
+
+.error{
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 72, 72, .12);
+  border: 1px solid rgba(255, 72, 72, .3);
+}
+
+@media (max-height: 900px) {
+  .office-container{
+    padding: 68px 8px 6px;
+  }
+
+  .office-card{
+    padding: 10px;
+  }
+
+  .office-title{
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .office-grid{
+    gap: 6px;
+  }
+
+  .office-field label{
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .office-field input[type="text"],
+  .office-field input[type="date"],
+  .office-field select{
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .office-table th,
+  .office-table td{
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  .qty-row{
+    gap: 4px;
+  }
+
+  .qty-row input[type="number"]{
+    padding: 4px 6px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .office-actions{
+    margin-top: 6px;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .btn{
+    height: 28px;
+    padding: 0 10px;
+  }
+
+  .office-field input[type="file"]::file-selector-button,
+  .office-field input[type="file"]::-webkit-file-upload-button{
+    height: 28px;
+    padding: 0 10px;
+  }
+
+  .result{
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .error{
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+

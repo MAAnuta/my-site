@@ -135,8 +135,6 @@ final class OrderService
 
     $recordsPdfName = 'Запись_о_документах.pdf';
     $recordsPdfPath = $genDir . DIRECTORY_SEPARATOR . $recordsPdfName;
-    // По цепочке csv-excel-odt-pdf: конвертируем ИЗ ODT -> PDF через LibreOffice.
-    // Если конвертация не удалась (или получился пустой/очень маленький файл) — fallback на Dompdf.
     $converted = self::tryConvertOdtToPdf($recordsOdtPath, $genDir, $recordsPdfPath);
     if (!$converted) {
       self::writeRecordsPdfViaDompdf($records, $recordsPdfPath);
@@ -164,13 +162,11 @@ final class OrderService
 
   private static function sanitizeForDocuments(string $s): string
   {
-    // Some apps render U+2011 (non‑breaking hyphen) poorly in PDF/ODT.
     return str_replace(["\u{2011}", "\u{00A0}"], ['-', ' '], $s);
   }
 
   private static function formatDateRu(string $isoDate): string
   {
-    // input from <input type="date"> usually: YYYY-MM-DD
     $dt = \DateTime::createFromFormat('Y-m-d', $isoDate);
     if ($dt instanceof \DateTimeInterface) return $dt->format('d.m.Y');
     return $isoDate;
@@ -242,7 +238,6 @@ final class OrderService
     $sheet->setTitle('Накладная');
     $sheet->setShowGridlines(false);
 
-    // Фиксируем ширины, чтобы картинки не налезали на соседние ячейки
     $sheet->getColumnDimension('A')->setWidth(5);
     $sheet->getColumnDimension('B')->setWidth(26);
     $sheet->getColumnDimension('C')->setWidth(18);
@@ -253,14 +248,13 @@ final class OrderService
 
     $draw = new Drawing();
     $draw->setPath($barcodePath);
-    // Штрихкод в пределах D-E-F, за F не выходит
+
     $draw->setCoordinates('D1');
     $draw->setOffsetX(0);
     $draw->setOffsetY(2);
     $draw->setWidth(300);
     $draw->setWorksheet($sheet);
 
-    // Заголовки идут ПОСЛЕ штрихкода (штрихкод в самом верху справа)
     $sheet->mergeCells('A2:F2');
     $sheet->setCellValue('A2', 'Накладная № ' . $ctx['invoiceNumber']);
     $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(16);
@@ -290,9 +284,7 @@ final class OrderService
       $base = $ctx['prices'][$item];
       $sheet->setCellValue("A{$row}", $i);
       $sheet->setCellValue("B{$row}", $item);
-      // В столбце "Цвет" у строк товаров пусто (картинка будет только в строке "Цвет: ...")
       $sheet->setCellValue("C{$row}", '');
-      // Цена и сумма — БЕЗ наценки (как в price.csv)
       $sheet->setCellValue("D{$row}", round((float)$base, 2));
       $sheet->setCellValue("E{$row}", $qty);
       $sheet->setCellValue("F{$row}", round(((float)$base) * (int)$qty, 2));
@@ -307,19 +299,17 @@ final class OrderService
     $draw2 = new Drawing();
     $draw2->setPath($colorPngPath);
     $draw2->setCoordinates("C{$colorInfoRow}");
-    // Центрируем картинку в ячейке C (приближённо по пикселям)
-    $draw2->setWidth(120);
-    $draw2->setHeight(40);
-    $draw2->setOffsetX(18);
-    $draw2->setOffsetY(10);
+    $draw2->setWidth(110);
+    $draw2->setHeight(36);
+    $draw2->setOffsetX(48);
+    $draw2->setOffsetY(12); 
     $draw2->setWorksheet($sheet);
-    $sheet->getRowDimension($colorInfoRow)->setRowHeight(46);
+    $sheet->getRowDimension($colorInfoRow)->setRowHeight(44);
     $sheet->getStyle("C{$colorInfoRow}")->getAlignment()
       ->setHorizontal(Alignment::HORIZONTAL_CENTER)
       ->setVertical(Alignment::VERTICAL_CENTER);
 
     $sheet->mergeCells("D{$colorInfoRow}:E{$colorInfoRow}");
-    // В объединённой ячейке только число коэффициента (без слова "Наценка")
     $sheet->setCellValue("D{$colorInfoRow}", rtrim(rtrim((string)$ctx['multiplier'], '0'), '.'));
     $sheet->getStyle("D{$colorInfoRow}:E{$colorInfoRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     $sheet->setCellValue("F{$colorInfoRow}", round($ctx['sumNoMarkup'], 2));
@@ -355,7 +345,6 @@ final class OrderService
     }
 
     $endRow = $totalRow;
-    // Чёрные границы для всей таблицы (включая последние строки)
     $borders = $sheet->getStyle("A{$startRow}:F{$endRow}")->getBorders()->getAllBorders();
     $borders->setBorderStyle(Border::BORDER_THIN);
     $borders->getColor()->setARGB('FF000000');
@@ -365,7 +354,6 @@ final class OrderService
     $sheet->getStyle("A{$startRow}:F{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     $sheet->getStyle("B" . ($startRow + 1) . ":B{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
-    // В строке "Итого" не должно быть нижней границы у объединённой ячейки A:E
     $sheet->getStyle("A{$totalRow}:E{$totalRow}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_NONE);
 
     (new Xlsx($ss))->save($outPath);
@@ -387,8 +375,6 @@ final class OrderService
 
   private static function writeRecordsOdt(array $records, string $outPath): void
   {
-    // В LibreOffice Writer 26.2.1 ODT, сгенерированный PhpWord (ODText), открывается белым листом.
-    // Поэтому делаем надёжно: DOCX (PhpWord) -> конвертация в ODT через LibreOffice (soffice.exe).
     $outDir = dirname($outPath);
     self::ensureDir($outDir);
 
@@ -405,7 +391,6 @@ final class OrderService
     $tableStyle = [
       'borderColor' => '000000',
       'borderSize' => 4,
-      // Уменьшаем внутренние отступы, чтобы таблица помещалась на ширину страницы
       'cellMargin' => 20,
     ];
     $phpWord->addTableStyle('RecordsTable', $tableStyle);
@@ -413,7 +398,6 @@ final class OrderService
 
     $table->addRow();
     foreach (['№', '№ накладной', 'Город', 'Адрес', 'Итоговая сумма'] as $h) {
-      // Суммарная ширина столбцов должна быть меньше ширины страницы A4
       $table->addCell(1900)->addText(
         $h,
         ['bold' => true, 'color' => '000000', 'name' => 'Arial'],
@@ -428,13 +412,12 @@ final class OrderService
       $addr = self::sanitizeForDocuments((string)($rec['address'] ?? ''));
       $sumInt = (int)round((float)($rec['sumWithMarkup'] ?? 0));
 
-      // Порядковые номера по центру
       $table->addCell(1900)->addText(
         (string)$n,
         ['color' => '000000', 'name' => 'Arial'],
         ['alignment' => 'center']
       );
-      // Номер накладной по правому краю
+
       $table->addCell(1900)->addText(
         (string)($rec['invoiceNumber'] ?? ''),
         ['color' => '000000', 'name' => 'Arial'],
@@ -442,7 +425,7 @@ final class OrderService
       );
       $table->addCell(1900)->addText($city, ['color' => '000000', 'name' => 'Arial']);
       $table->addCell(1900)->addText($addr, ['color' => '000000', 'name' => 'Arial']);
-      // Итоговая сумма целым числом без "руб." и по правому краю
+  
       $table->addCell(1900)->addText(
         (string)$sumInt,
         ['color' => '000000', 'name' => 'Arial'],
@@ -451,11 +434,9 @@ final class OrderService
       $n++;
     }
 
-    // 1) DOCX
     $docxWriter = WordIOFactory::createWriter($phpWord, 'Word2007');
     $docxWriter->save($tmpDocx);
 
-    // 2) DOCX -> ODT through LibreOffice
     $sofficeCandidates = [
       'C:\\Program Files\\LibreOffice\\program\\soffice.exe',
       'C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe',
@@ -466,7 +447,6 @@ final class OrderService
     }
 
     if (!$soffice) {
-      // fallback: old writer (может быть белый лист)
       $odtWriter = WordIOFactory::createWriter($phpWord, 'ODText');
       $odtWriter->save($outPath);
       return;
@@ -549,7 +529,6 @@ final class OrderService
       @unlink($outPdfPath);
     }
 
-    // LibreOffice output file is usually: <input filename>.pdf
     $baseName = pathinfo($odtPath, PATHINFO_FILENAME);
     $expected = $outDir . DIRECTORY_SEPARATOR . $baseName . '.pdf';
 
@@ -562,14 +541,11 @@ final class OrderService
       return true;
     }
 
-    // Some LibreOffice builds output directly to $outPdfPath name already.
     if (is_file($outPdfPath) && filesize($outPdfPath) > 1500) {
       return true;
     }
 
     return false;
   }
-
-  // Note: intentionally not converting ODT->PDF via LibreOffice here.
 }
 
