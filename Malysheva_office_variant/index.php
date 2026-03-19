@@ -1,5 +1,51 @@
 <?php
 declare(strict_types=1);
+
+require_once __DIR__ . '/order_service.php';
+
+use SiteMalysheva\OfficeVariant\OrderException;
+use SiteMalysheva\OfficeVariant\OrderService;
+
+$colors = ['Орех', 'Дуб мореный', 'Палисандр', 'Эбеновое дерево', 'Клен', 'Лиственница'];
+$items = ['Банкетка', 'Кровать', 'Комод', 'Шкаф', 'Стул', 'Стол'];
+
+$old = $_POST;
+$error = '';
+$result = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  try {
+    $result = OrderService::handle($_POST, $_FILES);
+  } catch (OrderException $e) {
+    $error = $e->getMessage();
+  } catch (Throwable $e) {
+    $error = 'Ошибка сервера: ' . $e->getMessage();
+  }
+}
+
+function h(mixed $v): string {
+  return htmlspecialchars(is_scalar($v) ? (string)$v : '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function oldv(array $old, string $key, string $default = ''): string {
+  $v = $old[$key] ?? $default;
+  return is_string($v) ? $v : $default;
+}
+
+function oldChecked(array $old, string $val): bool {
+  $arr = $old['items'] ?? [];
+  if (!is_array($arr)) return false;
+  return in_array($val, array_map('strval', $arr), true);
+}
+
+function oldQty(array $old, string $item): string {
+  $q = $old['qty'][$item] ?? '';
+  if (is_string($q) || is_numeric($q)) {
+    $q = (string)$q;
+    return preg_match('/^\d+$/', $q) ? $q : '';
+  }
+  return '';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -74,89 +120,109 @@ declare(strict_types=1);
     <div class="office-card">
       <h2 class="office-title">Заказ мебели</h2>
 
-      <form id="orderForm" enctype="multipart/form-data" method="post">
+      <form enctype="multipart/form-data" method="post" action="./index.php">
         <div class="office-grid">
           <div class="office-field">
             <label for="lastName">Фамилия</label>
-            <input id="lastName" name="lastName" type="text" required placeholder="Иванова">
+            <input id="lastName" name="lastName" type="text" required placeholder="Иванова" value="<?= h(oldv($old, 'lastName')) ?>">
           </div>
 
           <div class="office-field">
             <label for="city">Город доставки</label>
             <select id="city" name="city" required>
               <option value="">— выберите —</option>
-              <option>Москва</option>
-              <option>Санкт‑Петербург</option>
-              <option>Новосибирск</option>
-              <option>Екатеринбург</option>
-              <option>Казань</option>
+              <?php
+              $cities = ['Москва', 'Санкт‑Петербург', 'Новосибирск', 'Екатеринбург', 'Казань'];
+              $oldCity = oldv($old, 'city');
+              foreach ($cities as $c):
+                $sel = ($oldCity === $c) ? 'selected' : '';
+                ?>
+                <option <?= $sel ?>><?= h($c) ?></option>
+              <?php endforeach; ?>
             </select>
           </div>
 
           <div class="office-field">
             <label for="deliveryDate">Дата доставки</label>
-            <input id="deliveryDate" name="deliveryDate" type="date" required>
+            <input id="deliveryDate" name="deliveryDate" type="date" required value="<?= h(oldv($old, 'deliveryDate')) ?>">
           </div>
 
           <div class="office-field">
             <label for="address">Адрес</label>
-            <input id="address" name="address" type="text" required placeholder="ул. Пушкина, дом 1">
+            <input id="address" name="address" type="text" required placeholder="ул. Пушкина, дом 1" value="<?= h(oldv($old, 'address')) ?>">
           </div>
         </div>
 
         <div style="height: 14px"></div>
-
-        <table class="office-table">
-          <thead>
-          <tr>
-            <th>Выберите цвет мебели</th>
-            <th>Выберите предметы мебели</th>
-            <th>Количество</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>
-              <div class="options">
-                <?php
-                $colors = ['Орех', 'Дуб мореный', 'Палисандр', 'Эбеновое дерево', 'Клен', 'Лиственница'];
-                foreach ($colors as $i => $c):
-                  $id = 'color_' . $i;
-                  ?>
-                  <label class="option" for="<?= htmlspecialchars($id) ?>">
-                    <input id="<?= htmlspecialchars($id) ?>" type="radio" name="color" value="<?= htmlspecialchars($c) ?>" <?= $i === 0 ? 'checked' : '' ?>>
-                    <span><?= htmlspecialchars($c) ?></span>
-                  </label>
-                <?php endforeach; ?>
-              </div>
-            </td>
-            <td>
-              <div class="options inline-2">
-                <?php
-                $items = ['Банкетка', 'Кровать', 'Комод', 'Шкаф', 'Стул', 'Стол'];
-                foreach ($items as $i => $it):
-                  $id = 'item_' . $i;
-                  ?>
-                  <label class="option" for="<?= htmlspecialchars($id) ?>">
-                    <input class="furniture-check" id="<?= htmlspecialchars($id) ?>" type="checkbox" name="items[]" value="<?= htmlspecialchars($it) ?>">
-                    <span><?= htmlspecialchars($it) ?></span>
-                  </label>
-                <?php endforeach; ?>
-              </div>
-            </td>
-            <td>
-              <div class="qty-grid">
-                <?php foreach ($items as $it): ?>
-                  <div class="qty-row">
-                    <div><?= htmlspecialchars($it) ?></div>
-                    <input type="number" name="qty[<?= htmlspecialchars($it) ?>]" placeholder="0" disabled>
-                  </div>
-                <?php endforeach; ?>
-              </div>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="office-table-wrapper">
+          <table class="office-table">
+            <thead>
+            <tr>
+              <th>Выберите цвет мебели</th>
+              <th>Выберите предметы мебели</th>
+              <th>Количество</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>
+                <div class="options">
+                  <?php
+                  $oldColor = oldv($old, 'color', $colors[0]);
+                  foreach ($colors as $i => $c):
+                    $id = 'color_' . $i;
+                    $checked = ($oldColor === $c) ? 'checked' : '';
+                    ?>
+                    <label class="option" for="<?= htmlspecialchars($id) ?>">
+                      <input id="<?= htmlspecialchars($id) ?>" type="radio" name="color" value="<?= htmlspecialchars($c) ?>" <?= $checked ?>>
+                      <span><?= htmlspecialchars($c) ?></span>
+                    </label>
+                  <?php endforeach; ?>
+                </div>
+              </td>
+              <td>
+                <div class="options inline-2">
+                  <?php foreach ($items as $i => $it):
+                    $id = 'item_' . $i;
+                    $checked = oldChecked($old, $it) ? 'checked' : '';
+                    ?>
+                    <label class="option" for="<?= htmlspecialchars($id) ?>">
+                      <input
+                        id="<?= htmlspecialchars($id) ?>"
+                        class="furniture-check"
+                        type="checkbox"
+                        name="items[]"
+                        value="<?= htmlspecialchars($it) ?>"
+                        <?= $checked ?>
+                      >
+                      <span><?= htmlspecialchars($it) ?></span>
+                    </label>
+                  <?php endforeach; ?>
+                </div>
+              </td>
+              <td>
+                <div class="qty-grid">
+                  <?php foreach ($items as $it): ?>
+                    <div class="qty-row">
+                      <div><?= htmlspecialchars($it) ?></div>
+                      <?php $qtyEnabled = oldChecked($old, $it); ?>
+                      <input
+                        type="number"
+                        name="qty[<?= htmlspecialchars($it) ?>]"
+                        placeholder="0"
+                        min="0"
+                        value="<?= $qtyEnabled ? h(oldQty($old, $it)) : '' ?>"
+                        data-qty-item="<?= htmlspecialchars($it) ?>"
+                        <?= $qtyEnabled ? '' : 'disabled' ?>
+                      >
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
 
         <div class="office-actions">
           <div class="office-field" style="margin:0">
@@ -165,22 +231,40 @@ declare(strict_types=1);
             <div style="opacity:.8;font-size:13px;margin-top:6px">Если файл не выбран — используется `price.csv` из модуля.</div>
           </div>
 
+            <a class="btn" href="./index.php">Очистить форму</a>
           <button id="submitBtn" class="btn primary" type="submit">Оформить заказ</button>
         </div>
       </form>
 
-      <div id="errorBox" class="error" hidden></div>
+      <?php if ($error !== ''): ?>
+        <div class="error"><?= h($error) ?></div>
+      <?php endif; ?>
 
-      <div id="result" class="result" hidden>
-        <h3>Готово</h3>
-        <div><b>Номер накладной:</b> <span id="invoiceNumber"></span></div>
-        <div><b>Цвет:</b> <span id="colorName"></span></div>
-        <div><b>Товаров:</b> <span id="itemsCount"></span></div>
-        <div><b>Сумма без наценки:</b> <span id="sumNoMarkup"></span></div>
-        <div><b>Сумма с наценкой:</b> <span id="sumWithMarkup"></span></div>
-        <div style="height: 10px"></div>
-        <div id="downloadLinks" class="links"></div>
-      </div>
+      <?php if (is_array($result)): ?>
+        <div class="result">
+          <h3>Готово</h3>
+          <div><b>Номер накладной:</b> <?= h($result['invoiceNumber'] ?? '') ?></div>
+          <div><b>Цвет:</b> <?= h($result['colorName'] ?? '') ?></div>
+          <div><b>Товаров:</b> <?= h($result['itemsCount'] ?? '') ?></div>
+          <div><b>Сумма без наценки:</b> <?= h((string)($result['sumNoMarkup'] ?? '')) ?></div>
+          <div><b>Сумма с наценкой:</b> <?= h((string)($result['sumWithMarkup'] ?? '')) ?></div>
+          <div style="height: 10px"></div>
+          <div class="links">
+            <?php if (!empty($result['invoiceDownloadUrl'])): ?>
+              <a class="btn primary" href="<?= h($result['invoiceDownloadUrl']) ?>" download>Скачать накладную (Excel)</a>
+            <?php endif; ?>
+            <?php if (!empty($result['recordsOdtUrl'])): ?>
+              <a class="btn" href="<?= h($result['recordsOdtUrl']) ?>" download>Запись о документах (ODT)</a>
+            <?php endif; ?>
+            <?php if (!empty($result['recordsPdfUrl'])): ?>
+              <a class="btn" href="<?= h($result['recordsPdfUrl']) ?>" download>Запись о документах (PDF)</a>
+            <?php endif; ?>
+          </div>
+          <div style="opacity:.85;font-size:13px;margin-top:10px">
+            Если ODT/PDF не обновились из‑за кеша Office/браузера — скачайте заново после повторного оформления заказа.
+          </div>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 </main>
@@ -210,7 +294,7 @@ declare(strict_types=1);
 </footer>
 
 <script src="../js/script.js"></script>
-<script src="script.js"></script>
+<script src="qty-toggle.js"></script>
 </body>
 </html>
 
