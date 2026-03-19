@@ -261,7 +261,7 @@ final class OrderService
     $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)->setVertical(Alignment::VERTICAL_CENTER);
 
     $sheet->mergeCells('A3:F3');
-    $sheet->setCellValue('A3', $ctx['city'] . ', ' . $ctx['address']);
+    $sheet->setCellValue('A3', 'Адрес получения заказа: '. $ctx['city'] . ', ' . $ctx['address']);
     $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
     $sheet->mergeCells('A4:F4');
