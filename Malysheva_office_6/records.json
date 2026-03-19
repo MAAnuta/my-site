@@ -1,1 +1,23 @@
-[]
+[
+    {
+        "invoiceNumber": 3070,
+        "city": "Санкт‑Петербург",
+        "address": "Поэтический бульвар, 3",
+        "sumWithMarkup": 26400,
+        "createdAt": "2026-03-19T13:42:48+01:00"
+    },
+    {
+        "invoiceNumber": 3028,
+        "city": "Москва",
+        "address": "Новоспасский пер, 5",
+        "sumWithMarkup": 2860,
+        "createdAt": "2026-03-19T13:45:17+01:00"
+    },
+    {
+        "invoiceNumber": 9464,
+        "city": "Екатеринбург",
+        "address": "ул. Московская, 249",
+        "sumWithMarkup": 1800,
+        "createdAt": "2026-03-19T13:46:39+01:00"
+    }
+]
