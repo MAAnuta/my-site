@@ -1,17 +1,7 @@
 {
-  "name": "site-malysheva/site-malysheva",
-  "description": "Site Malysheva - PHPOffice tasks",
-  "type": "project",
-  "require": {
-    "php": ">=8.1",
-    "phpoffice/phpspreadsheet": "^2.4",
-    "phpoffice/phpword": "^1.4",
-    "dompdf/dompdf": "^3.1"
-  },
-  "autoload": {
-    "psr-4": {
-      "SiteMalysheva\\": "src/"
+    "require": {
+        "phpoffice/phpspreadsheet": "^5.5",
+        "phpoffice/phpword": "^1.4",
+        "dompdf/dompdf": "^3.1"
     }
-  }
 }
-
