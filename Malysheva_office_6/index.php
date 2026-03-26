@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/order_service.php';
 
-use SiteMalysheva\OfficeVariant\OrderException;
-use SiteMalysheva\OfficeVariant\OrderService;
+use SiteMalysheva\OfficeVariant6\OrderException;
+use SiteMalysheva\OfficeVariant6\OrderService;
 
 $colors = ['Орех', 'Дуб мореный', 'Палисандр', 'Эбеновое дерево', 'Клен', 'Лиственница'];
 $items = ['Банкетка', 'Кровать', 'Комод', 'Шкаф', 'Стул', 'Стол'];

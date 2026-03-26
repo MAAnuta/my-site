@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace SiteMalysheva\OfficeVariant;
+namespace SiteMalysheva\OfficeVariant6;
 
 use Dompdf\Dompdf;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
