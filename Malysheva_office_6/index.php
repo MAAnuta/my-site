@@ -178,9 +178,7 @@ function oldQty(array $old, string $item): string {
           </div>
         </div>
 
-        <div style="height: 14px"></div>
-
-        <table class="office-table">
+         <table class="office-table">
           <thead>
           <tr>
             <th>Выберите цвет мебели</th>
@@ -249,7 +247,7 @@ function oldQty(array $old, string $item): string {
         </table>
 
         <div class="office-actions">
-          <div class="office-field" style="margin:0">
+          <div class="office-field">
             <label for="priceFile">Выбрать файл с ценами (CSV)</label>
             <input id="priceFile" name="priceFile" type="file" accept=".csv,text/csv">
           </div>
@@ -271,7 +269,6 @@ function oldQty(array $old, string $item): string {
           <div><b>Товаров:</b> <?= h($result['itemsCount'] ?? '') ?></div>
           <div><b>Сумма без наценки:</b> <?= h((string)($result['sumNoMarkup'] ?? '')) ?></div>
           <div><b>Сумма с наценкой:</b> <?= h((string)($result['sumWithMarkup'] ?? '')) ?></div>
-          <div style="height: 10px"></div>
           <div class="links">
             <?php if (!empty($result['invoiceDownloadUrl'])): ?>
               <a class="btn primary" href="<?= h($result['invoiceDownloadUrl']) ?>" download>Скачать накладную (Excel)</a>
