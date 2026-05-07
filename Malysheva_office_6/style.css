@@ -101,6 +101,7 @@
   overflow: hidden;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.14);
+  margin-top: 14px;
 }
 
 .office-table th,
@@ -197,6 +198,9 @@
 .result .links a{
   display: inline-block;
   margin-right: 12px;
+}
+.result .links{
+  margin-top: 10px;
 }
 
 .error{
