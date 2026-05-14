@@ -67,11 +67,14 @@ final class OrderService
     $csvPath = __DIR__ . DIRECTORY_SEPARATOR . 'price.csv';
     if (isset($files['priceFile']) && is_array($files['priceFile']) && ($files['priceFile']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
       $tmp = (string)($files['priceFile']['tmp_name'] ?? '');
-      if ($tmp !== '' && is_uploaded_file($tmp)) $csvPath = $tmp;
+      if ($tmp !== '' && is_uploaded_file($tmp)) 
+        $csvPath = $tmp;
     }
 
     $prices = self::readPricesCsv($csvPath);
-    foreach ($items as $it) if (!isset($prices[$it])) throw new OrderException('В файле цен нет позиции: ' . $it);
+    foreach ($items as $it) 
+      if (!isset($prices[$it])) 
+        throw new OrderException('В файле цен нет позиции: ' . $it);
 
     $multiplier = (float)$allowedColors[$colorName];
     $sumNoMarkup = 0.0;
@@ -88,7 +91,10 @@ final class OrderService
     self::ensureDir($genDir);
 
     $picturesDir = __DIR__ . DIRECTORY_SEPARATOR . 'pictures';
-    $barcodePath = self::pickBarcode($picturesDir);
+    $barcodePath = $picturesDir . DIRECTORY_SEPARATOR . 'штрих.JPG';
+    if (!is_file($barcodePath)) {
+      throw new OrderException('Не найден файл штрихкода (штрих.JPG) в папке pictures');
+    }
     $colorPngPath = self::pickColorImage($picturesDir, $colorName);
 
     $warrantyText = is_file(__DIR__ . DIRECTORY_SEPARATOR . 'warranty.txt')
@@ -135,10 +141,8 @@ final class OrderService
 
     $recordsPdfName = 'Запись_о_документах.pdf';
     $recordsPdfPath = $genDir . DIRECTORY_SEPARATOR . $recordsPdfName;
-    $converted = self::tryConvertOdtToPdf($recordsOdtPath, $genDir, $recordsPdfPath);
-    if (!$converted) {
-      self::writeRecordsPdfViaDompdf($records, $recordsPdfPath);
-    }
+    // PDF из ODT через LibreOffice даёт «пустые» рамки/выравнивание с PhpWord ODText — делаем PDF через Dompdf.
+    self::writeRecordsPdfViaDompdf($records, $recordsPdfPath);
 
     return [
       'invoiceNumber' => $inv,
@@ -158,11 +162,6 @@ final class OrderService
     $v = trim($v);
     $v = preg_replace('/\s+/u', ' ', $v) ?? '';
     return $v;
-  }
-
-  private static function sanitizeForDocuments(string $s): string
-  {
-    return str_replace(["\u{2011}", "\u{00A0}"], ['-', ' '], $s);
   }
 
   private static function formatDateRu(string $isoDate): string
@@ -202,15 +201,6 @@ final class OrderService
     }
   }
 
-  private static function pickBarcode(string $picturesDir): string
-  {
-    foreach (['штрих.png', 'штрих.PNG', 'штрих.jpg', 'штрих.JPG', 'штрих.jpeg', 'штрих.JPEG'] as $f) {
-      $candidate = $picturesDir . DIRECTORY_SEPARATOR . $f;
-      if (is_file($candidate)) return $candidate;
-    }
-    throw new OrderException('Не найден файл штрихкода (штрих.png или штрих.jpg) в папке pictures');
-  }
-
   private static function pickColorImage(string $picturesDir, string $colorName): string
   {
     $colorFiles = [
@@ -236,7 +226,6 @@ final class OrderService
     $ss = new Spreadsheet();
     $sheet = $ss->getActiveSheet();
     $sheet->setTitle('Накладная');
-    $sheet->setShowGridlines(false);
 
     $sheet->getColumnDimension('A')->setWidth(5);
     $sheet->getColumnDimension('B')->setWidth(26);
@@ -244,14 +233,11 @@ final class OrderService
     $sheet->getColumnDimension('D')->setWidth(12);
     $sheet->getColumnDimension('E')->setWidth(12);
     $sheet->getColumnDimension('F')->setWidth(14);
-    $sheet->getRowDimension(1)->setRowHeight(70);
-
+    
+    $sheet->getRowDimension(1)->setRowHeight(75);
     $draw = new Drawing();
     $draw->setPath($barcodePath);
-
     $draw->setCoordinates('D1');
-    $draw->setOffsetX(0);
-    $draw->setOffsetY(2);
     $draw->setWidth(300);
     $draw->setWorksheet($sheet);
 
@@ -378,8 +364,6 @@ final class OrderService
     $outDir = dirname($outPath);
     self::ensureDir($outDir);
 
-    $tmpDocx = $outDir . DIRECTORY_SEPARATOR . 'records_tmp.docx';
-
     $phpWord = new PhpWord();
     $phpWord->setDefaultFontName('Arial');
     $phpWord->setDefaultFontSize(11);
@@ -388,17 +372,23 @@ final class OrderService
     $section->addText('Запись о документах', ['bold' => true, 'size' => 16, 'color' => '000000', 'name' => 'Arial'], ['alignment' => 'center']);
     $section->addTextBreak(1);
 
-    $tableStyle = [
-      'borderColor' => '000000',
-      'borderSize' => 4,
-      'cellMargin' => 20,
-    ];
-    $phpWord->addTableStyle('RecordsTable', $tableStyle);
     $table = $section->addTable('RecordsTable');
 
+    $cellBorder = [
+      'borderTopSize' => 18,
+      'borderTopColor' => '000000',
+      'borderRightSize' => 18,
+      'borderRightColor' => '000000',
+      'borderBottomSize' => 18,
+      'borderBottomColor' => '000000',
+      'borderLeftSize' => 18,
+      'borderLeftColor' => '000000',
+    ];
+
     $table->addRow();
-    foreach (['№', '№ накладной', 'Город', 'Адрес', 'Итоговая сумма'] as $h) {
-      $table->addCell(1900)->addText(
+    $headers = ['№', '№ накладной', 'Город', 'Адрес', 'Итоговая сумма'];
+    foreach ($headers as $h) {
+      $table->addCell(1900, $cellBorder)->addText(
         $h,
         ['bold' => true, 'color' => '000000', 'name' => 'Arial'],
         ['alignment' => 'center']
@@ -408,65 +398,32 @@ final class OrderService
     $n = 1;
     foreach ($records as $rec) {
       $table->addRow();
-      $city = self::sanitizeForDocuments((string)($rec['city'] ?? ''));
-      $addr = self::sanitizeForDocuments((string)($rec['address'] ?? ''));
+      $city = (string)($rec['city'] ?? '');
+      $addr = (string)($rec['address'] ?? '');
       $sumInt = (int)round((float)($rec['sumWithMarkup'] ?? 0));
 
-      $table->addCell(1900)->addText(
+      $table->addCell(1900, $cellBorder)->addText(
         (string)$n,
         ['color' => '000000', 'name' => 'Arial'],
         ['alignment' => 'center']
       );
 
-      $table->addCell(1900)->addText(
+      $table->addCell(1900, $cellBorder)->addText(
         (string)($rec['invoiceNumber'] ?? ''),
-        ['color' => '000000', 'name' => 'Arial'],
-        ['alignment' => 'right']
+        ['color' => '000000', 'name' => 'Arial']
       );
-      $table->addCell(1900)->addText($city, ['color' => '000000', 'name' => 'Arial']);
-      $table->addCell(1900)->addText($addr, ['color' => '000000', 'name' => 'Arial']);
-  
-      $table->addCell(1900)->addText(
+      $table->addCell(1900, $cellBorder)->addText($city, ['color' => '000000', 'name' => 'Arial']);
+      $table->addCell(1900, $cellBorder)->addText($addr, ['color' => '000000', 'name' => 'Arial']);
+
+      $table->addCell(1900, $cellBorder)->addText(
         (string)$sumInt,
-        ['color' => '000000', 'name' => 'Arial'],
-        ['alignment' => 'right']
+        ['color' => '000000', 'name' => 'Arial']
       );
       $n++;
     }
 
-    $docxWriter = WordIOFactory::createWriter($phpWord, 'Word2007');
-    $docxWriter->save($tmpDocx);
-
-    $sofficeCandidates = [
-      'C:\\Program Files\\LibreOffice\\program\\soffice.exe',
-      'C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe',
-    ];
-    $soffice = null;
-    foreach ($sofficeCandidates as $c) {
-      if (is_file($c)) { $soffice = $c; break; }
-    }
-
-    if (!$soffice) {
-      $odtWriter = WordIOFactory::createWriter($phpWord, 'ODText');
-      $odtWriter->save($outPath);
-      return;
-    }
-
-    $cmd = '"' . $soffice . '" --headless --nologo --nodefault --nolockcheck --norestore '
-      . '--convert-to odt --outdir "' . $outDir . '" "' . $tmpDocx . '"';
-    @shell_exec($cmd);
-
-    $tmpOdt = $outDir . DIRECTORY_SEPARATOR . 'records_tmp.odt';
-    if (is_file($tmpOdt)) {
-      if (is_file($outPath)) @unlink($outPath);
-      @copy($tmpOdt, $outPath);
-      @unlink($tmpOdt);
-    } else {
-      $odtWriter = WordIOFactory::createWriter($phpWord, 'ODText');
-      $odtWriter->save($outPath);
-    }
-
-    @unlink($tmpDocx);
+    $odtWriter = WordIOFactory::createWriter($phpWord, 'ODText');
+    $odtWriter->save($outPath);
   }
 
   private static function writeRecordsPdfViaDompdf(array $records, string $outPath): void
@@ -475,16 +432,16 @@ final class OrderService
     $n = 1;
     foreach ($records as $rec) {
       $inv = htmlspecialchars((string)($rec['invoiceNumber'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-      $city = htmlspecialchars(self::sanitizeForDocuments((string)($rec['city'] ?? '')), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-      $addr = htmlspecialchars(self::sanitizeForDocuments((string)($rec['address'] ?? '')), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+      $city = htmlspecialchars((string)($rec['city'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+      $addr = htmlspecialchars((string)($rec['address'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
       $sumInt = (int)round((float)($rec['sumWithMarkup'] ?? 0));
-      $rows .= "<tr>"
-        . "<td style=\"text-align:center\">{$n}</td>"
-        . "<td style=\"text-align:right\">{$inv}</td>"
+      $rows .= '<tr>'
+        . "<td>{$n}</td>"
+        . "<td>{$inv}</td>"
         . "<td>{$city}</td>"
         . "<td>{$addr}</td>"
-        . "<td style=\"text-align:right\">{$sumInt}</td>"
-        . "</tr>";
+        . "<td>{$sumInt}</td>"
+        . '</tr>';
       $n++;
     }
 
@@ -493,9 +450,11 @@ final class OrderService
       . 'body{font-family:DejaVu Sans, sans-serif;font-size:12px;}'
       . 'h1{font-size:16px;text-align:center;margin:0 0 10px;}'
       . 'table{border-collapse:collapse;width:100%;}'
-      . 'th,td{border:1px solid #000;padding:6px;vertical-align:top;}'
+      . 'th,td{border:1pt solid #000;padding:6px;vertical-align:top;}'
       . 'th{background:#f2f2f2;font-weight:bold;text-align:center;}'
-      . 'td{text-align:left;}'
+      . 'td:nth-child(1){text-align:center;}'
+      . 'td:nth-child(2),td:nth-child(5){text-align:right;}'
+      . 'td:nth-child(3),td:nth-child(4){text-align:left;}'
       . '</style></head><body>'
       . '<h1>Запись о документах</h1>'
       . '<table><thead><tr>'
@@ -508,44 +467,6 @@ final class OrderService
     $dompdf->setPaper('A4', 'portrait');
     $dompdf->render();
     file_put_contents($outPath, $dompdf->output());
-  }
-
-  private static function tryConvertOdtToPdf(string $odtPath, string $outDir, string $outPdfPath): bool
-  {
-    if (!is_file($odtPath)) return false;
-    self::ensureDir($outDir);
-
-    $sofficeCandidates = [
-      'C:\\Program Files\\LibreOffice\\program\\soffice.exe',
-      'C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe',
-    ];
-    $soffice = null;
-    foreach ($sofficeCandidates as $c) {
-      if (is_file($c)) { $soffice = $c; break; }
-    }
-    if (!$soffice) return false;
-
-    if (is_file($outPdfPath)) {
-      @unlink($outPdfPath);
-    }
-
-    $baseName = pathinfo($odtPath, PATHINFO_FILENAME);
-    $expected = $outDir . DIRECTORY_SEPARATOR . $baseName . '.pdf';
-
-    $cmd = '"' . $soffice . '" --headless --nologo --nodefault --nolockcheck --norestore '
-      . '--convert-to pdf --outdir "' . $outDir . '" "' . $odtPath . '"';
-    @shell_exec($cmd);
-
-    if (is_file($expected) && filesize($expected) > 1500) {
-      if ($expected !== $outPdfPath) @copy($expected, $outPdfPath);
-      return true;
-    }
-
-    if (is_file($outPdfPath) && filesize($outPdfPath) > 1500) {
-      return true;
-    }
-
-    return false;
   }
 }
 

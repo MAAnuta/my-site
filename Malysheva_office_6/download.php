@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 $baseDir = __DIR__ . DIRECTORY_SEPARATOR . 'generated' . DIRECTORY_SEPARATOR;
 
@@ -29,7 +28,6 @@ $mime = match ($ext) {
   'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'odt' => 'application/vnd.oasis.opendocument.text',
   'pdf' => 'application/pdf',
-  'png' => 'image/png',
   default => 'application/octet-stream'
 };
 

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 require_once __DIR__ . '/order_service.php';
 
@@ -197,7 +196,11 @@ function oldQty(array $old, string $item): string {
                   $checked = ($oldColor === $c) ? 'checked' : '';
                   ?>
                   <label class="option" for="<?= htmlspecialchars($id) ?>">
-                    <input id="<?= htmlspecialchars($id) ?>" type="radio" name="color" value="<?= htmlspecialchars($c) ?>" <?= $checked ?>>
+                    <input id="<?= htmlspecialchars($id) ?>" 
+                           type="radio" 
+                           name="color" 
+                           value="<?= htmlspecialchars($c) ?>" 
+                           <?= $checked ?>>
                     <span><?= htmlspecialchars($c) ?></span>
                   </label>
                 <?php endforeach; ?>
@@ -216,8 +219,7 @@ function oldQty(array $old, string $item): string {
                       type="checkbox"
                       name="items[]"
                       value="<?= htmlspecialchars($it) ?>"
-                      <?= $checked ?>
-                    >
+                      <?= $checked ?>>
                     <span><?= htmlspecialchars($it) ?></span>
                   </label>
                 <?php endforeach; ?>
