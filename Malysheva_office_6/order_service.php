@@ -141,7 +141,6 @@ final class OrderService
 
     $recordsPdfName = 'Запись_о_документах.pdf';
     $recordsPdfPath = $genDir . DIRECTORY_SEPARATOR . $recordsPdfName;
-    // PDF из ODT через LibreOffice даёт «пустые» рамки/выравнивание с PhpWord ODText — делаем PDF через Dompdf.
     self::writeRecordsPdfViaDompdf($records, $recordsPdfPath);
 
     return [
